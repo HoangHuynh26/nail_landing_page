@@ -1,0 +1,44 @@
+[
+  {
+    "bookingId": "AURA-9584",
+    "serviceId": "acrylic-fullset-shellac",
+    "serviceName": "FULL SET acrylic with shellac",
+    "date": "2026-09-20",
+    "time": "11:00",
+    "fullName": "Emma Watson",
+    "phone": "0412345678",
+    "notes": "First visit at Fashion Nails Morley Galleria",
+    "language": "vi",
+    "status": "pending",
+    "createdAt": "2026-09-16T13:14:24.587Z",
+    "source": "website"
+  },
+  {
+    "bookingId": "AURA-1142",
+    "serviceId": "russian-manicure",
+    "serviceName": "Dry Russian Manicure & Pure Gel Overlay",
+    "date": "2026-09-28",
+    "time": "11:45 AM",
+    "fullName": "Emily Thorne",
+    "phone": "0433 987 654",
+    "notes": "Sensitive nails",
+    "language": "en",
+    "status": "pending",
+    "createdAt": "2026-09-16T10:42:00.641Z",
+    "source": "website"
+  },
+  {
+    "bookingId": "AURA-4809",
+    "serviceId": "biab-signature",
+    "serviceName": "Signature BIAB Natural Nail Sculpting",
+    "date": "2026-09-25",
+    "time": "10:15 AM",
+    "fullName": "Charlotte Vance",
+    "phone": "+61 412 345 678",
+    "notes": "Gentle cuticle care",
+    "language": "en",
+    "status": "pending",
+    "createdAt": "2026-09-16T10:36:53.288Z",
+    "source": "website"
+  }
+]

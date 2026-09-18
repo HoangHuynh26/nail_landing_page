@@ -1,0 +1,277 @@
+{
+  "announcement": {
+    "text": "Fashion Nails • Morley Galleria • Giảm 10% cho Seniors, Học sinh, Sinh viên & Nhân viên Morley Galleria • Có sẵn Gift Vouchers",
+    "action": "Chỉ đường"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "story": "Câu chuyện",
+    "services": "Dịch vụ",
+    "pricing": "Bảng giá",
+    "whyUs": "Tiêu chuẩn",
+    "about": "Về chúng tôi",
+    "gallery": "Bộ sưu tập",
+    "reviews": "Đánh giá",
+    "faq": "Hỏi đáp",
+    "bookCta": "Đặt lịch hẹn",
+    "menu": "Menu"
+  },
+  "hero": {
+    "badge": "Fashion Nails • Morley Galleria",
+    "titleLine1": "Đẹp từ đôi tay.",
+    "titleLine2": "Tỏa sáng theo cách của bạn.",
+    "subtitle": "Trải nghiệm chăm sóc móng chuyên nghiệp tại Morley Galleria. Chuyên BIAB, Acrylic, Shellac, Gel X, SNS và nghệ thuật vẽ móng tinh xảo.",
+    "primaryCta": "Đặt lịch hẹn ngay",
+    "secondaryCta": "Xem bảng giá & Dịch vụ",
+    "ratingScore": "4.9 / 5.0",
+    "ratingText": "Khách hàng tin chọn tại Morley Galleria",
+    "badgeNote": "Ưu đãi 10% cho Seniors, Students & Staff Morley Galleria"
+  },
+  "trust": {
+    "item1": {
+      "title": "Chất lượng sơn cao cấp",
+      "desc": "100% dòng sơn chính hãng bền màu, bảo vệ móng tự nhiên chắc khỏe."
+    },
+    "item2": {
+      "title": "Vệ sinh & Tiệt trùng kỹ lưỡng",
+      "desc": "Quy trình vô khuẩn dụng cụ riêng biệt, an toàn tuyệt đối cho từng khách hàng."
+    },
+    "item3": {
+      "title": "Kỹ thuật viên lành nghề",
+      "desc": "Đội ngũ giàu kinh nghiệm đắp bột Acrylic, nối móng Gel X, BIAB và nhúng bột SNS chuẩn form."
+    },
+    "item4": {
+      "title": "Ưu đãi & Phiếu quà tặng",
+      "desc": "Giảm 10% cho Seniors, Students và Staff Morley Galleria. Có sẵn Gift Vouchers tặng người thân."
+    }
+  },
+  "services": {
+    "badge": "Menu Dịch Vụ Chính Thức",
+    "title": "Dịch vụ & Kỹ thuật móng phong phú",
+    "subtitle": "Bảng dịch vụ đầy đủ từ BIAB, Acrylic, Shellac, Gel X đến SNS và nghệ thuật trang trí móng.",
+    "tabAll": "Tất cả",
+    "tabBiab": "Builder Gel - BIAB",
+    "tabShellac": "Shellac",
+    "tabAcrylic": "Acrylic Nails",
+    "tabGelX": "Gel X Extensions",
+    "tabSns": "SNS Dipping",
+    "tabPolish": "Sơn thường (Polish)",
+    "tabExtra": "Dịch vụ thêm & Art",
+    "durationUnit": "phút",
+    "priceFrom": "Từ",
+    "bookService": "Đặt dịch vụ này",
+    "details": "Xem chi tiết"
+  },
+  "pricing": {
+    "badge": "Minh bạch & Trực tiếp",
+    "title": "Bảng Giá Dịch Vụ Fashion Nails",
+    "subtitle": "Tất cả mức giá niêm yết bằng đô la Úc (AUD) theo đúng bảng giá chính thức tại tiệm.",
+    "colCategory": "Phân loại",
+    "colService": "Dịch vụ",
+    "colDuration": "Thời gian",
+    "colPrice": "Giá (AUD)",
+    "colAction": "Đặt lịch",
+    "specialOffersTitle": "Ưu đãi đặc biệt tại Fashion Nails:",
+    "specialOffer1": "🎁 Gift Vouchers Available (Phiếu quà tặng có sẵn tại quầy)",
+    "specialOffer2": "🏷️ Giảm 10% cho Người cao tuổi (Seniors), Học sinh/Sinh viên (Students) và Nhân viên Morley Galleria Staff",
+    "note": "* Giá dịch vụ chưa bao gồm các yêu cầu vẽ art phức tạp ngoài menu. Quý khách được tư vấn phom dáng móng miễn phí trước khi thực hiện."
+  },
+  "whyUs": {
+    "badge": "Cam kết của chúng tôi",
+    "title": "Tại sao khách hàng chọn Fashion Nails?",
+    "subtitle": "Chúng tôi tự hào mang đến trải nghiệm làm móng đẹp bền, tận tâm và giá cả hợp lý nhất.",
+    "card1": {
+      "title": "Kỹ thuật đắp phom sắc nét",
+      "desc": "Dáng móng thon gọn, đường bột mịn màng, ôm sát viền móng tự nhiên mà không gây cảm giác cộm dày."
+    },
+    "card2": {
+      "title": "Vệ sinh an toàn tuyệt đối",
+      "desc": "Dụng cụ được khử trùng sạch sẽ trước khi phục vụ. Bồn ngâm chân chân có màng lót hợp vệ sinh."
+    },
+    "card3": {
+      "title": "Đa dạng phong cách thịnh hành",
+      "desc": "Liên tục cập nhật các xu hướng hot nhất: Mắt mèo (Cat eyes), Chrome tráng gương, Ombre airbrush, French đầu móng."
+    },
+    "card4": {
+      "title": "Vị trí thuận tiện tại Morley Galleria",
+      "desc": "Nằm ngay trung tâm thương mại Morley Galleria, dễ dàng đậu xe miễn phí và kết hợp mua sắm."
+    }
+  },
+  "about": {
+    "badge": "Về Fashion Nails",
+    "title": "Không gian làm đẹp tin cậy tại Morley Galleria",
+    "p1": "Tọa lạc tại trung tâm thương mại Morley Galleria, Fashion Nails là điểm đến quen thuộc của quý khách hàng mong muốn sở hữu bộ móng thời thượng, sắc sảo và bền bỉ.",
+    "p2": "Với tay nghề khéo léo và sự tận tình của đội ngũ thợ lành nghề, chúng tôi chăm chút từng ngón tay, ngón chân của bạn với sự tỉ mỉ cao nhất. Từ móng bột Acrylic, gel định hình BIAB tự nhiên đến các thiết kế vẽ móng độc đáo, Fashion Nails luôn sẵn sàng làm hài lòng mọi sở thích.",
+    "quote": "“Sự hài lòng và nụ cười rạng rỡ của quý khách là niềm tự hào lớn nhất của chúng tôi.”",
+    "author": "Đội ngũ Fashion Nails Morley Galleria"
+  },
+  "gallery": {
+    "badge": "Case Studies Thực Tế",
+    "title": "Ngón Tay Sau Khi Hoàn Thiện Nail",
+    "subtitle": "Chiêm ngưỡng các tác phẩm móng thực tế qua vòng xoay 3D tương tác 360° hoặc lưới ảnh chi tiết từ Fashion Nails.",
+    "view3D": "Vòng Xoay 3D (360°)",
+    "viewGrid": "Lưới Ảnh Chi Tiết",
+    "dragHint": "Kéo hoặc vuốt để xoay vòng tròn 3D • Nhấn vào ảnh để xem chi tiết",
+    "pause": "Tạm dừng xoay",
+    "play": "Tiếp tục xoay",
+    "prev": "Mẫu trước",
+    "next": "Mẫu kế tiếp",
+    "shape": "Dáng móng",
+    "technique": "Kỹ thuật thực hiện",
+    "duration": "Thời gian",
+    "price": "Giá dịch vụ",
+    "bookThis": "Đặt làm mẫu móng này",
+    "tag1": "BIAB Natural Nails",
+    "tag2": "Chrome Colours",
+    "tag3": "Air Brush Ombre",
+    "tag4": "Spa Pedicure"
+  },
+  "testimonials": {
+    "badge": "Đánh giá từ khách hàng",
+    "title": "Những Nụ Cười & Lời Khen Thực Tế",
+    "subtitle": "Trải nghiệm slider cuộn mượt mà khám phá cảm nhận chân thực từ khách hàng thân thiết tại Fashion Nails Morley Galleria.",
+    "verified": "Khách hàng thân thiết",
+    "note": "Đánh giá thực tế từ khách hàng làm dịch vụ tại tiệm",
+    "dragHint": "Kéo vuốt hoặc cuộn chuột để xem các đánh giá • Tự động lướt mượt mà",
+    "ratingSummary": "4.9 / 5.0 trên Google Reviews",
+    "ratingSub": "Hơn 500+ lượt đánh giá hài lòng tại Morley Galleria",
+    "viewGoogle": "Xem thêm đánh giá trên Google"
+  },
+  "faq": {
+    "badge": "Giải đáp thắc mắc",
+    "title": "Câu hỏi thường gặp",
+    "subtitle": "Mọi thông tin cần thiết về dịch vụ và lịch hẹn tại Fashion Nails.",
+    "q1": "Sự khác biệt giữa BIAB, Gel X và Acrylic là gì?",
+    "a1": "BIAB là gel tăng cường đắp trên móng tự nhiên giúp móng dẻo dai; Gel X là nối móng bằng móng úp gel mềm nhẹ; Acrylic là bột đắp nối móng truyền thống có độ cứng và độ bền cao nhất.",
+    "q2": "Làm thế nào để nhận ưu đãi giảm giá 10%?",
+    "a2": "Quý khách chỉ cần xuất trình thẻ Học sinh/Sinh viên (Student ID), thẻ Người cao tuổi (Seniors Card) hoặc thẻ nhân viên Morley Galleria khi thanh toán tại quầy.",
+    "q3": "Tiệm có nhận khách không đặt trước (Walk-in) không?",
+    "a3": "Tiệm luôn hoan nghênh khách vãng lai (walk-in). Tuy nhiên, để không phải chờ đợi vào các khung giờ cao điểm, quý khách nên đặt lịch hẹn trước qua website.",
+    "q4": "Tôi có thể mua Gift Voucher ở đâu?",
+    "a4": "Gift Vouchers luôn có sẵn tại quầy thu ngân của Fashion Nails Morley Galleria với các mệnh giá linh hoạt, là món quà hoàn hảo cho bạn bè và người thân."
+  },
+  "finalCta": {
+    "badge": "Sẵn sàng làm đẹp cùng Fashion Nails?",
+    "title": "Đặt lịch hẹn ngay hôm nay tại Morley Galleria",
+    "subtitle": "Chọn dịch vụ và thời gian thuận tiện. Tiệm sẽ giữ chỗ và chuẩn bị chu đáo nhất cho bạn.",
+    "btn": "Đặt lịch hẹn ngay"
+  },
+  "booking": {
+    "title": "Đặt lịch hẹn tại Fashion Nails",
+    "step1": "1. Chọn dịch vụ",
+    "step2": "2. Chọn ngày",
+    "step3": "3. Chọn giờ",
+    "step4": "4. Thông tin cá nhân",
+    "step5": "5. Kiểm tra lịch hẹn",
+    "step6": "6. Hoàn tất",
+    "selectServicePrompt": "Vui lòng chọn dịch vụ bạn muốn trải nghiệm theo bảng giá:",
+    "selectDatePrompt": "Chọn ngày hẹn (Mở cửa 7 ngày/tuần, nhận hẹn ngay hôm nay):",
+    "selectTimePrompt": "Chọn khung giờ thuận tiện (theo giờ Tây Úc - AWST):",
+    "perthCurrentTime": "Giờ hiện tại ở Tây Úc (Perth - AWST):",
+    "todayBadge": "Hôm nay",
+    "passedBadge": "Đã qua",
+    "noMoreSlotsToday": "Các khung giờ đặt hẹn trực tuyến hôm nay đã qua hoặc đã đầy. Quý khách vui lòng chọn ngày mai hoặc gọi (08) 9375 2888 để được hỗ trợ xếp lịch gấp!",
+    "enterDetailsPrompt": "Vui lòng nhập thông tin để Fashion Nails xác nhận lịch hẹn:",
+    "fullName": "Họ và tên",
+    "fullNamePlaceholder": "Ví dụ: Nguyễn Lan Anh",
+    "phone": "Số điện thoại liên hệ",
+    "phonePlaceholder": "0412 345 678 hoặc +61...",
+    "notes": "Ghi chú thêm (tuỳ chọn)",
+    "notesPlaceholder": "Ví dụ: Cần tháo móng cũ, làm móng nhọn, nhân viên Morley Galleria...",
+    "discountDesc": "Áp dụng giảm ngay 10% trên tổng hoá đơn khi thanh toán tại quầy và xuất trình thẻ hợp lệ.",
+    "summaryTitle": "Chi tiết lịch hẹn của bạn",
+    "service": "Dịch vụ đã chọn",
+    "dateTime": "Thời gian hẹn",
+    "duration": "Thời lượng ước tính",
+    "estimatedPrice": "Mức giá",
+    "customer": "Khách hàng",
+    "contactPhone": "Số điện thoại",
+    "policyNotice": "Lưu ý: Thanh toán trực tiếp tại tiệm sau khi làm dịch vụ. Giảm ngay 10% tại quầy cho Seniors, Students và Morley Galleria Staff!",
+    "confirmBtn": "Xác nhận đặt lịch",
+    "backBtn": "Quay lại",
+    "nextBtn": "Tiếp tục",
+    "close": "Đóng",
+    "submitting": "Đang gửi thông tin đặt lịch...",
+    "successTitle": "Đặt lịch thành công!",
+    "successSubtitle": "Cảm ơn bạn! Fashion Nails Morley Galleria đã tiếp nhận lịch hẹn của bạn.",
+    "refCode": "Mã đặt hẹn của bạn:",
+    "addToCalendar": "Thêm vào lịch (Google / Apple)",
+    "doneBtn": "Hoàn tất & Quay lại trang chủ",
+    "errors": {
+      "serviceRequired": "Vui lòng chọn một dịch vụ từ bảng giá.",
+      "dateRequired": "Vui lòng chọn ngày hẹn hợp lệ.",
+      "timeRequired": "Vui lòng chọn khung giờ.",
+      "nameRequired": "Vui lòng nhập họ và tên của bạn.",
+      "phoneRequired": "Vui lòng nhập số điện thoại hợp lệ (VD: 0412 345 678).",
+      "general": "Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ trực tiếp tiệm qua hotline."
+    }
+  },
+  "footer": {
+    "desc": "Fashion Nails - Salon móng chuyên nghiệp tại Morley Galleria. Cung cấp đầy đủ dịch vụ Acrylic, BIAB, Gel X, Shellac, SNS và Nail Art sáng tạo.",
+    "hoursTitle": "Giờ mở cửa",
+    "hours": "Thứ 2 – Thứ 7: 9:30 AM – 5:30 PM (Thứ 5 mở tới 7:00 PM)\nChủ Nhật: 11:00 AM – 4:30 PM",
+    "contactTitle": "Địa chỉ & Liên hệ",
+    "address": "Shop SP094 (đối diện Kmart), Morley Galleria Shopping Centre, Morley WA 6062, Australia",
+    "phone": "+61 8 9375 2888",
+    "socialTitle": "Theo dõi Fashion Nails",
+    "rights": "Bản quyền thuộc về Fashion Nails Morley Galleria. Tất cả các quyền được bảo lưu."
+  },
+  "story": {
+    "badge": "Câu chuyện thương hiệu",
+    "capsule1": "01 Không gian",
+    "capsule2": "02 Vô trùng 100%",
+    "capsule3": "03 Nghệ thuật BIAB",
+    "capsule4": "04 Đặc quyền Galleria",
+    "chapter1": {
+      "tag": "CHƯƠNG 01 • KHÔNG GIAN THƯ THÁI",
+      "headline": "Ốc đảo tĩnh lặng giữa lòng Morley Galleria sôi động.",
+      "lead": "Bước qua cánh cửa Fashion Nails, mọi ồn ào của khu trung tâm mua sắm đều tan biến. Ánh sáng dịu ấm, âm nhạc thư giãn và những chiếc ghế spa cao cấp sẵn sàng mang lại cho bạn những phút giây nuông chiều bản thân trọn vẹn.",
+      "stat1Num": "500+",
+      "stat1Label": "Khách hàng thân thiết tại Perth",
+      "stat2Num": "4.9★",
+      "stat2Label": "Đánh giá xuất sắc trên Google",
+      "stat3Num": "0 Phút",
+      "stat3Label": "Chờ đợi khi đặt hẹn trước"
+    },
+    "chapter2": {
+      "tag": "CHƯƠNG 02 • CHUẨN TIỆT TRÙNG Y TẾ",
+      "headline": "Túi tiệt trùng xé trước mắt bạn. Không khoan nhượng với sự an toàn.",
+      "lead": "Mỗi chiếc kìm bấm, dũa thép và đầu mài đều trải qua chu trình khử trùng áp suất hơi nước 134°C bằng nồi hấp y tế Autoclave. Dũa giấy và mút nhám sử dụng một lần. Chúng tôi bảo vệ sức khỏe bộ móng của bạn như chính gia đình mình.",
+      "stat1Num": "134°C",
+      "stat1Label": "Nhiệt độ nồi hấp Autoclave",
+      "stat2Num": "100%",
+      "stat2Label": "Dụng cụ đóng túi vô trùng",
+      "stat3Num": "1 Lần",
+      "stat3Label": "Dũa mút dùng riêng biệt"
+    },
+    "chapter3": {
+      "tag": "CHƯƠNG 03 • ĐỈNH CAO NGHỆ THUẬT MÓNG",
+      "headline": "Móng thật chắc khỏe. Kỹ thuật đắp gel định hình không xâm lấn.",
+      "lead": "Chuyên môn sâu về Builder Gel (BIAB) nuôi dưỡng và tăng cường móng tự nhiên mọc dài kiên cố, kết hợp nối móng Gel-X siêu nhẹ êm ái và kỹ thuật sơn French, mắt mèo, tráng gương thủ công sắc sảo đến từng góc cạnh.",
+      "stat1Num": "26+",
+      "stat1Label": "Dịch vụ niêm yết chính thức",
+      "stat2Num": "4+ Tuần",
+      "stat2Label": "Độ bền bóng của BIAB & Gel X",
+      "stat3Num": "7 Ngày",
+      "stat3Label": "Bảo hành dặm sửa miễn phí"
+    },
+    "chapter4": {
+      "tag": "CHƯƠNG 04 • GẮN KẾT CỘNG ĐỒNG",
+      "headline": "Tự hào phục vụ cư dân Morley, Dianella & vùng đô thị Perth.",
+      "lead": "Fashion Nails mang đến sự minh bạch tuyệt đối: Bảng giá niêm yết rõ ràng, không phụ phí ẩn. Đặc quyền giảm ngay 10% cho Người cao tuổi, Học sinh - Sinh viên và Nhân viên Morley Galleria cùng các phiếu Gift Vouchers làm đẹp sang trọng.",
+      "stat1Num": "10%",
+      "stat1Label": "Ưu đãi Seniors, Students, Staff",
+      "stat2Num": "Gift Vouchers",
+      "stat2Label": "Có sẵn mọi mệnh giá tại quầy",
+      "stat3Num": "7 Ngày",
+      "stat3Label": "Mở cửa phục vụ cả tuần"
+    },
+    "ctaExplore": "Khám phá 26 Dịch vụ & Bảng giá",
+    "ctaBook": "Đặt lịch trải nghiệm ngay"
+  },
+  "backToHero": {
+    "tooltip": "Trở về đầu trang (Hero)",
+    "ariaLabel": "Cuộn trở về phần Hero",
+    "label": "Về Hero"
+  }
+}

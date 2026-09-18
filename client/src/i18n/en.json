@@ -1,0 +1,277 @@
+{
+  "announcement": {
+    "text": "Fashion Nails • Morley Galleria • 10% Off for Seniors, Students & Morley Galleria Staff • Gift Vouchers Available",
+    "action": "Directions"
+  },
+  "nav": {
+    "home": "Home",
+    "story": "Our Story",
+    "services": "Services",
+    "pricing": "Price List",
+    "whyUs": "Why Choose Us",
+    "about": "About",
+    "gallery": "Gallery",
+    "reviews": "Reviews",
+    "faq": "FAQ",
+    "bookCta": "Book Appointment",
+    "menu": "Menu"
+  },
+  "hero": {
+    "badge": "Fashion Nails • Morley Galleria",
+    "titleLine1": "Beautiful nails.",
+    "titleLine2": "Beautifully yours.",
+    "subtitle": "Your premier nail destination at Morley Galleria. Specializing in Acrylic Nails, Shellac, Builder Gel (BIAB), Gel X Extensions, SNS Dipping, and bespoke nail artistry.",
+    "primaryCta": "Book an Appointment",
+    "secondaryCta": "View Price List",
+    "ratingScore": "4.9 / 5.0",
+    "ratingText": "Trusted by Morley Galleria locals",
+    "badgeNote": "10% Off Seniors, Students & Morley Galleria Staff"
+  },
+  "trust": {
+    "item1": {
+      "title": "Premium Salon Products",
+      "desc": "High-grade polishes, genuine Shellac, and non-lifting acrylic & BIAB builder gels."
+    },
+    "item2": {
+      "title": "Strict Hygiene Standards",
+      "desc": "Thoroughly disinfected instruments and single-use liners for every pedicure basin."
+    },
+    "item3": {
+      "title": "Experienced Nail Technicians",
+      "desc": "Master technicians skilled in razor-sharp acrylic sculpting, Gel X, BIAB, and flawless ombre."
+    },
+    "item4": {
+      "title": "Vouchers & Community Discounts",
+      "desc": "Gift Vouchers Available. 10% discount for Seniors, Students, and Morley Galleria Staff."
+    }
+  },
+  "services": {
+    "badge": "Official Treatment Menu",
+    "title": "Comprehensive Nail Services & Price List",
+    "subtitle": "Explore our full range of services from Builder Gel (BIAB) and Acrylics to Gel X, Shellac, and trending Nail Art.",
+    "tabAll": "All Services",
+    "tabBiab": "Builder Gel - BIAB",
+    "tabShellac": "Shellac",
+    "tabAcrylic": "Acrylic Nails",
+    "tabGelX": "Gel X Extensions",
+    "tabSns": "SNS Dipping",
+    "tabPolish": "Nail Polish",
+    "tabExtra": "Extra Services & Art",
+    "durationUnit": "mins",
+    "priceFrom": "From",
+    "bookService": "Book This Service",
+    "details": "View Details"
+  },
+  "pricing": {
+    "badge": "Official Salon Pricing",
+    "title": "Fashion Nails Price List",
+    "subtitle": "Clear and transparent pricing in Australian Dollars (AUD) directly matching our in-salon menu.",
+    "colCategory": "Category",
+    "colService": "Treatment",
+    "colDuration": "Est. Duration",
+    "colPrice": "Price (AUD)",
+    "colAction": "Book",
+    "specialOffersTitle": "Special In-Salon Offers:",
+    "specialOffer1": "🎁 Gift Vouchers Available at reception",
+    "specialOffer2": "🏷️ 10% Off for Seniors, Students, and Morley Galleria Staff (Show ID at checkout)",
+    "note": "* In-salon prices. Complex custom art designs priced on request upon consultation."
+  },
+  "whyUs": {
+    "badge": "Our Commitment",
+    "title": "Why Clients Love Fashion Nails Morley Galleria",
+    "subtitle": "We are passionate about delivering durable, stunning nail enhancements in a welcoming atmosphere.",
+    "card1": {
+      "title": "Precision Shaping & Apex",
+      "desc": "Slim, natural-looking nail profiles without bulky edges, tailored to your natural nail plate."
+    },
+    "card2": {
+      "title": "Uncompromising Cleanliness",
+      "desc": "Sterilized metal implements, fresh disposable files, and clean spa pedicure chairs."
+    },
+    "card3": {
+      "title": "Trending Finishes & Effects",
+      "desc": "Cat eye magnetic shimmer, mirror chrome powders, airbrush ombres, and hand-painted French tips."
+    },
+    "card4": {
+      "title": "Convenient Morley Location",
+      "desc": "Conveniently located inside Morley Galleria with ample free parking and shopping nearby."
+    }
+  },
+  "about": {
+    "badge": "About Fashion Nails",
+    "title": "Your Dedicated Nail Studio at Morley Galleria",
+    "p1": "Conveniently located in Morley Galleria Shopping Centre, Fashion Nails has long been the favorite choice for local residents seeking high quality, long-lasting, and fashionable nail enhancements.",
+    "p2": "From quick cut-buff-shape sessions and nourishing pedicures to intricate full-set acrylics, BIAB, and Gel X, our team takes pride in every stroke. We listen to your preferences to give you nails you'll love showing off every day.",
+    "quote": "“Quality craftsmanship, friendly service, and nails that turn heads.”",
+    "author": "The Fashion Nails Morley Galleria Team"
+  },
+  "gallery": {
+    "badge": "Real Case Studies",
+    "title": "Finished Nails & Hand Portfolio",
+    "subtitle": "Explore our interactive 3D 360° carousel showcasing real fingernails completed by Fashion Nails artists.",
+    "view3D": "3D Carousel (360°)",
+    "viewGrid": "Editorial Grid",
+    "dragHint": "Drag or swipe to spin 3D carousel • Click any nail set to view details",
+    "pause": "Pause rotation",
+    "play": "Resume auto-spin",
+    "prev": "Previous look",
+    "next": "Next look",
+    "shape": "Nail shape",
+    "technique": "Technique",
+    "duration": "Duration",
+    "price": "Price",
+    "bookThis": "Book This Nail Look",
+    "tag1": "BIAB Natural Nails",
+    "tag2": "Chrome Colours",
+    "tag3": "Air Brush Ombre",
+    "tag4": "Spa Pedicure"
+  },
+  "testimonials": {
+    "badge": "Client Feedback",
+    "title": "Loved by Locals at Morley Galleria",
+    "subtitle": "Smooth scroll through authentic reviews from clients who trust Fashion Nails for their signature look.",
+    "verified": "Verified Client",
+    "note": "Verified feedback from genuine clients at Morley Galleria",
+    "dragHint": "Drag, swipe or wheel to explore reviews • Infinite smooth drift",
+    "ratingSummary": "4.9 / 5.0 on Google Reviews",
+    "ratingSub": "Over 500+ satisfied clients across Perth & Morley",
+    "viewGoogle": "View all reviews on Google"
+  },
+  "faq": {
+    "badge": "Common Questions",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Helpful details before visiting Fashion Nails Morley Galleria.",
+    "q1": "What is the difference between BIAB, Gel X, and Acrylic?",
+    "a1": "BIAB is a flexible builder gel applied over natural nails to add strength. Gel X uses full-cover soft gel tips for a lightweight extension. Acrylic is a traditional powder enhancement offering the highest durability and structure.",
+    "q2": "How do I claim the 10% discount?",
+    "a2": "Simply present your Student ID, Seniors Card, or Morley Galleria Staff badge at checkout when paying in-salon.",
+    "q3": "Do you accept walk-ins?",
+    "a3": "Yes! Walk-ins are always welcome. However, booking online in advance guarantees you won't have to wait during peak shopping hours.",
+    "q4": "Are Gift Vouchers available?",
+    "a4": "Yes, Gift Vouchers are readily available at the counter in any denomination, making the perfect gift for loved ones."
+  },
+  "finalCta": {
+    "badge": "Ready for Beautiful Nails?",
+    "title": "Book Your Appointment at Morley Galleria",
+    "subtitle": "Pick your favorite treatment and time. It takes less than 60 seconds to reserve your spot.",
+    "btn": "Book an Appointment"
+  },
+  "booking": {
+    "title": "Book at Fashion Nails Morley Galleria",
+    "step1": "1. Select Treatment",
+    "step2": "2. Choose Date",
+    "step3": "3. Select Time",
+    "step4": "4. Contact Details",
+    "step5": "5. Review",
+    "step6": "6. Confirmed",
+    "selectServicePrompt": "Select a treatment from our official price list:",
+    "selectDatePrompt": "Select appointment date (Open 7 days, same-day booking available):",
+    "selectTimePrompt": "Choose an available time slot (Western Australia Time - AWST):",
+    "perthCurrentTime": "Current Western Australia time (Perth - AWST):",
+    "todayBadge": "Today",
+    "passedBadge": "Passed",
+    "noMoreSlotsToday": "All online appointment slots for today have passed or are fully booked. Please choose another date or call (08) 9375 2888 for urgent assistance!",
+    "enterDetailsPrompt": "Please enter your contact details to secure your booking:",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "e.g., Sarah Jenkins",
+    "phone": "Mobile Phone",
+    "phonePlaceholder": "0412 345 678 or +61...",
+    "notes": "Notes / Special Requests (Optional)",
+    "notesPlaceholder": "e.g., Old acrylic removal needed, Morley Galleria staff, nail art ideas...",
+    "discountDesc": "10% off will be applied upon payment at the salon counter when presenting valid ID/Staff badge.",
+    "summaryTitle": "Your Appointment Summary",
+    "service": "Selected Treatment",
+    "dateTime": "Date & Time",
+    "duration": "Estimated Duration",
+    "estimatedPrice": "Price",
+    "customer": "Client",
+    "contactPhone": "Phone",
+    "policyNotice": "Note: Payment is settled directly at the salon after service. Don't forget your ID for the 10% Seniors, Students & Morley Galleria Staff discount!",
+    "confirmBtn": "Confirm Booking",
+    "backBtn": "Back",
+    "nextBtn": "Continue",
+    "close": "Close",
+    "submitting": "Submitting reservation...",
+    "successTitle": "Booking Received!",
+    "successSubtitle": "Thank you! Fashion Nails Morley Galleria has received your appointment request.",
+    "refCode": "Your Booking Reference:",
+    "addToCalendar": "Add to Calendar (Google / Apple)",
+    "doneBtn": "Done & Return Home",
+    "errors": {
+      "serviceRequired": "Please select a treatment from the menu.",
+      "dateRequired": "Please select a valid booking date.",
+      "timeRequired": "Please select a time slot.",
+      "nameRequired": "Please enter your full name.",
+      "phoneRequired": "Please enter a valid phone number (e.g., 0412 345 678).",
+      "general": "An error occurred. Please try again or call the salon directly."
+    }
+  },
+  "footer": {
+    "desc": "Fashion Nails - Full-service nail salon located inside Morley Galleria. Professional Acrylic Nails, BIAB, Gel X, Shellac, SNS Dipping, and trending Nail Art.",
+    "hoursTitle": "Salon Hours",
+    "hours": "Monday – Saturday: 9:30 AM – 5:30 PM (Thurs open till 7:00 PM)\nSunday: 11:00 AM – 4:30 PM",
+    "contactTitle": "Location & Contact",
+    "address": "Shop SP094 (Opposite Kmart), Morley Galleria Shopping Centre, Morley WA 6062, Australia",
+    "phone": "+61 8 9375 2888",
+    "socialTitle": "Follow Fashion Nails",
+    "rights": "Copyright © Fashion Nails Morley Galleria. All rights reserved."
+  },
+  "story": {
+    "badge": "Brand Narrative",
+    "capsule1": "01 Sanctuary",
+    "capsule2": "02 Autoclave 100%",
+    "capsule3": "03 Master BIAB",
+    "capsule4": "04 Galleria Privileges",
+    "chapter1": {
+      "tag": "CHAPTER 01 • THE CALM OASIS",
+      "headline": "A sanctuary of quiet luxury inside buzzing Morley Galleria.",
+      "lead": "Step through our doors and let the commotion of the shopping centre fade away. Gentle ambient warm lighting, relaxing scents, and plush ergonomic spa thrones create an intimate haven dedicated entirely to your self-care.",
+      "stat1Num": "500+",
+      "stat1Label": "Devoted Perth Clients",
+      "stat2Num": "4.9★",
+      "stat2Label": "Google Verified Rating",
+      "stat3Num": "0 Min",
+      "stat3Label": "Wait with Prior Booking"
+    },
+    "chapter2": {
+      "tag": "CHAPTER 02 • THE AUTOCLAVE STANDARD",
+      "headline": "Sterile pouches unsealed before your eyes. Zero hygiene compromise.",
+      "lead": "Every cuticle nipper, steel pusher, and carbide drill bit undergoes hospital-grade 134°C pressurized steam autoclaving. Files, buffers, and pumices are strictly single-use. We protect your natural nail wellness like family.",
+      "stat1Num": "134°C",
+      "stat1Label": "Medical Autoclave Heat",
+      "stat2Num": "100%",
+      "stat2Label": "Hermetically Sealed Pouches",
+      "stat3Num": "1-Use",
+      "stat3Label": "Disposable Buffers & Files"
+    },
+    "chapter3": {
+      "tag": "CHAPTER 03 • MASTER NAIL ARTISTRY",
+      "headline": "Natural nail vitality first. Fortification without structural damage.",
+      "lead": "Specializing in Japanese Builder Gel (BIAB) that empowers weak nails to grow resiliently, ultra-lightweight Gel-X extensions, and bespoke hand-painted French, chrome glazing, and cat-eye ombre precision.",
+      "stat1Num": "26+",
+      "stat1Label": "Official Menu Services",
+      "stat2Num": "4+ Wks",
+      "stat2Label": "High-Gloss BIAB Durability",
+      "stat3Num": "7-Day",
+      "stat3Label": "Atelier Service Guarantee"
+    },
+    "chapter4": {
+      "tag": "CHAPTER 04 • COMMUNITY PRIVILEGES",
+      "headline": "Proudly serving Morley, Dianella & the Greater Perth Community.",
+      "lead": "Complete pricing transparency with zero hidden fees. Honoring our community with 10% off for Seniors, Students, and Morley Galleria Staff, alongside beautifully presented Gift Vouchers.",
+      "stat1Num": "10%",
+      "stat1Label": "Off Seniors, Students & Staff",
+      "stat2Num": "Gift Vouchers",
+      "stat2Label": "Available in Custom Amounts",
+      "stat3Num": "7 Days",
+      "stat3Label": "Open Full Week For You"
+    },
+    "ctaExplore": "Explore 26 Treatments & Prices",
+    "ctaBook": "Book an Appointment"
+  },
+  "backToHero": {
+    "tooltip": "Back to Hero Section",
+    "ariaLabel": "Scroll back to Hero section",
+    "label": "Back to Hero"
+  }
+}

@@ -1,0 +1,127 @@
+/* ===================================================
+   FASHION NAILS MORLEY GALLERIA - DESIGN SYSTEM TOKENS
+   Feminine Luxury Nail Boutique: Rose Gold, Blush Pearl & Alabaster
+   UI/UX Pro Max & Apple Human Interface Guidelines
+   =================================================== */
+
+:root {
+  /* Common Font Families */
+  --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Font Scale */
+  --text-display: clamp(2.4rem, 5vw + 1rem, 4.25rem);
+  --text-h1: clamp(2rem, 3.6vw + 0.8rem, 3.2rem);
+  --text-h2: clamp(1.6rem, 2.4vw + 0.5rem, 2.3rem);
+  --text-h3: clamp(1.2rem, 1.4vw + 0.4rem, 1.6rem);
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-caption: 0.75rem;
+
+  /* Line Heights */
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.08em;
+  --tracking-widest: 0.16em;
+
+  /* 8pt Spatial Rhythm */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* Layout Constrains */
+  --max-width-site: 1240px;
+  --max-width-narrow: 920px;
+  --max-width-text: 680px;
+
+  /* Apple Soft Curved Corners */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 34px;
+  --radius-full: 9999px;
+
+  /* Easing curves (Apple HIG fluid physics) */
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 260ms;
+  --duration-slow: 450ms;
+
+  /* Z-Index Layers */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-drawer: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 310;
+  --z-toast: 400;
+
+  /* Status Colors */
+  --color-success: #15803D;
+  --color-success-bg: #F0FDF4;
+  --color-error: #DC2626;
+  --color-error-bg: #FEF2F2;
+
+  /* ===================================================
+     BRIGHT FEMININE NAIL PALETTE (ROSE GOLD & BLUSH PEARL)
+     Fresh, Luminous, High-Contrast & Elegant
+     =================================================== */
+  --color-canvas: #FFFBF9;               /* Luminous Warm Petal Milk */
+  --color-surface: #FFFFFF;              /* Pure Crisp White */
+  --color-surface-card: #FFFFFF;         /* Pure Alabaster Card */
+  --color-surface-soft: #FDF4F0;         /* Soft Blush Nude */
+  --color-surface-glass: rgba(255, 255, 255, 0.88); /* Apple Liquid Glass */
+  --color-surface-translucent: rgba(255, 255, 255, 0.78);
+
+  /* High Contrast Typography */
+  --color-text-primary: #2B2121;         /* Deep Velvet Plum Espresso (14:1 contrast) */
+  --color-text-secondary: #6B5857;       /* Warm Rose Taupe (5.5:1 contrast) */
+  --color-text-muted: #9A8584;           /* Gentle Hint */
+
+  /* Rose Gold & Feminine Accents */
+  --color-gold: #D48278;                 /* Primary Rose Gold */
+  --color-gold-light: #F6DDD8;           /* Soft Petal Pink */
+  --color-gold-dark: #BD6D64;            /* Deep Rose Gold for Readable Text */
+  --color-gold-subtle: rgba(212, 130, 120, 0.1); /* Delicate Wash */
+  --color-gold-hover: #C7756B;           /* Interactive Hover */
+
+  --color-border: rgba(212, 130, 120, 0.22);       /* Hairline Rose Gold Border */
+  --color-border-hover: rgba(212, 130, 120, 0.55); /* Glow Rose Gold Border */
+  --color-border-subtle: rgba(43, 33, 33, 0.08);
+
+  /* Luxury Feminine Gradients */
+  --gradient-gold: linear-gradient(135deg, #F3BAA8 0%, #D48278 50%, #B8675E 100%);
+  --gradient-gold-foil: linear-gradient(110deg, #D48278 0%, #FFEBE6 35%, #D48278 65%, #A7554C 100%);
+  --gradient-dark-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(253, 246, 243, 0.96) 100%);
+  --gradient-card-hero: linear-gradient(145deg, #FFFFFF 0%, #FFF5F1 100%);
+
+  /* Soft Ambient Shadows */
+  --shadow-subtle: 0 1px 3px rgba(43, 33, 33, 0.04);
+  --shadow-card: 0 6px 24px -2px rgba(92, 53, 49, 0.06), 0 2px 6px -1px rgba(92, 53, 49, 0.03);
+  --shadow-card-hover: 0 16px 36px -4px rgba(212, 130, 120, 0.2), 0 0 20px rgba(212, 130, 120, 0.12);
+  --shadow-modal: 0 24px 60px -12px rgba(43, 33, 33, 0.18), 0 8px 24px -6px rgba(212, 130, 120, 0.15);
+  --shadow-gold: 0 6px 20px rgba(212, 130, 120, 0.24);
+  --glow-gold: 0 0 24px rgba(212, 130, 120, 0.28);
+
+  --damask-opacity: 0.035;
+}

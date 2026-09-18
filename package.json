@@ -1,0 +1,10 @@
+{
+  "name": "luxury-nail-salon-landing-page",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "client:dev": "npm run dev --prefix client",
+    "server:dev": "npm run dev --prefix server",
+    "build": "npm run build --prefix client"
+  }
+}
