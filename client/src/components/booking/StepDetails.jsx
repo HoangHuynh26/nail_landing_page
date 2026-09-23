@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { User, Phone, FileText, AlertCircle } from 'lucide-react';
+import { User, Phone, Mail, Users, FileText, AlertCircle, Gift } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { Button } from '../ui/Button';
 
 export function StepDetails() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { formData, updateFormData, setStep } = useBooking();
   const [localErrors, setLocalErrors] = useState({});
 
@@ -16,10 +16,20 @@ export function StepDetails() {
     }
 
     // Australian / international phone validation
-    // Matches: 0412345678, 0412 345 678, +61412345678, +84..., or at least 8 digits
-    const cleanedPhone = formData.phone.replace(/[\s\-\(\)]/g, '');
+    const cleanedPhone = (formData.phone || '').replace(/[\s\-\(\)]/g, '');
     if (!cleanedPhone || cleanedPhone.length < 8) {
       errs.phone = t('booking.errors.phoneRequired');
+    }
+
+    // Required email check
+    const emailStr = (formData.email || '').trim();
+    if (!emailStr) {
+      errs.email = t('booking.errors.emailRequired') || 'Please enter your email address.';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailStr)) {
+        errs.email = 'Please enter a valid email address (e.g., name@example.com).';
+      }
     }
 
     setLocalErrors(errs);
@@ -31,6 +41,8 @@ export function StepDetails() {
       setStep(5);
     }
   };
+
+  const currentGuests = Number(formData.guests) || 1;
 
   return (
     <div className="booking-step booking-step--details">
@@ -86,7 +98,57 @@ export function StepDetails() {
           )}
         </div>
 
-        {/* Special Notes Field */}
+        {/* Email Field (Required) */}
+        <div className={`booking-field ${localErrors.email ? 'has-error' : ''}`}>
+          <label htmlFor="booking-email-input" className="booking-field__label">
+            <Mail size={15} />
+            <span>{t('booking.email')} <abbr title="required">*</abbr></span>
+          </label>
+          <input
+            id="booking-email-input"
+            type="email"
+            required
+            autoComplete="email"
+            placeholder={t('booking.emailPlaceholder')}
+            value={formData.email || ''}
+            onChange={(e) => updateFormData({ email: e.target.value })}
+            className="booking-field__input"
+          />
+          {localErrors.email && (
+            <div className="booking-field__error" role="alert">
+              <AlertCircle size={14} />
+              <span>{localErrors.email}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Number of Guests / Party Size */}
+        <div className="booking-field">
+          <label className="booking-field__label">
+            <Users size={15} />
+            <span>{t('booking.guests')}</span>
+          </label>
+          <div className="booking-guests-selector" role="radiogroup" aria-label="Select number of guests">
+            {[1, 2, 3, 4, 5].map((count) => {
+              const isSelected = currentGuests === count;
+              const label = count === 1 ? '1 Person' : count === 5 ? '5+ Group' : `${count} People`;
+              return (
+                <button
+                  key={count}
+                  type="button"
+                  role="radio"
+                  aria-checked={isSelected}
+                  className={`booking-guest-pill ${isSelected ? 'is-selected' : ''}`}
+                  onClick={() => updateFormData({ guests: count })}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Special Message / Notes Field (Completely Optional) */}
         <div className="booking-field">
           <label htmlFor="booking-notes-input" className="booking-field__label">
             <FileText size={15} />
@@ -96,9 +158,25 @@ export function StepDetails() {
             id="booking-notes-input"
             rows="3"
             placeholder={t('booking.notesPlaceholder')}
-            value={formData.notes}
+            value={formData.notes || ''}
             onChange={(e) => updateFormData({ notes: e.target.value })}
             className="booking-field__textarea"
+          />
+        </div>
+
+        {/* Voucher / Gift Card Field (Optional) */}
+        <div className="booking-field">
+          <label htmlFor="booking-voucher-input" className="booking-field__label">
+            <Gift size={15} />
+            <span>{language === 'vi' ? 'Mã Voucher / Phiếu Quà Tặng (Tuỳ chọn)' : 'Voucher / Gift Card Code (Optional)'}</span>
+          </label>
+          <input
+            id="booking-voucher-input"
+            type="text"
+            placeholder={language === 'vi' ? 'Nhập mã voucher nếu có (ví dụ: GIFT-50)...' : 'e.g., GIFT-50, VOUCHER-10...'}
+            value={formData.voucher || ''}
+            onChange={(e) => updateFormData({ voucher: e.target.value })}
+            className="booking-field__input"
           />
         </div>
 
@@ -117,7 +195,7 @@ export function StepDetails() {
               <span className="booking-discount-badge">-10%</span>
             </div>
             <div className="booking-discount-desc">
-              {t('booking.discountDesc') || 'Áp dụng giảm ngay 10% trên tổng hoá đơn khi xuất trình thẻ tại quầy.'}
+              {t('booking.discountDesc')}
             </div>
           </div>
         </label>

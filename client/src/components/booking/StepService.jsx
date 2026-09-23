@@ -27,7 +27,6 @@ export function StepService() {
         const q = modalSearch.toLowerCase().trim();
         return (
           s.name_en.toLowerCase().includes(q) ||
-          s.name_vi.toLowerCase().includes(q) ||
           s.category.toLowerCase().includes(q)
         );
       }
@@ -38,7 +37,7 @@ export function StepService() {
   const handleSelect = (service) => {
     updateFormData({
       serviceId: service.id,
-      serviceName: language === 'vi' ? service.name_vi : service.name_en,
+      serviceName: service.name_en,
       servicePrice: service.price,
       serviceDuration: service.duration
     });
@@ -59,7 +58,7 @@ export function StepService() {
           type="text"
           value={modalSearch}
           onChange={(e) => setModalSearch(e.target.value)}
-          placeholder={language === 'vi' ? 'Tìm dịch vụ...' : 'Search service...'}
+          placeholder="Search service..."
           style={{
             width: '100%',
             padding: '8px 12px 8px 36px',
@@ -98,11 +97,11 @@ export function StepService() {
         ))}
       </div>
 
-      <div className="booking-service-list" style={{ maxHeight: '340px', overflowY: 'auto' }}>
+      <div className="booking-service-list" role="radiogroup" aria-label="Services list" style={{ maxHeight: '340px', overflowY: 'auto' }}>
         {filtered.map(service => {
           const isSelected = formData.serviceId === service.id;
-          const name = language === 'vi' ? service.name_vi : service.name_en;
-          const desc = language === 'vi' ? service.description_vi : service.description_en;
+          const name = service.name_en;
+          const desc = service.description_en;
 
           return (
             <div

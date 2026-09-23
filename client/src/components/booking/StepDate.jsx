@@ -32,12 +32,12 @@ export function StepDate() {
     const isSunday = (dayOfWeek === 0);
     const isThursday = (dayOfWeek === 4);
 
-    const dayName = dateObj.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-AU', {
+    const dayName = dateObj.toLocaleDateString('en-AU', {
       weekday: 'short',
       timeZone: 'UTC'
     });
     const dayNumber = d;
-    const monthName = dateObj.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-AU', {
+    const monthName = dateObj.toLocaleDateString('en-AU', {
       month: 'short',
       timeZone: 'UTC'
     });
@@ -73,23 +73,7 @@ export function StepDate() {
       <h3 className="booking-step__heading">{t('booking.step2')}</h3>
       <p className="booking-step__desc">{t('booking.selectDatePrompt')}</p>
 
-      {/* Live Western Australia Timezone Indicator */}
-      <div className="booking-timezone-banner" role="status" aria-live="polite">
-        <div className="booking-timezone-pill">
-          <span className="live-pulsing-dot" aria-hidden="true"></span>
-          <Clock size={13} className="booking-timezone-icon" aria-hidden="true" />
-          <span className="booking-timezone-text">
-            {t('booking.perthCurrentTime')} <strong>{perthTimeStr}</strong>
-          </span>
-        </div>
-        <span className="booking-timezone-note">
-          <Sparkles size={12} className="booking-sparkle-icon" aria-hidden="true" />
-          {language === 'vi'
-            ? 'Nhận hẹn hôm nay & mở cửa phục vụ cả tuần (7 ngày)'
-            : 'Same-day booking available & open full 7 days'}
-        </span>
-      </div>
-
+     
       {/* 14-Day Quick Selection Strip Starting Today */}
       <div className="booking-date-grid" role="radiogroup" aria-label="Available appointment dates">
         {quickDates.map((item) => {
@@ -113,11 +97,11 @@ export function StepDate() {
               <span className="booking-date-card__day">{item.dayNumber}</span>
               <span className="booking-date-card__month">{item.monthName}</span>
               {item.isSunday && (
-                <span className="booking-date-card__hours-hint">11h - 16h30</span>
+                <span className="booking-date-card__hours-hint">11am - 4:30pm</span>
               )}
               {item.isThursday && (
                 <span className="booking-date-card__hours-hint booking-date-card__hours-hint--late">
-                  {language === 'vi' ? 'Tới 19h' : 'Till 7pm'}
+                  Till 7pm
                 </span>
               )}
             </button>
@@ -129,7 +113,7 @@ export function StepDate() {
       <div className="booking-date-custom">
         <label htmlFor="custom-date-input" className="booking-date-custom__label">
           <CalendarIcon size={16} />
-          <span>{language === 'vi' ? 'Hoặc chọn ngày khác:' : 'Or choose another date:'}</span>
+          <span>Or choose another date:</span>
         </label>
         <input
           id="custom-date-input"

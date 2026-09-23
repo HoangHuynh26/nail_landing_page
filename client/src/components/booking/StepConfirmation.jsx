@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Calendar, MapPin, Download, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Calendar, MapPin, Mail, Users, Download, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { Button } from '../ui/Button';
@@ -17,7 +17,7 @@ export function StepConfirmation() {
     if (!isoStr) return '';
     try {
       const d = new Date(isoStr + 'T00:00:00');
-      return d.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-AU', {
+      return d.toLocaleDateString('en-AU', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
@@ -56,8 +56,18 @@ export function StepConfirmation() {
 
           <div className="booking-confirm-detail-row">
             <span className="booking-confirm-detail-dot" />
-            <span>{bookingResult?.serviceName} (${bookingResult?.servicePrice} AUD)</span>
+            <span>
+              {bookingResult?.serviceName} (${bookingResult?.servicePrice} AUD)
+              {Number(bookingResult?.guests) > 1 ? ` • ${bookingResult.guests} Guests` : ''}
+            </span>
           </div>
+
+          {bookingResult?.email && (
+            <div className="booking-confirm-detail-row">
+              <Mail size={16} />
+              <span>Email: {bookingResult.email}</span>
+            </div>
+          )}
 
           <div className="booking-confirm-detail-row">
             <MapPin size={16} />

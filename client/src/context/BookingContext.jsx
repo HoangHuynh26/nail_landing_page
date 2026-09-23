@@ -17,16 +17,20 @@ export function BookingProvider({ children }) {
   // Form State
   const [formData, setFormData] = useState({
     serviceId: servicesData[0].id,
-    serviceName: servicesData[0].name_vi,
+    serviceName: servicesData[0].name_en,
     servicePrice: servicesData[0].price,
     serviceDuration: servicesData[0].duration,
     date: '',
     time: '',
     fullName: '',
     phone: '',
+    email: '',
+    guests: 1,
     notes: '',
+    voucher: '',
     hasDiscount: false
   });
+
 
   const openBooking = (preferredServiceId = null) => {
     setError(null);
@@ -39,7 +43,7 @@ export function BookingProvider({ children }) {
     setFormData(prev => ({
       ...prev,
       serviceId: targetService.id,
-      serviceName: language === 'vi' ? targetService.name_vi : targetService.name_en,
+      serviceName: targetService.name_en,
       servicePrice: targetService.price,
       serviceDuration: targetService.duration,
       // Default to today's date in Western Australia (Perth) if not chosen
@@ -67,14 +71,17 @@ export function BookingProvider({ children }) {
     setError(null);
     setFormData({
       serviceId: servicesData[0].id,
-      serviceName: language === 'vi' ? servicesData[0].name_vi : servicesData[0].name_en,
+      serviceName: servicesData[0].name_en,
       servicePrice: servicesData[0].price,
       serviceDuration: servicesData[0].duration,
       date: getPerthDateString(0),
       time: '',
       fullName: '',
       phone: '',
+      email: '',
+      guests: 1,
       notes: '',
+      voucher: '',
       hasDiscount: false
     });
   };
@@ -86,20 +93,26 @@ export function BookingProvider({ children }) {
     try {
       const finalNotes = [
         formData.hasDiscount
-          ? (language === 'vi' ? '[Ưu đãi 10%: Senior / Student / Morley Galleria Staff]' : '[10% Discount: Senior / Student / Morley Galleria Staff]')
+          ? '[10% Discount: Senior / Student / Morley Galleria Staff]'
           : '',
         formData.notes.trim()
       ].filter(Boolean).join(' - ');
 
       const payload = {
-        serviceId: formData.serviceId,
-        serviceName: formData.serviceName,
-        date: formData.date,
-        time: formData.time,
+        name: formData.fullName.trim(),
         fullName: formData.fullName.trim(),
         phone: formData.phone.trim(),
+        email: (formData.email || '').trim(),
+        service: formData.serviceName,
+        serviceName: formData.serviceName,
+        serviceId: formData.serviceId,
+        date: formData.date,
+        time: formData.time,
+        message: finalNotes,
         notes: finalNotes,
-        language
+        voucher: (formData.voucher || (formData.hasDiscount ? '10% Off Community Discount' : '')).trim(),
+        guests: Number(formData.guests) || 1,
+        language: 'en'
       };
 
       const response = await fetch('/api/bookings', {
@@ -120,6 +133,8 @@ export function BookingProvider({ children }) {
       setBookingResult({
         bookingId: data.bookingId,
         ...formData,
+        email: (formData.email || '').trim(),
+        guests: Number(formData.guests) || 1,
         createdAt: data.data?.createdAt || new Date().toISOString()
       });
       setStep(6);

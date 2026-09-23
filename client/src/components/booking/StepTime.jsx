@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Clock, AlertCircle, Calendar, PhoneCall, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Clock, AlertCircle, Calendar, PhoneCall } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { Button } from '../ui/Button';
@@ -15,6 +15,15 @@ export function StepTime() {
   const { language, t } = useLanguage();
   const { formData, updateFormData, setStep } = useBooking();
 
+  // Tick state to update live Perth time every 30 seconds
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((prev) => prev + 1);
+    }, 30000);
+    return () => clearInterval(timer);
+  }, []);
+
   const perthTimeStr = getPerthFormattedTime();
   const perthNow = getPerthNow();
   const perthTodayIso = perthNow.isoDate;
@@ -26,49 +35,51 @@ export function StepTime() {
   // Day-of-week appropriate slots for this date in Perth
   const slots = getSalonSlotsForDate(selectedDate);
 
-  // Realistic mock booked slots
-  const bookedSlots = ['11:00 AM', '02:30 PM'];
-
-  // Available upcoming slots (neither booked nor in the past in Western Australia)
-  const availableUpcomingSlots = slots.filter((time) => {
-    const isPast = isTodayInPerth && isSlotInPast(time, selectedDate, 20);
-    const isBooked = bookedSlots.includes(time);
-    return !isPast && !isBooked;
+  // Available upcoming slots: if today, only slots that haven't passed in Western Australia
+  const availableSlots = slots.filter((time) => {
+    if (isTodayInPerth) {
+      return !isSlotInPast(time, selectedDate, 0);
+    }
+    return true;
   });
 
-  // Auto-align selected time if currently empty, in past, or invalid for date
+  const hasNoSlotsLeft = isTodayInPerth && availableSlots.length === 0;
+
+  // Auto-align selected time if currently empty, locked, or not in available slots
   useEffect(() => {
-    const isCurrentTimeInvalid =
-      !formData.time ||
-      !slots.includes(formData.time) ||
-      bookedSlots.includes(formData.time) ||
-      (isTodayInPerth && isSlotInPast(formData.time, selectedDate, 20));
+    const isSelectedLocked = isTodayInPerth && isSlotInPast(formData.time, selectedDate, 0);
+    const isCurrentTimeInvalid = !formData.time || !slots.includes(formData.time) || isSelectedLocked;
 
-    if (isCurrentTimeInvalid && availableUpcomingSlots.length > 0) {
-      updateFormData({ time: availableUpcomingSlots[0] });
+    if (isCurrentTimeInvalid) {
+      if (availableSlots.length > 0) {
+        updateFormData({ time: availableSlots[0] });
+      } else {
+        updateFormData({ time: '' });
+      }
     }
-  }, [selectedDate, formData.time, isTodayInPerth, slots.length]);
+  }, [selectedDate, isTodayInPerth, formData.time, slots.length, availableSlots.length]);
 
-  const handleSelectTime = (time, isUnavailable) => {
-    if (isUnavailable) return;
+  const handleSelectTime = (time, isLocked) => {
+    if (isLocked) return;
     updateFormData({ time });
   };
 
   const handleNext = () => {
-    if (!formData.time && availableUpcomingSlots.length > 0) {
-      updateFormData({ time: availableUpcomingSlots[0] });
+    const isSelectedLocked = isTodayInPerth && isSlotInPast(formData.time, selectedDate, 0);
+    if ((!formData.time || isSelectedLocked) && availableSlots.length > 0) {
+      updateFormData({ time: availableSlots[0] });
     }
-    setStep(4);
+    if (!hasNoSlotsLeft && formData.time && !isSelectedLocked) {
+      setStep(4);
+    }
   };
-
-  const hasNoSlotsLeft = availableUpcomingSlots.length === 0;
 
   return (
     <div className="booking-step booking-step--time">
       <h3 className="booking-step__heading">{t('booking.step3')}</h3>
       <p className="booking-step__desc">{t('booking.selectTimePrompt')}</p>
 
-      {/* Live Western Australia Timezone Pill */}
+      {/* Live Western Australia Timezone Banner */}
       <div className="booking-timezone-banner" role="status" aria-live="polite">
         <div className="booking-timezone-pill">
           <span className="live-pulsing-dot" aria-hidden="true"></span>
@@ -80,20 +91,20 @@ export function StepTime() {
         <span className="booking-timezone-note">
           {isTodayInPerth ? (
             language === 'vi'
-              ? '⚡ Khung giờ hôm nay được cập nhật theo thời gian thực tại Perth'
-              : '⚡ Today\'s slots dynamically updated in real-time Perth AWST'
+              ? '⚡ Khung giờ đã qua tại Tây Úc (Perth AWST) tự động khóa'
+              : '⚡ Past slots in Western Australia (Perth AWST) are automatically locked'
           ) : (
             language === 'vi'
-              ? '✨ Lịch hẹn theo giờ hoạt động của tiệm tại Morley Galleria'
+              ? '✨ Giờ hoạt động tiệm tại Morley Galleria'
               : '✨ Scheduled in Morley Galleria salon operating hours'
           )}
         </span>
       </div>
 
       {/* If all slots for today have already passed */}
-      {hasNoSlotsLeft ? (
+      {hasNoSlotsLeft && (
         <div className="booking-no-slots-box" role="alert">
-          <AlertCircle size={28} className="booking-no-slots-box__icon" />
+          <AlertCircle size={26} className="booking-no-slots-box__icon" />
           <div className="booking-no-slots-box__content">
             <h4 className="booking-no-slots-box__title">
               {language === 'vi'
@@ -126,48 +137,47 @@ export function StepTime() {
             </div>
           </div>
         </div>
-      ) : (
-        /* Available time slots grid */
-        <div
-          className="booking-time-grid"
-          role="radiogroup"
-          aria-label="Available appointment times"
-        >
-          {slots.map((time) => {
-            const isSelected = formData.time === time;
-            const isPast = isTodayInPerth && isSlotInPast(time, selectedDate, 20);
-            const isBooked = bookedSlots.includes(time);
-            const isUnavailable = isPast || isBooked;
-
-            return (
-              <button
-                key={time}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                disabled={isUnavailable}
-                className={`booking-time-slot ${isSelected ? 'is-selected' : ''} ${
-                  isPast ? 'is-past' : ''
-                } ${isBooked ? 'is-booked' : ''}`}
-                onClick={() => handleSelectTime(time, isUnavailable)}
-              >
-                <Clock size={13} aria-hidden="true" />
-                <span className="booking-time-slot__text">{time}</span>
-                {isPast && (
-                  <span className="booking-time-slot__badge booking-time-slot__badge--past">
-                    {t('booking.passedBadge')}
-                  </span>
-                )}
-                {isBooked && !isPast && (
-                  <span className="booking-time-slot__badge booking-time-slot__badge--booked">
-                    Kín / Booked
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
       )}
+
+      {/* Available time slots grid */}
+      <div
+        className="booking-time-grid"
+        role="radiogroup"
+        aria-label="Available appointment times"
+      >
+        {slots.map((time) => {
+          const isLocked = isTodayInPerth && isSlotInPast(time, selectedDate, 0);
+          const isSelected = !isLocked && formData.time === time;
+
+          return (
+            <button
+              key={time}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              aria-disabled={isLocked}
+              disabled={isLocked}
+              className={`booking-time-slot ${isSelected ? 'is-selected' : ''} ${
+                isLocked ? 'is-past is-locked' : ''
+              }`}
+              onClick={() => handleSelectTime(time, isLocked)}
+              title={
+                isLocked
+                  ? (language === 'vi' ? 'Khung giờ này đã qua tại Tây Úc' : 'This time slot has already passed in Western Australia')
+                  : time
+              }
+            >
+              <Clock size={13} aria-hidden="true" />
+              <span className="booking-time-slot__text">{time}</span>
+              {isLocked && (
+                <span className="booking-time-slot__badge booking-time-slot__badge--past">
+                  {t('booking.passedBadge') || (language === 'vi' ? 'Đã qua' : 'Passed')}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
       <div className="booking-step__nav">
         <Button
@@ -181,7 +191,7 @@ export function StepTime() {
           id="step3-next-btn"
           variant="primary"
           size="md"
-          disabled={hasNoSlotsLeft || !formData.time}
+          disabled={hasNoSlotsLeft || !formData.time || (isTodayInPerth && isSlotInPast(formData.time, selectedDate, 0))}
           onClick={handleNext}
         >
           {t('booking.nextBtn')} →
@@ -190,3 +200,4 @@ export function StepTime() {
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, DollarSign, User, Phone, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Calendar, Clock, DollarSign, User, Phone, Users, Mail, AlertCircle, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { Button } from '../ui/Button';
@@ -13,7 +13,7 @@ export function StepReview() {
     if (!isoStr) return '';
     try {
       const d = new Date(isoStr + 'T00:00:00');
-      return d.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-AU', {
+      return d.toLocaleDateString('en-AU', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
@@ -67,7 +67,7 @@ export function StepReview() {
                     ${Math.round(formData.servicePrice * 0.9)} AUD
                   </strong>
                   <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '0.75rem', background: 'var(--color-gold)', color: '#000', fontWeight: 700, padding: '1px 5px', borderRadius: '4px' }}>
-                    -10% Ưu đãi
+                    -10% Discount
                   </span>
                 </div>
               ) : (
@@ -91,12 +91,39 @@ export function StepReview() {
               <strong>{formData.phone}</strong>
             </div>
           </div>
+
+          <div className="booking-summary-item">
+            <Users size={16} className="booking-summary-item__icon" />
+            <div className="booking-summary-item__text">
+              <span className="booking-summary-item__label">Party Size</span>
+              <strong>{Number(formData.guests) > 1 ? `${formData.guests} People` : '1 Person'}</strong>
+            </div>
+          </div>
+
+          {formData.email && (
+            <div className="booking-summary-item">
+              <Mail size={16} className="booking-summary-item__icon" />
+              <div className="booking-summary-item__text">
+                <span className="booking-summary-item__label">Email</span>
+                <strong style={{ wordBreak: 'break-all' }}>{formData.email}</strong>
+              </div>
+            </div>
+          )}
         </div>
 
         {formData.notes && (
           <div className="booking-summary-notes">
             <span className="booking-summary-notes__label">{t('booking.notes')}:</span>
             <p className="booking-summary-notes__text">"{formData.notes}"</p>
+          </div>
+        )}
+
+        {formData.voucher && (
+          <div className="booking-summary-notes" style={{ marginTop: '8px' }}>
+            <span className="booking-summary-notes__label">Voucher / Promo Code:</span>
+            <p className="booking-summary-notes__text" style={{ fontWeight: 600, color: 'var(--color-gold-dark)' }}>
+              {formData.voucher}
+            </p>
           </div>
         )}
 
