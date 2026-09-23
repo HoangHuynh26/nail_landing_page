@@ -10,7 +10,7 @@ import SlideFillButton from '../common/SlideFillButton';
 import { rankAndFilterServices } from '../../utils/searchServices';
 
 export function Services() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const { openBooking } = useBooking();
   const [activeCategory, setActiveCategory] = useState('biab');
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,7 +44,9 @@ export function Services() {
     return Object.fromEntries(categories.map(c => [c.key, c.label]));
   }, [categories]);
 
-  const activeCategoryObj = categories.find(c => c.key === activeCategory) || categories[0];
+  const activeCategoryObj = useMemo(() => {
+    return categories.find(c => c.key === activeCategory) || categories[0];
+  }, [categories, activeCategory]);
 
   return (
     <section id="services" className="section services-section" aria-labelledby="services-heading">
@@ -54,7 +56,7 @@ export function Services() {
           subtitle={t('services.subtitle')}
         />
 
-        {/* Sticky Search Input Bar (Dính khi cuộn trên cả Desktop & Mobile) */}
+        {/* Sticky Search Input Bar */}
         <div className="services-search-sticky-wrap">
           <div className="services-search-container">
             <div className="services-search-input-wrapper">
@@ -65,7 +67,7 @@ export function Services() {
                 className="services-search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={language === 'vi' ? 'Tìm nhanh dịch vụ (ví dụ: BIAB, Acrylic, Shellac, Mắt Mèo, French...)' : 'Search services (e.g., BIAB, Acrylic, Shellac, Cat eye, French...)'}
+                placeholder="Search services (e.g., BIAB, Acrylic, Shellac, Cat eye, French...)"
                 aria-label="Search treatments"
               />
               {searchQuery && (
@@ -86,16 +88,14 @@ export function Services() {
                 <div className="services-search-feedback" role="status" aria-live="polite">
                   <Sparkles size={13} className="services-search-feedback-icon" />
                   <span>
-                    {language === 'vi'
-                      ? <>Tìm thấy <strong>{filteredServices.length}</strong> dịch vụ phù hợp nhất</>
-                      : <>Found <strong>{filteredServices.length}</strong> best matching services</>}
+                    Found <strong>{filteredServices.length}</strong> best matching services
                   </span>
                   <button
                     type="button"
                     className="services-search-reset-link"
                     onClick={() => setSearchQuery('')}
                   >
-                    {language === 'vi' ? 'Xoá tìm kiếm' : 'Clear'}
+                    Clear
                   </button>
                 </div>
               </div>
@@ -103,47 +103,11 @@ export function Services() {
           </div>
         </div>
 
-        {/* =========================================================
-            MOBILE UNIFIED FILTER BAR (Hiển thị 1 bộ lọc gọn gàng trên mobile)
-            ========================================================= */}
+        {/* Mobile Filter Bar */}
         <div className="services-mobile-filter-box">
-          {/* Main Select Dropdown Bar */}
-          <div className="services-mobile-filter-bar">
-            <div className="services-mobile-filter-lead">
-              <SlidersHorizontal size={14} className="services-mobile-filter-lead-icon" />
-              <span>{language === 'vi' ? 'Bộ lọc dịch vụ:' : 'Filter category:'}</span>
-            </div>
+          
 
-            <div className="services-mobile-select-trigger">
-              <span className="services-mobile-select-text">
-                {activeCategoryObj.label}
-              </span>
-              <span className="services-mobile-select-badge">
-                {categoryCounts[activeCategory] || 0}
-              </span>
-              <ChevronDown size={15} className="services-mobile-select-chevron" />
-
-              {/* Native Mobile Wheel/Sheet Select Overlay */}
-              <select
-                id="services-mobile-filter-select"
-                value={activeCategory}
-                onChange={(e) => {
-                  setActiveCategory(e.target.value);
-                  if (searchQuery) setSearchQuery('');
-                }}
-                className="services-mobile-select-native"
-                aria-label={language === 'vi' ? 'Chọn danh mục dịch vụ' : 'Select service category'}
-              >
-                {categories.map(cat => (
-                  <option key={cat.key} value={cat.key}>
-                    {cat.label} ({categoryCounts[cat.key] || 0} dịch vụ)
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Single-row horizontal swipe pill track (Chạy 1 hàng duy nhất, vuốt mượt mà) */}
+          {/* Single-row horizontal swipe pill track */}
           <div className="services-mobile-pills-row" role="tablist" aria-label="Service categories quick swipe">
             {categories.map(cat => {
               const isSelected = activeCategory === cat.key;
@@ -201,10 +165,10 @@ export function Services() {
             margin: '0 auto'
           }}>
             <p style={{ fontSize: '1.1rem', color: 'var(--color-text-primary)', marginBottom: '12px' }}>
-              {language === 'vi' ? 'Không tìm thấy dịch vụ phù hợp' : 'No matching services found'}
+              No matching services found
             </p>
             <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '20px' }}>
-              {language === 'vi' ? 'Vui lòng thử tìm từ khóa khác hoặc xóa bộ lọc.' : 'Try adjusting your search terms or clearing the filter.'}
+              Try adjusting your search terms or clearing the filter.
             </p>
             <Button
               variant="outline"
@@ -214,20 +178,19 @@ export function Services() {
                 setActiveCategory('all');
               }}
             >
-              {language === 'vi' ? 'Xem lại tất cả dịch vụ' : 'View all services'}
+              View all services
             </Button>
           </div>
         ) : (
           <div className="services-grid">
             {filteredServices.map(service => {
-              const name = language === 'vi' ? service.name_vi : service.name_en;
-              const desc = language === 'vi' ? service.description_vi : service.description_en;
+              const name = service.name_en;
+              const desc = service.description_en;
 
               return (
                 <article key={service.id} className={`service-card ${service.featured ? 'service-card--featured' : ''}`}>
                   {service.featured && (
                     <span className="service-card__featured-pill">
-                      <Sparkles size={12} aria-hidden="true" />
                       <span>Popular</span>
                     </span>
                   )}

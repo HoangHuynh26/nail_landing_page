@@ -7,7 +7,7 @@ import { SectionHeader } from '../ui/SectionHeader';
 import { Button } from '../ui/Button';
 
 export function PricingTable() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const { openBooking } = useBooking();
   const [activeFilter, setActiveFilter] = useState('all');
 
@@ -23,13 +23,13 @@ export function PricingTable() {
   ];
 
   const categoryTitles = {
-    acrylic: { vi: 'ACRYLIC NAILS (MÓNG BỘT)', en: 'ACRYLIC NAILS' },
-    shellac: { vi: 'SHELLAC (SƠN GEL)', en: 'SHELLAC' },
-    biab: { vi: 'BUILDER GEL - BIAB', en: 'BUILDER GEL - BIAB' },
-    gelx: { vi: 'GEL X EXTENSIONS', en: 'GEL X EXTENSIONS' },
-    polish: { vi: 'NAIL POLISH (SƠN THƯỜNG)', en: 'NAIL POLISH' },
-    sns: { vi: 'SNS (DIPPING POWDER)', en: 'SNS (DIPPING POWDER)' },
-    extra: { vi: 'EXTRA SERVICES (DỊCH VỤ THÊM)', en: 'EXTRA SERVICES' }
+    acrylic: 'ACRYLIC NAILS',
+    shellac: 'SHELLAC',
+    biab: 'BUILDER GEL - BIAB',
+    gelx: 'GEL X EXTENSIONS',
+    polish: 'NAIL POLISH',
+    sns: 'SNS (DIPPING POWDER)',
+    extra: 'EXTRA SERVICES'
   };
 
   // 2-Column layout matching the exact physical salon menu photo
@@ -47,10 +47,8 @@ export function PricingTable() {
       <div className="container">
         <SectionHeader
           badgeText={t('pricing.badge')}
-          title={language === 'vi' ? 'Bảng Giá Niêm Yết Chính Thức' : 'Official Salon Price List'}
-          subtitle={language === 'vi'
-            ? 'Bảng giá minh bạch 100% của Fashion Nails tại Morley Galleria. Không phụ phí ẩn, bảo hành làm móng 7 ngày.'
-            : 'Transparent menu pricing at Fashion Nails Morley Galleria. Zero hidden fees, backed by our 7-day guarantee.'}
+          title="Official Salon Price List"
+          subtitle="Transparent menu pricing at Fashion Nails Morley Galleria. Zero hidden fees, backed by our 7-day guarantee."
         />
 
         {/* Quick Filter Pill Tabs */}
@@ -77,7 +75,7 @@ export function PricingTable() {
                 const items = getItemsForCat(catKey);
                 if (items.length === 0) return null;
 
-                const title = language === 'vi' ? categoryTitles[catKey]?.vi : categoryTitles[catKey]?.en;
+                const title = categoryTitles[catKey];
 
                 return (
                   <div key={catKey} className="salon-menu-group">
@@ -87,7 +85,7 @@ export function PricingTable() {
                     </h3>
                     <div className="salon-menu-group__items">
                       {items.map(item => {
-                        const name = language === 'vi' ? item.name_vi : item.name_en;
+                        const name = item.name_en;
                         return (
                           <div key={item.id} className="salon-menu-item">
                             <span className="salon-menu-item__name">{name}</span>
@@ -100,9 +98,9 @@ export function PricingTable() {
                                 type="button"
                                 className="salon-menu-item__book-btn"
                                 onClick={() => openBooking(item.id)}
-                                title={`Đặt lịch ${name}`}
+                                title={`Book ${name}`}
                               >
-                                {language === 'vi' ? 'Đặt lịch' : 'Book'}
+                                Book
                               </button>
                             </div>
                           </div>
@@ -121,7 +119,7 @@ export function PricingTable() {
                 const items = getItemsForCat(catKey);
                 if (items.length === 0) return null;
 
-                const title = language === 'vi' ? categoryTitles[catKey]?.vi : categoryTitles[catKey]?.en;
+                const title = categoryTitles[catKey];
 
                 return (
                   <div key={catKey} className="salon-menu-group">
@@ -131,7 +129,7 @@ export function PricingTable() {
                     </h3>
                     <div className="salon-menu-group__items">
                       {items.map(item => {
-                        const name = language === 'vi' ? item.name_vi : item.name_en;
+                        const name = item.name_en;
                         return (
                           <div key={item.id} className="salon-menu-item">
                             <span className="salon-menu-item__name">{name}</span>
@@ -144,9 +142,9 @@ export function PricingTable() {
                                 type="button"
                                 className="salon-menu-item__book-btn"
                                 onClick={() => openBooking(item.id)}
-                                title={`Đặt lịch ${name}`}
+                                title={`Book ${name}`}
                               >
-                                {language === 'vi' ? 'Đặt lịch' : 'Book'}
+                                Book
                               </button>
                             </div>
                           </div>
@@ -178,7 +176,7 @@ export function PricingTable() {
             onClick={() => openBooking()}
             icon={Calendar}
           >
-            {language === 'vi' ? 'Đặt Lịch Làm Móng Ngay' : 'Book an Appointment'}
+            Book an Appointment
           </Button>
 
           <Button
@@ -187,7 +185,7 @@ export function PricingTable() {
             onClick={handlePrint}
             icon={Printer}
           >
-            {language === 'vi' ? 'In / Lưu Bảng Giá' : 'Print / Save Price Menu'}
+            Print / Save Price Menu
           </Button>
         </div>
       </div>

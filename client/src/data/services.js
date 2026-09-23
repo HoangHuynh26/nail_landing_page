@@ -16,7 +16,7 @@ export const servicesData = [
     duration: 50,
     price: 60,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
@@ -29,7 +29,7 @@ export const servicesData = [
     duration: 70,
     price: 80,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
@@ -72,7 +72,7 @@ export const servicesData = [
     duration: 45,
     price: 50,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
@@ -98,7 +98,7 @@ export const servicesData = [
     duration: 85,
     price: 100,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
 
@@ -115,7 +115,7 @@ export const servicesData = [
     duration: 65,
     price: 70,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
@@ -184,7 +184,7 @@ export const servicesData = [
     duration: 65,
     price: 80,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
@@ -227,7 +227,7 @@ export const servicesData = [
     duration: 60,
     price: 70,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
 
@@ -313,7 +313,7 @@ export const servicesData = [
     duration: 20,
     price: 20,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
@@ -326,7 +326,7 @@ export const servicesData = [
     duration: 25,
     price: 25,
     pricePrefix: "",
-    featured: true,
+    featured: false,
     active: true
   },
   {
