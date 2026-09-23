@@ -147,7 +147,7 @@ export function getSalonSlotsForDate(isoDate) {
  * Checks if a slot has passed relative to current Western Australia time
  * Buffer: 20 minutes buffer for customer travel / salon arrival prep
  */
-export function isSlotInPast(slotStr, isoDate, bufferMinutes = 20) {
+export function isSlotInPast(slotStr, isoDate, bufferMinutes = 0) {
   const perth = getPerthNow();
   if (isoDate < perth.isoDate) return true;
   if (isoDate > perth.isoDate) return false;
