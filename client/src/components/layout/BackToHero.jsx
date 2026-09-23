@@ -1,30 +1,57 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 export function BackToHero() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const isVisibleRef = useRef(false);
+  const indicatorRef = useRef(null);
 
-  const calculateScroll = useCallback(() => {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrollY / docHeight) * 100)) : 0;
-
-    setScrollProgress(progress);
-    setIsVisible(scrollY > 380);
-  }, []);
+  // Radius = 19, Circumference ≈ 119.38
+  const radius = 19;
+  const circumference = 2 * Math.PI * radius;
 
   useEffect(() => {
-    calculateScroll();
-    window.addEventListener('scroll', calculateScroll, { passive: true });
-    window.addEventListener('resize', calculateScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', calculateScroll);
-      window.removeEventListener('resize', calculateScroll);
+    let ticking = false;
+
+    const updateScrollProgress = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrollY / docHeight) * 100)) : 0;
+      const offset = circumference - (progress / 100) * circumference;
+
+      // Direct GPU/DOM update without triggering React Virtual DOM reconciliation
+      if (indicatorRef.current) {
+        indicatorRef.current.style.strokeDashoffset = `${offset}`;
+      }
+
+      const shouldShow = scrollY > 380;
+      if (shouldShow !== isVisibleRef.current) {
+        isVisibleRef.current = shouldShow;
+        setIsVisible(shouldShow);
+      }
     };
-  }, [calculateScroll]);
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateScrollProgress();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    updateScrollProgress();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [circumference]);
 
   const scrollToHero = (e) => {
     e?.preventDefault?.();
@@ -36,14 +63,9 @@ export function BackToHero() {
     }
   };
 
-  const tooltipText = t('backToHero.tooltip') || (language === 'vi' ? 'Trở về đầu trang (Hero)' : 'Back to Hero Section');
-  const ariaLabelText = t('backToHero.ariaLabel') || (language === 'vi' ? 'Cuộn trở về phần Hero' : 'Scroll back to Hero section');
-  const labelText = t('backToHero.label') || (language === 'vi' ? 'Về Hero' : 'Back to Hero');
-
-  // Radius = 19, Circumference ≈ 119.38
-  const radius = 19;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (scrollProgress / 100) * circumference;
+  const tooltipText = t('backToHero.tooltip') || 'Back to Hero Section';
+  const ariaLabelText = t('backToHero.ariaLabel') || 'Scroll back to Hero section';
+  const labelText = t('backToHero.label') || 'Back to Hero';
 
   return (
     <div
@@ -76,8 +98,9 @@ export function BackToHero() {
             strokeWidth="2.5"
             fill="none"
           />
-          {/* Active Gold Progress Track */}
+          {/* Active Gold Progress Track with Direct Hardware Rendering */}
           <circle
+            ref={indicatorRef}
             className="back-to-hero__indicator"
             cx="24"
             cy="24"
@@ -85,7 +108,7 @@ export function BackToHero() {
             strokeWidth="2.5"
             fill="none"
             strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
+            strokeDashoffset={circumference}
             strokeLinecap="round"
           />
         </svg>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, Phone } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
@@ -8,15 +8,30 @@ export function MobileStickyCTA() {
   const { t } = useLanguage();
   const { openBooking, isBookingOpen } = useBooking();
   const [isVisible, setIsVisible] = useState(false);
+  const isVisibleRef = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Show sticky CTA when scrolled past 380px and booking modal is closed
+    let ticking = false;
+
+    const updateVisibility = () => {
       const shouldShow = window.scrollY > 380 && !isBookingOpen;
-      setIsVisible(shouldShow);
+      if (shouldShow !== isVisibleRef.current) {
+        isVisibleRef.current = shouldShow;
+        setIsVisible(shouldShow);
+      }
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateVisibility();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    updateVisibility();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isBookingOpen]);

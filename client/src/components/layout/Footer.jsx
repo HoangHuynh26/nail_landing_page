@@ -1,7 +1,6 @@
 import React from 'react';
 import { Phone, MapPin, Clock, Gift, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { LanguageSwitch } from '../ui/LanguageSwitch';
 import FashionNailsLogo from '../common/FashionNailsLogo';
 
 function InstagramIcon({ size = 18 }) {
@@ -23,13 +22,20 @@ function FacebookIcon({ size = 18 }) {
 }
 
 export function Footer() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('lazy-section-mount', { detail: { id: 'all' } }));
     }
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        const yOffset = -80;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }, 40);
   };
 
   return (
@@ -42,13 +48,8 @@ export function Footer() {
               <FashionNailsLogo size="sm" showSub={true} />
             </div>
             <p className="atelier-footer__desc">
-              {language === 'vi'
-                ? 'Tiệm móng nghệ thuật cao cấp tại Morley Galleria Shopping Centre, Tây Úc. Khử trùng dụng cụ 100% bằng nồi hấp Autoclave y tế, phục vụ tận tâm với 26 dịch vụ chuyên nghiệp.'
-                : 'Premier luxury nail boutique at Morley Galleria Shopping Centre, Western Australia. 100% autoclave sterilized instruments with 26 master treatments.'}
+              Premier luxury nail boutique at Morley Galleria Shopping Centre, Western Australia. 100% autoclave sterilized instruments with 26 master treatments.
             </p>
-            <div className="atelier-footer__lang">
-              <LanguageSwitch />
-            </div>
           </div>
 
           {/* Quick Navigation Links */}
@@ -77,12 +78,17 @@ export function Footer() {
               </li>
               <li>
                 <button type="button" onClick={() => scrollTo('pricing')}>
-                  {language === 'vi' ? 'Bảng giá 26 Dịch vụ' : 'Official 26-Item Menu'}
+                  Official 26-Item Menu
                 </button>
               </li>
               <li>
                 <button type="button" onClick={() => scrollTo('gallery')}>
                   {t('nav.gallery')}
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollTo('location')}>
+                  {t('location.badge')}
                 </button>
               </li>
             </ul>
@@ -147,7 +153,7 @@ export function Footer() {
         {/* Bottom Hairline & Legal */}
         <div className="atelier-footer__bottom">
           <p className="atelier-footer__copyright">
-            © {new Date().getFullYear()} Fashion Nails Morley Galleria. All rights reserved.
+            {t('footer.rights')}
           </p>
           <div className="atelier-footer__legal-links">
             <span>Morley Galleria, WA 6062</span>

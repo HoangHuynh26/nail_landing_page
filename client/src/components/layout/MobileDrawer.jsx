@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { X, Calendar } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
-import { LanguageToggle } from '../ui/LanguageToggle';
 import { Button } from '../ui/Button';
 import FashionNailsLogo from '../common/FashionNailsLogo';
 
@@ -33,12 +32,16 @@ export function MobileDrawer({ isOpen, onClose }) {
   const handleNavClick = (anchorId) => {
     onClose();
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('lazy-section-mount', { detail: { id: anchorId } }));
+      window.dispatchEvent(new CustomEvent('lazy-section-mount', { detail: { id: 'all' } }));
     }
-    const el = document.getElementById(anchorId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    setTimeout(() => {
+      const el = document.getElementById(anchorId);
+      if (el) {
+        const yOffset = -80;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   const handleBookClick = () => {
@@ -61,11 +64,6 @@ export function MobileDrawer({ isOpen, onClose }) {
           </button>
         </div>
 
-        <div className="mobile-drawer__lang" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid var(--color-border)' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-secondary)' }}>Ngôn ngữ / Language:</span>
-          <LanguageToggle />
-        </div>
-
         <nav className="mobile-drawer__nav" aria-label="Mobile Navigation">
           <button type="button" onClick={() => handleNavClick('hero')} className="mobile-drawer__link">
             {t('nav.home')}
@@ -81,6 +79,9 @@ export function MobileDrawer({ isOpen, onClose }) {
           </button>
           <button type="button" onClick={() => handleNavClick('reviews')} className="mobile-drawer__link">
             {t('nav.reviews')}
+          </button>
+          <button type="button" onClick={() => handleNavClick('location')} className="mobile-drawer__link">
+            {t('nav.contact')}
           </button>
           <button type="button" onClick={() => handleNavClick('faq')} className="mobile-drawer__link">
             {t('nav.faq')}
