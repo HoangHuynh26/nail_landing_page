@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Star,
   CheckCircle2,
@@ -9,22 +10,39 @@ import {
   Sparkles,
   ShieldCheck,
   Heart,
-  ExternalLink
+  ExternalLink,
+  Camera,
+  X
 } from 'lucide-react';
 import SmoothScrollSlider from '../common/SmoothScrollSlider';
-import { testimonialsData } from '../../data/testimonials';
+import { testimonialsData, googleMapsCommunityPhotos } from '../../data/testimonials';
 import { useLanguage } from '../../context/LanguageContext';
 import { SectionHeader } from '../ui/SectionHeader';
 
 export function Testimonials() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const [autoDrift, setAutoDrift] = useState(true);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
+
+  // Close lightbox on Escape key & lock scroll
+  useEffect(() => {
+    if (!lightboxPhoto) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setLightboxPhoto(null);
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [lightboxPhoto]);
 
   // Custom slide renderer for SmoothScrollSlider
   const renderTestimonialSlide = (item, index) => {
     if (!item) return null;
-    const quote = language === 'vi' ? item.quote_vi : item.quote_en;
-    const service = language === 'vi' ? item.service_vi : item.service_en;
+    const quote = item.quote_en;
+    const service = item.service_en;
     const rating = item.rating || 5;
     const maxRating = item.maxRating || 5;
 
@@ -45,7 +63,7 @@ export function Testimonials() {
             <span>Google Maps</span>
           </div>
 
-          <div className="testimonial-slider-card__score-pill" title={`${rating} trên tổng ${maxRating} sao`}>
+          <div className="testimonial-slider-card__score-pill" title={`${rating} out of ${maxRating} stars`}>
             <span className="testimonial-slider-card__score-val">{rating} / {maxRating}</span>
             <div className="testimonial-slider-card__stars">
               {[...Array(rating)].map((_, i) => (
@@ -85,18 +103,26 @@ export function Testimonials() {
 
         {/* Center: Quote Text */}
         <div className="testimonial-slider-card__body">
-          <Quote size={22} className="testimonial-slider-card__quote-icon" aria-hidden="true" />
+          <Quote size={18} className="testimonial-slider-card__quote-icon" aria-hidden="true" />
           <blockquote className="testimonial-slider-card__quote">
             "{quote}"
           </blockquote>
         </div>
 
+        {/* Real Customer Google Review Photo */}
+        {item.reviewPhoto && (
+          <div className="testimonial-slider-card__photo-box">
+            <img
+              src={item.reviewPhoto}
+              alt={service}
+              className="testimonial-slider-card__photo"
+              loading="lazy"
+            />
+          </div>
+        )}
+
         {/* Bottom: Service Tag & Date */}
         <div className="testimonial-slider-card__footer">
-          <div className="testimonial-slider-card__service-tag">
-            <Sparkles size={11} className="service-tag-icon" />
-            <span>{service}</span>
-          </div>
 
           <span className="testimonial-slider-card__date">
             {item.date}
@@ -111,13 +137,7 @@ export function Testimonials() {
       <div className="container">
         {/* Section Header */}
         <SectionHeader
-          badgeText={language === 'vi' ? 'Đánh Giá Google Maps' : 'Google Maps Reviews'}
-          title={language === 'vi' ? 'Được Yêu Thích Tại Morley Galleria' : 'Loved by Locals at Morley Galleria'}
-          subtitle={
-            language === 'vi'
-              ? 'Tổng hợp những lời khen ngợi và đánh giá 5 sao thực tế từ khách hàng thân thiết trên Google Maps tại Perth, Tây Úc.'
-              : 'Authentic 5-star ratings and genuine reviews from verified Perth clients on Google Maps.'
-          }
+          title="Loved by Locals at Morley Galleria"
         />
 
         {/* Trust Rating Summary Strip */}
@@ -127,7 +147,7 @@ export function Testimonials() {
             target="_blank"
             rel="noopener noreferrer"
             className="testimonials-trust-item"
-            title="Xem đánh giá trực tiếp trên Google Maps"
+            title="View genuine reviews on Google Maps"
             style={{ textDecoration: 'none', cursor: 'pointer' }}
           >
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style={{ flexShrink: 0 }}>
@@ -142,21 +162,11 @@ export function Testimonials() {
               ))}
             </div>
             <div className="testimonials-trust-text">
-              <strong>4.9 / 5.0 trên Google Reviews</strong>
-              <span>528+ đánh giá xác thực từ khách tại Perth</span>
+              <strong>4.9 / 5.0 on Google Reviews</strong>
+              <span>528+ verified reviews & client photos</span>
             </div>
             <ExternalLink size={14} style={{ color: 'var(--color-gold)', marginLeft: '4px' }} />
           </a>
-
-          <div className="testimonials-trust-badge">
-            <ShieldCheck size={16} className="trust-icon" />
-            <span>100% Vệ sinh vô trùng chuẩn y tế WA</span>
-          </div>
-
-          <div className="testimonials-trust-badge">
-            <Heart size={16} className="trust-icon" />
-            <span>Bảo hành độ bền lên đến 4 tuần</span>
-          </div>
         </div>
       </div>
 
@@ -165,7 +175,7 @@ export function Testimonials() {
         <SmoothScrollSlider
           items={testimonialsData}
           slideWidth={380}
-          slideHeight={440}
+          slideHeight={485}
           spacing={2.2}
           direction="right"
           smoothness={10}
@@ -178,9 +188,61 @@ export function Testimonials() {
           renderSlide={renderTestimonialSlide}
         />
       </div>
+
+      {/* Lightbox Modal for Full Review Photo View */}
+      {lightboxPhoto && createPortal(
+        <div
+          className="google-photo-lightbox"
+          onClick={() => setLightboxPhoto(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="google-photo-lightbox__content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="google-photo-lightbox__close"
+              onClick={() => setLightboxPhoto(null)}
+              aria-label="Close photo preview"
+            >
+              <X size={20} />
+            </button>
+            <img
+              src={lightboxPhoto.url}
+              alt={lightboxPhoto.service || 'Client review photo'}
+              className="google-photo-lightbox__image"
+            />
+            <div className="google-photo-lightbox__details">
+              <div className="google-photo-lightbox__header">
+                <div className="google-photo-lightbox__user">
+                  <span>{lightboxPhoto.name}</span>
+                </div>
+                <div className="google-photo-lightbox__stars">
+                  {[...Array(lightboxPhoto.rating || 5)].map((_, i) => (
+                    <Star key={i} size={15} fill="#FBBC04" color="#FBBC04" />
+                  ))}
+                </div>
+              </div>
+              {lightboxPhoto.service && (
+                <div>
+                  <span className="google-photo-lightbox__tag">{lightboxPhoto.service}</span>
+                </div>
+              )}
+              {lightboxPhoto.caption && (
+                <p className="google-photo-lightbox__caption">"{lightboxPhoto.caption}"</p>
+              )}
+              <div className="google-photo-lightbox__source">
+                <CheckCircle2 size={13} />
+                <span>Verified Google Maps Review • {lightboxPhoto.date}</span>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </section>
   );
 }
 
 export default Testimonials;
-
