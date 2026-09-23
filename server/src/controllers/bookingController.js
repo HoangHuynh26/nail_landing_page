@@ -21,6 +21,7 @@ export async function createBooking(req, res, next) {
 
     const newBooking = {
       bookingId,
+      type: rawData.type || 'appointment',
       ...rawData,
       status: 'pending',
       createdAt,
@@ -46,10 +47,14 @@ export async function createBooking(req, res, next) {
       message,
       data: {
         bookingId,
-        serviceName: newBooking.serviceName,
+        name: newBooking.name,
+        phone: newBooking.phone,
+        email: newBooking.email,
+        service: newBooking.service,
         date: newBooking.date,
         time: newBooking.time,
-        fullName: newBooking.fullName,
+        message: newBooking.message,
+        voucher: newBooking.voucher,
         createdAt
       }
     });
@@ -73,3 +78,4 @@ export async function listBookings(req, res, next) {
     next(err);
   }
 }
+

@@ -1,8 +1,54 @@
 import { config } from '../config/env.js';
 
 /**
- * Dispatches booking payload to Make.com webhook
- * Never exposes the webhook URL to the client.
+ * Helper to format 12-hour AM/PM time slot to 24-hour "HH:MM" format
+ * e.g., "02:00 PM" -> "14:00", "09:30 AM" -> "09:30"
+ */
+function formatTimeTo24h(timeStr) {
+  if (!timeStr) return '';
+  const trimmed = timeStr.trim();
+  const match = trimmed.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+  if (match) {
+    let hours = parseInt(match[1], 10);
+    const mins = match[2];
+    const meridiem = (match[3] || '').toUpperCase();
+    if (meridiem === 'PM' && hours < 12) hours += 12;
+    if (meridiem === 'AM' && hours === 12) hours = 0;
+    return `${String(hours).padStart(2, '0')}:${mins}`;
+  }
+  return trimmed;
+}
+
+/**
+ * Helper to format Australian phone numbers into international +61 format
+ * e.g., "0412 345 678" -> "+61412345678"
+ */
+function formatAustralianPhone(phoneStr) {
+  if (!phoneStr) return '';
+  const cleaned = phoneStr.trim().replace(/[\s\-\(\)]/g, '');
+  if (cleaned.startsWith('+')) return cleaned;
+  if (cleaned.startsWith('0') && cleaned.length === 10) {
+    return `+61${cleaned.slice(1)}`;
+  }
+  if (cleaned.startsWith('61') && cleaned.length === 11) {
+    return `+${cleaned}`;
+  }
+  return cleaned;
+}
+
+/**
+ * Dispatches appointment booking payload to Make.com webhook
+ * Sends strictly and only the requested appointment fields:
+ * {
+ *   "name": "Customer Name",
+ *   "phone": "+61XXXXXXXXX",
+ *   "email": "customer@email.com",
+ *   "service": "Gel Manicure",
+ *   "date": "2026-10-01",
+ *   "time": "14:00",
+ *   "message": "...",
+ *   "voucher": "..."
+ * }
  */
 export async function sendToMakeWebhook(bookingPayload) {
   const webhookUrl = config.makeWebhookUrl;
@@ -12,24 +58,20 @@ export async function sendToMakeWebhook(bookingPayload) {
     return { sent: false, reason: 'Webhook URL not configured' };
   }
 
-  // Format payload specifically for Make.com / Google Sheets scenario
+  // Exactly and only the 8 fields requested for book an appointment
   const payload = {
-    bookingId: bookingPayload.bookingId,
-    serviceId: bookingPayload.serviceId,
-    serviceName: bookingPayload.serviceName,
-    date: bookingPayload.date,
-    time: bookingPayload.time,
-    fullName: bookingPayload.fullName,
-    phone: bookingPayload.phone,
-    notes: bookingPayload.notes || '',
-    language: bookingPayload.language,
-    status: bookingPayload.status || 'pending',
-    createdAt: bookingPayload.createdAt,
-    source: 'website'
+    name: bookingPayload.name || bookingPayload.fullName || '',
+    phone: formatAustralianPhone(bookingPayload.phone),
+    email: bookingPayload.email || '',
+    service: bookingPayload.service || bookingPayload.serviceName || '',
+    date: bookingPayload.date || '',
+    time: formatTimeTo24h(bookingPayload.time),
+    message: bookingPayload.message !== undefined ? bookingPayload.message : (bookingPayload.notes || ''),
+    voucher: bookingPayload.voucher || ''
   };
 
   try {
-    console.info(`[Make.com Webhook] Dispatching booking ${bookingPayload.bookingId} to Make.com...`);
+    console.info(`[Make.com Webhook] Dispatching booking for ${payload.name} (${payload.service}) to Make.com...`);
     
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 6000);
@@ -39,7 +81,7 @@ export async function sendToMakeWebhook(bookingPayload) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': 'AtelierLumiere-BookingServer/1.0'
+        'User-Agent': 'FashionNails-BookingServer/1.0'
       },
       body: JSON.stringify(payload),
       signal: controller.signal
@@ -52,10 +94,11 @@ export async function sendToMakeWebhook(bookingPayload) {
       return { sent: false, status: response.status };
     }
 
-    console.info(`[Make.com Webhook] Successfully delivered booking ${bookingPayload.bookingId} to Make.com.`);
+    console.info(`[Make.com Webhook] Successfully delivered appointment for ${payload.name} to Make.com.`);
     return { sent: true };
   } catch (err) {
     console.warn(`[Make.com Webhook] Delivery failed or timed out: ${err.message}. Local booking remains safe.`);
     return { sent: false, error: err.message };
   }
 }
+
