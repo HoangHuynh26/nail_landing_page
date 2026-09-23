@@ -33,7 +33,6 @@ export function WhyChooseUs() {
     <section id="why-us" className="section why-us-section" aria-labelledby="why-us-heading">
       <div className="container">
         <SectionHeader
-          badgeText={t('whyUs.badge')}
           title={t('whyUs.title')}
           subtitle={t('whyUs.subtitle')}
         />

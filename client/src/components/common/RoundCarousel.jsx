@@ -99,6 +99,26 @@ export default function RoundCarousel({
     }
   }, [targetIndex, angle, count]);
 
+  // Pause 3D animation loop when carousel is outside viewport to ensure 60/120fps buttery-smooth scrolling
+  const isVisibleRef = useRef(true);
+  useEffect(() => {
+    const ring = ringRef.current;
+    if (!ring) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            lastRef.current = performance.now();
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: '100px 0px 100px 0px' }
+    );
+    observer.observe(ring);
+    return () => observer.disconnect();
+  }, []);
+
   // Main 3D render loop with inertial damping & smooth auto-rotation
   useEffect(() => {
     const ring = ringRef.current;
@@ -110,6 +130,12 @@ export default function RoundCarousel({
     apply();
 
     const draw = (now) => {
+      // If off-screen, pause calculations and GPU matrix transformations
+      if (!isVisibleRef.current) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
+
       const dt = lastRef.current ? (now - lastRef.current) / 1000 : 0;
       lastRef.current = now;
       const f = Math.min(dt, 0.1);
@@ -269,8 +295,6 @@ export default function RoundCarousel({
         >
           {items.map((item, i) => {
             const src = item?.src;
-            const title = item?.title_vi || item?.title_en || item?.title;
-            const category = item?.category_vi || item?.category_en || item?.tag_vi || item?.tag_en;
 
             return (
               <div
@@ -285,7 +309,7 @@ export default function RoundCarousel({
                   cursor: "pointer",
                 }}
               >
-                {/* Front face with ultra-luxury finish */}
+                {/* Front face with clean, ultra-luxury gold border */}
                 <div
                   style={{
                     ...faceBase,
@@ -293,85 +317,7 @@ export default function RoundCarousel({
                     backgroundImage: src ? `url(${src})` : undefined,
                     boxShadow: "0 14px 40px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(212, 175, 55, 0.35)",
                   }}
-                >
-                  {/* Subtle luxury vignette & sheen overlay */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.85) 100%)",
-                      pointerEvents: "none",
-                    }}
-                  />
-
-                  {/* Bottom title & category overlay */}
-                  {(title || category) && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        padding: "16px 14px",
-                        color: "#fff",
-                        pointerEvents: "none",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "4px",
-                      }}
-                    >
-                      {category && (
-                        <span
-                          style={{
-                            fontSize: "0.7rem",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.08em",
-                            color: "#E2C376",
-                            fontWeight: 600,
-                            display: "inline-block",
-                            background: "rgba(0, 0, 0, 0.5)",
-                            backdropFilter: "blur(6px)",
-                            padding: "2px 8px",
-                            borderRadius: "100px",
-                            alignSelf: "flex-start",
-                            border: "1px solid rgba(226, 195, 118, 0.35)",
-                          }}
-                        >
-                          {category}
-                        </span>
-                      )}
-                      {title && (
-                        <span
-                          style={{
-                            fontSize: "0.85rem",
-                            fontWeight: 600,
-                            lineHeight: 1.25,
-                            textShadow: "0 2px 4px rgba(0,0,0,0.8)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {title}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Golden corner highlight */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 10,
-                      right: 10,
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      backgroundColor: "#E2C376",
-                      boxShadow: "0 0 10px #E2C376",
-                    }}
-                  />
-                </div>
+                />
 
                 {/* Back face (Originkit signature reverse-dimming for 3D realism) */}
                 <div

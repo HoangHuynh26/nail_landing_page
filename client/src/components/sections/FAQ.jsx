@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronDown, Search, X, Phone, Calendar, Sparkles, HelpCircle } from 'lucide-react';
+import { ChevronDown, Search, X, Phone, Calendar, HelpCircle, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { SectionHeader } from '../ui/SectionHeader';
@@ -7,7 +7,6 @@ import { Button } from '../ui/Button';
 import { FAQ_CATEGORIES, FAQ_ITEMS } from '../../data/faqData';
 
 export function FAQ() {
-  const { t, language } = useLanguage();
   const { openBooking } = useBooking();
 
   const [activeCategory, setActiveCategory] = useState('all');
@@ -24,14 +23,14 @@ export function FAQ() {
       // Search filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
-        const q = (language === 'vi' ? item.qVi : item.qEn).toLowerCase();
-        const a = (language === 'vi' ? item.aVi : item.aEn).toLowerCase();
-        const tag = (language === 'vi' ? item.tagVi : item.tagEn).toLowerCase();
+        const q = item.qEn.toLowerCase();
+        const a = item.aEn.toLowerCase();
+        const tag = item.tagEn.toLowerCase();
         return q.includes(query) || a.includes(query) || tag.includes(query);
       }
       return true;
     });
-  }, [activeCategory, searchQuery, language]);
+  }, [activeCategory, searchQuery]);
 
   // Compute count per category for filter pills
   const categoryCounts = useMemo(() => {
@@ -61,7 +60,7 @@ export function FAQ() {
       }
       return (
         <p key={idx} className="faq-item__answer-line">
-          {line}
+          {trimmed}
         </p>
       );
     });
@@ -71,45 +70,38 @@ export function FAQ() {
     <section id="faq" className="section faq-section" aria-labelledby="faq-heading">
       <div className="container faq-section__container">
         <SectionHeader
-          badgeText={language === 'vi' ? 'Tiêu Chuẩn Tiệm Nail Tại Úc' : 'Perth Nail Salon Standards'}
-          title={language === 'vi' ? 'Giải Đáp Thắc Mắc Thường Gặp' : 'Frequently Asked Questions'}
-          subtitle={
-            language === 'vi'
-              ? 'Tổng hợp thông tin chi tiết về công nghệ móng BIAB, khử trùng y tế, đặt lịch và tiện ích tại Morley Galleria.'
-              : 'Essential details on BIAB technology, hospital-grade sterilisation, booking policies, and your visit to Morley Galleria.'
-          }
+          title="Frequently Asked Questions"
+          subtitle="Essential details on BIAB technology, hospital-grade sterilisation, booking policies, and your visit to Morley Galleria."
         />
 
-        {/* Search & Category Filter Controls */}
-        <div className="faq-controls">
-          {/* Quick Search Bar */}
+        {/* Sticky Quick Search Bar for FAQ */}
+        <div className="faq-search-sticky-wrap">
           <div className="faq-search-wrap">
             <Search size={18} className="faq-search-icon" aria-hidden="true" />
             <input
+              id="faq-search-input-field"
               type="text"
               className="faq-search-input"
-              placeholder={
-                language === 'vi'
-                  ? 'Tìm kiếm: BIAB, Acrylic, tháo móng, bà bầu, bãi đậu xe, voucher...'
-                  : 'Search questions: BIAB, Acrylic, removal, pregnancy, parking, voucher...'
-              }
+              placeholder="Search questions: BIAB, Acrylic, removal, pregnancy, parking, voucher..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label={language === 'vi' ? 'Tìm câu hỏi' : 'Search FAQ'}
+              aria-label="Search FAQ"
             />
             {searchQuery && (
               <button
                 type="button"
                 className="faq-search-clear"
                 onClick={() => setSearchQuery('')}
-                aria-label={language === 'vi' ? 'Xoá tìm kiếm' : 'Clear search'}
+                aria-label="Clear search"
               >
                 <X size={16} />
               </button>
             )}
           </div>
+        </div>
 
-          {/* Category Filter Pills */}
+        {/* Category Filter Pills */}
+        <div className="faq-controls">
           <div className="faq-filters" role="tablist" aria-label="FAQ Categories">
             {FAQ_CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat.id;
@@ -124,7 +116,7 @@ export function FAQ() {
                   className={`faq-filter-btn ${isActive ? 'is-active' : ''}`}
                   onClick={() => setActiveCategory(cat.id)}
                 >
-                  <span>{language === 'vi' ? cat.labelVi : cat.labelEn}</span>
+                  <span>{cat.labelEn}</span>
                   <span className="faq-filter-btn__count">{count}</span>
                 </button>
               );
@@ -138,20 +130,18 @@ export function FAQ() {
             <div className="faq-empty">
               <HelpCircle size={40} style={{ color: 'var(--color-gold)', margin: '0 auto 12px' }} />
               <div className="faq-empty__title">
-                {language === 'vi' ? 'Không tìm thấy câu hỏi phù hợp' : 'No matching questions found'}
+                No matching questions found
               </div>
               <p>
-                {language === 'vi'
-                  ? `Thử tìm từ khoá khác hoặc gọi trực tiếp (08) 9375 2888 để được giải đáp.`
-                  : `Try different keywords or call us directly on (08) 9375 2888.`}
+                Try different keywords or call us directly on (08) 9375 2888.
               </p>
             </div>
           ) : (
-            filteredItems.map((item, idx) => {
+            filteredItems.map((item) => {
               const isOpen = openId === item.id;
-              const question = language === 'vi' ? item.qVi : item.qEn;
-              const answer = language === 'vi' ? item.aVi : item.aEn;
-              const tag = language === 'vi' ? item.tagVi : item.tagEn;
+              const question = item.qEn;
+              const answer = item.aEn;
+              const tag = item.tagEn;
 
               return (
                 <div
@@ -191,38 +181,6 @@ export function FAQ() {
               );
             })
           )}
-        </div>
-
-        {/* Contact & Booking Support Prompt */}
-        <div className="faq-contact-box">
-          <div className="faq-contact-box__info">
-            <div className="faq-contact-box__title">
-              {language === 'vi' ? 'Bạn vẫn còn câu hỏi riêng về móng?' : 'Have More Questions About Your Nails?'}
-            </div>
-            <div className="faq-contact-box__desc">
-              {language === 'vi'
-                ? 'Đội ngũ chuyên viên Fashion Nails luôn sẵn sàng tư vấn dáng móng và dịch vụ phù hợp nhất cho bạn.'
-                : 'Our friendly nail artisans are happy to assist with custom art quotes, bridal packages, and consultations.'}
-            </div>
-          </div>
-          <div className="faq-contact-box__actions">
-            <a
-              href="tel:0893752888"
-              className="btn btn--secondary btn--md"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-            >
-              <Phone size={16} />
-              <span>(08) 9375 2888</span>
-            </a>
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => openBooking()}
-              icon={Calendar}
-            >
-              {language === 'vi' ? 'Đặt Lịch Hẹn Ngay' : 'Book Appointment'}
-            </Button>
-          </div>
         </div>
       </div>
     </section>

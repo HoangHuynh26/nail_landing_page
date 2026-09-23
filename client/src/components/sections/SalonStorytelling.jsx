@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Sparkles, ShieldCheck, Flame, HeartHandshake, ArrowRight, Calendar, CheckCircle2, Gift } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
@@ -91,6 +91,31 @@ export function SalonStorytelling() {
   const [activeChapter, setActiveChapter] = useState(1);
 
   const chapterRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const chapterTabsRef = useRef({});
+  const chapterMetricsRef = useRef({});
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+
+  const chapters = [1, 2, 3, 4];
+
+  const updateChapterIndicator = useCallback(() => {
+    const el = chapterTabsRef.current[activeChapter];
+    if (el) {
+      setIndicatorStyle({
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        opacity: 1,
+      });
+    }
+  }, [activeChapter]);
+
+  useEffect(() => {
+    updateChapterIndicator();
+  }, [updateChapterIndicator, language]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateChapterIndicator, { passive: true });
+    return () => window.removeEventListener('resize', updateChapterIndicator);
+  }, [updateChapterIndicator]);
 
   useEffect(() => {
     const observers = [];
@@ -150,49 +175,40 @@ export function SalonStorytelling() {
             {t('story.badge')}
           </span>
           <h2 className="story-main-title">
-            {language === 'vi' ? 'Hành Trình Kiến Tạo Chuẩn Mực' : 'The Standard of Elevated Nail Artistry'}
+            The Standard of Elevated Nail Artistry
           </h2>
         </div>
 
         {/* Sticky Floating Apple Liquid Glass Capsule Navigation */}
         <nav className="story-capsule-nav" aria-label="Story Chapters">
           <div className="story-capsule-track">
-            <button
-              type="button"
-              className={`story-capsule-btn ${activeChapter === 1 ? 'is-active' : ''}`}
-              onClick={() => scrollToChapter(1)}
-              aria-current={activeChapter === 1 ? 'step' : undefined}
-            >
-              <span className="story-capsule-dot" />
-              <span>{t('story.capsule1')}</span>
-            </button>
-            <button
-              type="button"
-              className={`story-capsule-btn ${activeChapter === 2 ? 'is-active' : ''}`}
-              onClick={() => scrollToChapter(2)}
-              aria-current={activeChapter === 2 ? 'step' : undefined}
-            >
-              <span className="story-capsule-dot" />
-              <span>{t('story.capsule2')}</span>
-            </button>
-            <button
-              type="button"
-              className={`story-capsule-btn ${activeChapter === 3 ? 'is-active' : ''}`}
-              onClick={() => scrollToChapter(3)}
-              aria-current={activeChapter === 3 ? 'step' : undefined}
-            >
-              <span className="story-capsule-dot" />
-              <span>{t('story.capsule3')}</span>
-            </button>
-            <button
-              type="button"
-              className={`story-capsule-btn ${activeChapter === 4 ? 'is-active' : ''}`}
-              onClick={() => scrollToChapter(4)}
-              aria-current={activeChapter === 4 ? 'step' : undefined}
-            >
-              <span className="story-capsule-dot" />
-              <span>{t('story.capsule4')}</span>
-            </button>
+            {/* Fluid Sliding Apple Liquid Glass Bubble */}
+            <span
+              className="story-capsule-indicator"
+              style={{
+                transform: `translateX(${indicatorStyle.left}px)`,
+                width: `${indicatorStyle.width}px`,
+                opacity: indicatorStyle.opacity,
+              }}
+              aria-hidden="true"
+            />
+
+            {chapters.map((ch) => {
+              const isActive = activeChapter === ch;
+              return (
+                <button
+                  key={ch}
+                  ref={(el) => (chapterTabsRef.current[ch] = el)}
+                  type="button"
+                  className={`story-capsule-btn ${isActive ? 'is-active' : ''}`}
+                  onClick={() => scrollToChapter(ch)}
+                  aria-current={isActive ? 'step' : undefined}
+                >
+                  <span className="story-capsule-dot" />
+                  <span className="story-capsule-text">{t(`story.capsule${ch}`)}</span>
+                </button>
+              );
+            })}
           </div>
         </nav>
 
@@ -271,9 +287,7 @@ export function SalonStorytelling() {
             <div className="story-hygiene-guarantee">
               <ShieldCheck size={20} className="story-hygiene-icon" />
               <span>
-                {language === 'vi'
-                  ? 'Cam kết vô trùng 100%: Bao bảo quản nhiệt được mở trực tiếp trước sự chứng kiến của quý khách.'
-                  : '100% Sterile Promise: Individual medical pouches unsealed in front of you prior to every treatment.'}
+                100% Sterile Promise: Individual medical pouches unsealed in front of you prior to every treatment.
               </span>
             </div>
           </div>
@@ -301,9 +315,7 @@ export function SalonStorytelling() {
               </div>
               <h4 className="story-sterilize-title">Hospital-Grade Autoclaving</h4>
               <p className="story-sterilize-desc">
-                {language === 'vi'
-                  ? 'Thiết bị nồi hấp áp suất cao tiêu chuẩn y tế tiêu diệt 99.99% vi khuẩn và nấm mốc. Mỗi khách hàng luôn là một bộ dụng cụ mới nguyên bản.'
-                  : 'High-pressure steam sterilization eliminating 99.99% pathogens. Uncompromising hygiene for total peace of mind.'}
+                High-pressure steam sterilization eliminating 99.99% pathogens. Uncompromising hygiene for total peace of mind.
               </p>
               <ul className="story-sterilize-list">
                 <li><CheckCircle2 size={16} /> Single-use nail files & buffers</li>
@@ -431,9 +443,7 @@ export function SalonStorytelling() {
               </div>
               <h4 className="story-community-title">Morley Community Privileges</h4>
               <p className="story-community-desc">
-                {language === 'vi'
-                  ? 'Chúng tôi trân trọng phục vụ quý cư dân Morley, sinh viên và các đồng nghiệp làm việc tại trung tâm thương mại Galleria.'
-                  : 'Honoring our Morley neighbors, students, and hard-working Galleria shopping centre colleagues.'}
+                Honoring our Morley neighbors, students, and hard-working Galleria shopping centre colleagues.
               </p>
               <div className="story-community-perks">
                 <div className="story-perk-item">

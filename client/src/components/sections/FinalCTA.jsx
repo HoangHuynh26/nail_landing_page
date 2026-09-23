@@ -15,11 +15,6 @@ export function FinalCTA() {
       <div className="container">
         <div className="final-cta-card">
           <div className="final-cta-card__bg-glow" aria-hidden="true" />
-          
-          <Badge variant="gold" className="final-cta-card__badge">
-            <Sparkles size={13} style={{ marginRight: '6px' }} />
-            {t('finalCta.badge')}
-          </Badge>
 
           {/* Originkit FlickerText Header for CTA */}
           <div className="final-cta-flicker-wrapper">
@@ -101,15 +96,15 @@ export function FinalCTA() {
           <div className="final-cta-card__perks">
             <span>
               <Clock size={13} style={{ display: 'inline', marginRight: '4px', verticalAlign: '-1px' }} />
-              {language === 'vi' ? 'Không cần cọc trước' : 'No prepayment required'}
+              No prepayment required
             </span>
             <span>
               <Calendar size={13} style={{ display: 'inline', marginRight: '4px', verticalAlign: '-1px' }} />
-              {language === 'vi' ? 'Đổi giờ linh hoạt' : '24h flexible rescheduling'}
+              24h flexible rescheduling
             </span>
             <span>
               <ShieldCheck size={13} style={{ display: 'inline', marginRight: '4px', verticalAlign: '-1px' }} />
-              {language === 'vi' ? '100% Dụng cụ tiệt trùng' : '100% sterilized instruments'}
+              100% sterilized instruments
             </span>
           </div>
         </div>

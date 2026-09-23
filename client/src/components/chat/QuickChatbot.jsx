@@ -21,39 +21,70 @@ import {
   findChatResponse
 } from '../../data/chatbotKnowledge';
 
+const CONCIERGE_TIPS = [
+  {
+    badge: 'Fashion Nails Concierge',
+    text: 'Hello! Looking for nail styles or pricing advice today? ✨'
+  },
+  {
+    badge: 'Nail Care & Styling',
+    text: 'Need help choosing between BIAB, SNS dipping, or Acrylic sets? Ask me anything! 💅'
+  },
+  {
+    badge: 'Special Savings',
+    text: 'Did you know? We offer 10% OFF for Seniors, Students & Galleria Staff! 🏷️'
+  },
+  {
+    badge: 'Complimentary Consult',
+    text: 'Have a Pinterest or Instagram inspo design? Book a free consultation with our artists! 🎨'
+  },
+  {
+    badge: 'Visit Us in Morley',
+    text: 'Located opposite Kmart, Level 1 Morley Galleria. Walk-ins are always welcome! 🏬'
+  },
+  {
+    badge: 'Bridal & Occasion Packages',
+    text: 'Planning a wedding or party? We craft custom bridal packages for groups! 👰'
+  }
+];
+
 export function QuickChatbot() {
-  const { language, t } = useLanguage();
   const { openBooking } = useBooking();
 
   const [isOpen, setIsOpen] = useState(false);
   const [showWelcomeBubble, setShowWelcomeBubble] = useState(false);
+  const [currentTipIndex, setCurrentTipIndex] = useState(0);
   const [hasUnread, setHasUnread] = useState(true);
-  const [messages, setMessages] = useState(() => INITIAL_MESSAGES[language] || INITIAL_MESSAGES.vi);
+  const [messages, setMessages] = useState(() => INITIAL_MESSAGES.en);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isChipsExpanded, setIsChipsExpanded] = useState(true);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Sync initial messages if user switches language and chat hasn't started
+  // 1. Proactive welcome speech bubble after 2.5 seconds
   useEffect(() => {
-    setMessages(prev => {
-      if (prev.length <= 2 && prev.every(m => m.sender === 'bot')) {
-        return INITIAL_MESSAGES[language] || INITIAL_MESSAGES.vi;
-      }
-      return prev;
-    });
-  }, [language]);
+    if (isOpen) return;
 
-  // Proactive welcome speech bubble after 2.5 seconds
-  useEffect(() => {
     const timer = setTimeout(() => {
-      if (!isOpen) {
-        setShowWelcomeBubble(true);
-      }
+      setShowWelcomeBubble(true);
     }, 2500);
 
     return () => clearTimeout(timer);
+  }, [isOpen]);
+
+  // 2. Rotate to different messages every 1 minute (60,000 ms) if customer stays on the site
+  useEffect(() => {
+    if (isOpen) return;
+
+    const interval = setInterval(() => {
+      setCurrentTipIndex((prev) => (prev + 1) % CONCIERGE_TIPS.length);
+      setShowWelcomeBubble(true);
+      setHasUnread(true);
+    }, 60000);
+
+    return () => clearInterval(interval);
   }, [isOpen]);
 
   // Scroll to latest message
@@ -80,7 +111,7 @@ export function QuickChatbot() {
   };
 
   const handleResetChat = () => {
-    setMessages(INITIAL_MESSAGES[language] || INITIAL_MESSAGES.vi);
+    setMessages(INITIAL_MESSAGES.en);
   };
 
   const handleActionClick = (action) => {
@@ -118,7 +149,7 @@ export function QuickChatbot() {
 
     // Simulate smart bot typing response (400-650ms for realistic natural cadence)
     setTimeout(() => {
-      const botReply = findChatResponse(trimmed, language);
+      const botReply = findChatResponse(trimmed, 'en');
       const botMsg = {
         id: `bot-${Date.now()}`,
         sender: 'bot',
@@ -139,7 +170,7 @@ export function QuickChatbot() {
     }
   };
 
-  const prompts = QUICK_PROMPTS[language] || QUICK_PROMPTS.vi;
+  const prompts = QUICK_PROMPTS.en;
 
   // Simple parser to render **bold** text and lists cleanly
   const renderFormattedText = (rawText) => {
@@ -168,9 +199,13 @@ export function QuickChatbot() {
 
   return (
     <aside className="chatbot-root" aria-label="Fashion Nails Virtual Concierge">
-      {/* 1. Proactive Welcome Speech Bubble (When closed) */}
+      {/* 1. Proactive Welcome Speech Bubble (When closed, rotates every 1 min) */}
       {!isOpen && showWelcomeBubble && (
-        <div className="chatbot-welcome-bubble" role="alert">
+        <div 
+          className="chatbot-welcome-bubble" 
+          role="alert"
+          key={currentTipIndex}
+        >
           <button
             type="button"
             className="chatbot-welcome-bubble__close"
@@ -178,18 +213,16 @@ export function QuickChatbot() {
               e.stopPropagation();
               setShowWelcomeBubble(false);
             }}
-            aria-label="Đóng thông báo"
+            aria-label="Close notification"
           >
             <X size={13} />
           </button>
           <div className="chatbot-welcome-bubble__inner" onClick={toggleChat}>
             <span className="chatbot-welcome-bubble__badge">
-              <Sparkles size={13} /> Fashion Nails Concierge
+              <Sparkles size={13} /> {CONCIERGE_TIPS[currentTipIndex].badge}
             </span>
             <p className="chatbot-welcome-bubble__text">
-              {language === 'vi'
-                ? 'Xin chào! Bạn cần tư vấn mẫu móng đẹp hay bảng giá hôm nay? ✨'
-                : 'Hello! Looking for nail styles or pricing advice today? ✨'}
+              {CONCIERGE_TIPS[currentTipIndex].text}
             </p>
           </div>
         </div>
@@ -202,16 +235,12 @@ export function QuickChatbot() {
         className={`chatbot-trigger-btn ${isOpen ? 'chatbot-trigger-btn--open' : ''}`}
         onClick={toggleChat}
         aria-expanded={isOpen}
-        aria-label={
-          isOpen
-            ? language === 'vi' ? 'Đóng hộp tư vấn' : 'Close chat concierge'
-            : language === 'vi' ? 'Mở trợ lý tư vấn nhanh Fashion Nails' : 'Open Fashion Nails Concierge'
-        }
+        aria-label={isOpen ? 'Close chat concierge' : 'Open Fashion Nails Concierge'}
       >
         <span className="chatbot-trigger-btn__glow" aria-hidden="true" />
         
         {/* Pulsing Online Green Status Dot */}
-        <span className="chatbot-trigger-btn__status" aria-label="Trực tuyến">
+        <span className="chatbot-trigger-btn__status" aria-label="Online">
           <span className="chatbot-trigger-btn__status-ring" />
           <span className="chatbot-trigger-btn__status-dot" />
         </span>
@@ -227,7 +256,7 @@ export function QuickChatbot() {
 
         {/* Unread notification badge */}
         {!isOpen && hasUnread && (
-          <span className="chatbot-trigger-btn__badge" aria-label="1 tin nhắn mới">
+          <span className="chatbot-trigger-btn__badge" aria-label="1 new message">
             1
           </span>
         )}
@@ -260,34 +289,23 @@ export function QuickChatbot() {
                     <h3 id="chatbot-header-title" className="chatbot-header__title">
                       Fashion Nails
                     </h3>
-                    <span className="chatbot-header__tag">AI Concierge</span>
                   </div>
                   <div className="chatbot-header__status">
                     <span className="chatbot-header__dot" />
                     <span className="chatbot-header__status-text">
-                      {language === 'vi' ? 'Sẵn sàng tư vấn trực tuyến' : 'Online & Ready to Help'}
+                      Online & Ready to Help
                     </span>
                   </div>
                 </div>
               </div>
 
               <div className="chatbot-header__actions">
-                {/* Reset chat button */}
-                <button
-                  type="button"
-                  className="chatbot-header__btn"
-                  onClick={handleResetChat}
-                  title={language === 'vi' ? 'Làm mới cuộc trò chuyện' : 'Restart conversation'}
-                  aria-label="Restart chat"
-                >
-                  <RotateCcw size={16} />
-                </button>
                 {/* Close window */}
                 <button
                   type="button"
                   className="chatbot-header__btn chatbot-header__btn--close"
                   onClick={toggleChat}
-                  title={language === 'vi' ? 'Đóng' : 'Close'}
+                  title="Close"
                   aria-label="Close chat"
                 >
                   <X size={18} />
@@ -295,13 +313,40 @@ export function QuickChatbot() {
               </div>
             </div>
 
-          {/* Quick Notice Bar */}
-          <div className="chatbot-notice-bar">
-            <span>
-              {language === 'vi'
-                ? '⭐ Shop SP094 (đối diện Kmart) • Morley Galleria WA • 100% Vô trùng'
-                : '⭐ Shop SP094 (Opposite Kmart) • Morley Galleria WA • 100% Sterilized'}
-            </span>
+          {/* Quick FAQ / Prompt Chips */}
+          <div className="chatbot-chips-container" aria-label="Quick suggestions">
+            <div className="chatbot-chips-header">
+              <span className="chatbot-chips-label">
+                ⚡ Quick suggestions:
+              </span>
+              <button
+                type="button"
+                className="chatbot-chips-toggle"
+                onClick={() => setIsChipsExpanded(prev => !prev)}
+                aria-expanded={isChipsExpanded}
+                title={isChipsExpanded ? 'Collapse' : 'Expand'}
+              >
+                <span>{isChipsExpanded ? 'Hide' : 'Show (6)'}</span>
+                <ChevronDown
+                  size={13}
+                  className={`chatbot-chips-toggle-icon ${isChipsExpanded ? 'chatbot-chips-toggle-icon--up' : ''}`}
+                />
+              </button>
+            </div>
+            {isChipsExpanded && (
+              <div className="chatbot-chips-wrap">
+                {prompts.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    className="chatbot-chip"
+                    onClick={() => handleSend(p.text)}
+                  >
+                    {p.text}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Messages Stream */}
@@ -336,7 +381,7 @@ export function QuickChatbot() {
                             onClick={() => handleActionClick(msg.action)}
                           >
                             <span>
-                              {language === 'vi' ? msg.action.labelVi : msg.action.labelEn}
+                              {msg.action.labelEn || msg.action.labelVi}
                             </span>
                             <ArrowRight size={14} />
                           </button>
@@ -372,25 +417,6 @@ export function QuickChatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick FAQ / Prompt Chips Carousel */}
-          <div className="chatbot-chips-container" aria-label="Gợi ý câu hỏi nhanh">
-            <span className="chatbot-chips-label">
-              {language === 'vi' ? '⚡ Câu hỏi thường gặp:' : '⚡ Quick suggestions:'}
-            </span>
-            <div className="chatbot-chips-scroll">
-              {prompts.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  className="chatbot-chip"
-                  onClick={() => handleSend(p.text)}
-                >
-                  {p.text}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Input & Send Form */}
           <form
             className="chatbot-input-bar"
@@ -403,21 +429,17 @@ export function QuickChatbot() {
               ref={inputRef}
               type="text"
               className="chatbot-input-field"
-              placeholder={
-                language === 'vi'
-                  ? 'Hỏi về giá móng, BIAB, đặt lịch...'
-                  : 'Ask about prices, BIAB, bookings...'
-              }
+              placeholder="Ask about prices, BIAB, bookings..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              aria-label="Nội dung tin nhắn tư vấn"
+              aria-label="Message input"
             />
             <button
               type="submit"
               className="chatbot-send-btn"
               disabled={!inputValue.trim() || isTyping}
-              aria-label={language === 'vi' ? 'Gửi câu hỏi' : 'Send question'}
+              aria-label="Send question"
             >
               <Send size={16} />
             </button>
@@ -431,7 +453,7 @@ export function QuickChatbot() {
               onClick={() => openBooking()}
             >
               <Calendar size={13} />
-              {language === 'vi' ? 'Đặt lịch ngay' : 'Book Online'}
+              Book Online
             </button>
             <span className="chatbot-footer-divider">•</span>
             <a href="tel:+61893752888" className="chatbot-footer-link">

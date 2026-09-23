@@ -180,7 +180,7 @@ Choose your desired treatment, preferred date, and convenient time slot in 30 se
   }
 ];
 
-export function findChatResponse(input, language = 'vi') {
+export function findChatResponse(input, language = 'en') {
   const normalized = input.toLowerCase().trim();
 
   // Search through FAQ keywords
@@ -188,22 +188,16 @@ export function findChatResponse(input, language = 'vi') {
     const matched = item.keywords.some(kw => normalized.includes(kw));
     if (matched) {
       return {
-        text: language === 'vi' ? item.responseVi : item.responseEn,
+        text: item.responseEn || item.responseVi,
         action: item.action
       };
     }
   }
 
   // Fallback response with helpful salon summary & contact
-  if (language === 'vi') {
-    return {
-      text: `Dạ em đã ghi nhận thắc mắc của bạn! ✨\n\nBạn có thể tham khảo nhanh bảng giá 26 dịch vụ chuẩn Úc, liên hệ trực tiếp hotline **(08) 9375 2888** hoặc đặt lịch ngay để được chuyên viên Fashion Nails tư vấn trực tiếp chu đáo nhất nhé!`,
-      action: { type: 'book', labelVi: '📅 Đặt Lịch Hẹn Tư Vấn Trực Tiếp', labelEn: '📅 Book Consultation Appointment' }
-    };
-  }
-
   return {
-    text: `Thank you for your inquiry! ✨\n\nFor custom requests, you can explore our complete 26-service menu, call our salon desk directly at **(08) 9375 2888**, or book your chair online for personal consultation!`,
-    action: { type: 'book', labelVi: '📅 Đặt Lịch Hẹn Tư Vấn Trực Tiếp', labelEn: '📅 Book Consultation Appointment' }
+    text: `Thank you for your inquiry! ✨\n\nFor custom requests, you can explore our complete 26-service menu, call our salon desk directly at **(08) 9375 2888**, or reserve your appointment online!`,
+    action: { type: 'book', labelVi: '📅 Đặt Lịch Hẹn Ngay', labelEn: '📅 Book an Appointment' }
   };
 }
+

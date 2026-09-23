@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useLanguage } from './context/LanguageContext';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/Hero';
@@ -8,26 +8,27 @@ import { BackToHero } from './components/layout/BackToHero';
 import { QuickChatbot } from './components/chat/QuickChatbot';
 import { BookingModal } from './components/booking/BookingModal';
 
-// Code-Split Dynamic Sections (Loaded on Demand / Viewport Intersection)
-const TrustBar = lazy(() => import('./components/sections/TrustBar'));
-const SalonStorytelling = lazy(() => import('./components/sections/SalonStorytelling'));
-const Services = lazy(() => import('./components/sections/Services'));
-const WhyChooseUs = lazy(() => import('./components/sections/WhyChooseUs'));
-const About = lazy(() => import('./components/sections/About'));
-const Gallery = lazy(() => import('./components/sections/Gallery'));
-const Testimonials = lazy(() => import('./components/sections/Testimonials'));
-const FAQ = lazy(() => import('./components/sections/FAQ'));
-const FinalCTA = lazy(() => import('./components/sections/FinalCTA'));
-const Footer = lazy(() => import('./components/layout/Footer'));
+// Direct imports for smooth, lag-free scroll reveal (Ẩn rồi hiện lên êm dịu)
+import TrustBar from './components/sections/TrustBar';
+import SalonStorytelling from './components/sections/SalonStorytelling';
+import Services from './components/sections/Services';
+import WhyChooseUs from './components/sections/WhyChooseUs';
+import About from './components/sections/About';
+import Gallery from './components/sections/Gallery';
+import Testimonials from './components/sections/Testimonials';
+import FAQ from './components/sections/FAQ';
+import Location from './components/sections/Location';
+import FinalCTA from './components/sections/FinalCTA';
+import Footer from './components/layout/Footer';
 
 export function App() {
   const { language } = useLanguage();
 
   return (
-    <div className={`atelier-app lang-${language}`}>
+    <div className="atelier-app lang-en">
       {/* Accessibility: Skip to Main Content */}
       <a href="#main-content" className="skip-to-content">
-        {language === 'vi' ? 'Chuyển đến nội dung chính' : 'Skip to main content'}
+        Skip to main content
       </a>
 
       {/* Top Navbar */}
@@ -44,9 +45,9 @@ export function App() {
         </LazySection>
 
         {/* 3. Salon Storytelling: 4 Chapters */}
-        <LazySection id="salon-story" minHeight="650px" hasOwnId={true}>
+        {/* <LazySection id="salon-story" minHeight="650px" hasOwnId={true}>
           <SalonStorytelling />
-        </LazySection>
+        </LazySection> */}
 
         {/* 4. Services Catalog & Search */}
         <LazySection id="services" minHeight="750px" hasOwnId={true}>
@@ -78,7 +79,12 @@ export function App() {
           <FAQ />
         </LazySection>
 
-        {/* 10. Final Call to Action */}
+        {/* 10. Salon Location, Hours & Google Maps */}
+        <LazySection id="location" minHeight="580px" hasOwnId={true}>
+          <Location />
+        </LazySection>
+
+        {/* 11. Final Call to Action */}
         <LazySection id="final-cta" minHeight="380px" hasOwnId={false}>
           <FinalCTA />
         </LazySection>

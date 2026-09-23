@@ -131,10 +131,15 @@ button {
   user-select: none;
 }
 
-img, picture, video, canvas, svg {
+img, picture, video, canvas {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
 }
 
 /* -------------------------------------------------

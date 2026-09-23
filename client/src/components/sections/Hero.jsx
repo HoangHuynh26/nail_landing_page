@@ -9,54 +9,40 @@ const HERO_SLIDES = [
   {
     id: 'slide-1',
     src: '/518821645_122280518834203556_166016271660208696_n.jpg',
-    altVi: 'Mẫu móng BIAB tự nhiên cao cấp với French đầu móng tinh tế tại Fashion Nails Morley',
     altEn: 'Signature BIAB natural nails with delicate micro-French tips at Fashion Nails Morley',
-    tagVi: 'BIAB Tự Nhiên & French Đầu Móng',
     tagEn: 'Signature BIAB & Micro-French',
-    subVi: 'Khử trùng dụng cụ 100% chuẩn y tế',
     subEn: '100% Autoclave Sterilized Standard'
   },
   {
     id: 'slide-2',
     src: '/545549752_122295948854203556_1942215736309577969_n.jpg',
-    altVi: 'Thiết kế móng 3D ngọc trai biển và cá voi độc bản đắp nổi thủ công',
     altEn: 'Artisanal 3D ocean pearl and whale shark sculpted nail masterpiece',
-    tagVi: 'Nghệ Thuật 3D Độc Bản',
     tagEn: '3D Artisanal Sculpted Art',
-    subVi: 'Đắp nổi vẽ nổi thủ công tỉ mỉ từng chi tiết',
     subEn: 'Handcrafted bespoke 3D artistry'
   },
   {
     id: 'slide-3',
     src: '/596803338_122317878272203556_5827472803529081288_n.jpg',
-    altVi: 'Mẫu móng tráng gương Chrome giọt nước kim loại lỏng thời thượng',
     altEn: 'Molten liquid metal chrome droplets over sheer luxury base',
-    tagVi: 'Tráng Gương Giọt Nước Chrome',
     tagEn: 'Molten Liquid Chrome',
-    subVi: 'Độ bóng gương hoàn hảo, bền màu 4+ tuần',
     subEn: 'High-gloss mirror finish & 4+ weeks retention'
   },
   {
     id: 'slide-4',
     src: '/548191670_122297986364203556_8262094689456576226_n.jpg',
-    altVi: 'Mẫu móng Pastel Aura airbrush chuyển sắc ombré kết hợp gân gel nổi 3D',
     altEn: 'Pastel aura airbrush ombré with sculpted gel ridges',
-    tagVi: 'Aura Airbrush Ombré 3D',
     tagEn: 'Pastel Aura Ombré Art',
-    subVi: 'Xu hướng thẩm mỹ móng Hàn - Nhật thịnh hành',
     subEn: 'Trending K & J beauty aesthetic'
   },
   {
     id: 'slide-5',
     src: '/708927332_122351060870203556_5767741981343574057_n.jpg',
-    altVi: 'Dáng móng Stiletto dài sắc nét màu xanh Cobalt hoàng gia kết hợp bướm 3D',
     altEn: 'Royal cobalt blue stiletto extensions with delicate 3D butterfly art',
-    tagVi: 'Nối Móng Cobalt Hoàng Gia',
     tagEn: 'Royal Gel-X & Acrylic Extensions',
-    subVi: 'Kỹ thuật định hình form móng chuẩn xác đỉnh cao',
     subEn: 'Master form architecture & structural durability'
   }
 ];
+
 
 // Hook to count up numbers smoothly when mounted
 function useCountUp(endVal, duration = 1400, decimals = 0) {
@@ -83,7 +69,7 @@ function useCountUp(endVal, duration = 1400, decimals = 0) {
 }
 
 export function Hero() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { openBooking } = useBooking();
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -139,8 +125,6 @@ export function Hero() {
     }
   };
 
-  const currentSlideData = HERO_SLIDES[currentSlide];
-
   return (
     <section id="hero" className="hero-section" aria-label="Hero Section">
       <div className="container hero-section__inner">
@@ -149,17 +133,15 @@ export function Hero() {
           <div className="hero-section__header">
             <h1 className="hero-section__title">
               <span className="hero-section__title-line">
-                {language === 'vi' ? 'Đẳng Cấp Nghệ Thuật Móng' : 'Exquisite Luxury Nail Care'}
+                Exquisite Luxury Nail Care
               </span>
               <span className="hero-section__title-line hero-section__title-line--italic" style={{ color: 'var(--color-gold)' }}>
-                {language === 'vi' ? 'Tại Morley Galleria WA' : 'At Morley Galleria WA'}
+                At Morley Galleria WA
               </span>
             </h1>
 
             <p className="hero-section__subtitle">
-              {language === 'vi'
-                ? 'Trải nghiệm không gian làm đẹp hoàng gia với đầy đủ 26 dịch vụ tiêu chuẩn từ BIAB, Gel X, Acrylic đến Nghệ thuật sơn vẽ cao cấp. Khử trùng dụng cụ 100% chuẩn y tế.'
-                : 'Immerse in royal nail artistry featuring 26 full treatments from Builder Gel BIAB, Gel X, Acrylic to bespoke hand-painted nail art. 100% autoclave sterilized instruments.'}
+              Immerse in royal nail artistry featuring 26 full treatments from Builder Gel BIAB, Gel X, Acrylic to bespoke hand-painted nail art. 100% autoclave sterilized instruments.
             </p>
           </div>
 
@@ -182,8 +164,9 @@ export function Hero() {
                 size="lg"
                 onClick={scrollToPricing}
                 icon={ArrowRight}
+                iconPosition="right"
               >
-                {language === 'vi' ? 'Xem Bảng Giá Menu' : 'Explore Menu & Prices'}
+                Explore Menu & Prices
               </Button>
             </div>
 
@@ -200,19 +183,7 @@ export function Hero() {
                   </svg>
                   <span className="hero-google-trust__brand">Google</span>
                   <span className="hero-google-trust__label">
-                    {language === 'vi' ? 'Đánh Giá' : 'Reviews'}
-                  </span>
-                  <span className="hero-google-trust__verified-tag">
-                    <CheckCircle2 size={12} />
-                    {language === 'vi' ? 'Xác thực' : 'Verified'}
-                  </span>
-                </div>
-
-                {/* Live pulsing green indicator */}
-                <div className="hero-google-trust__live">
-                  <span className="hero-google-trust__pulse" aria-hidden="true" />
-                  <span className="hero-google-trust__live-text">
-                    {language === 'vi' ? 'Đánh giá thực tế' : 'Live Verified'}
+                    Reviews
                   </span>
                 </div>
               </div>
@@ -240,18 +211,15 @@ export function Hero() {
                 {/* Rolling count-up review count */}
                 <div className="hero-google-trust__reviews-count">
                   <strong>{clientsCount}+</strong>
-                  <span>{language === 'vi' ? 'Đánh giá tại Morley Galleria' : 'Perth Galleria reviews'}</span>
+                  <span>Perth Galleria reviews</span>
                 </div>
               </div>
 
               <div className="hero-google-trust__footer">
                 <a href="#reviews" className="hero-google-trust__link">
-                  <span>{language === 'vi' ? 'Xem các đánh giá từ khách hàng' : 'Read genuine client reviews'}</span>
+                  <span>Read genuine client reviews</span>
                   <ArrowRight size={13} />
                 </a>
-                <span className="hero-google-trust__walkins">
-                  {language === 'vi' ? 'Hẹn trước & Walk-ins' : 'Bookings & Walk-ins'}
-                </span>
               </div>
             </div>
           </div>
@@ -275,7 +243,7 @@ export function Hero() {
                 <img
                   key={slide.id}
                   src={slide.src}
-                  alt={language === 'vi' ? slide.altVi : slide.altEn}
+                  alt={slide.altEn}
                   className={`hero-section__image ${isActive ? 'is-active' : ''}`}
                   width="640"
                   height="580"
@@ -294,7 +262,7 @@ export function Hero() {
                 e.stopPropagation();
                 prevSlide();
               }}
-              aria-label={language === 'vi' ? 'Ảnh trước' : 'Previous slide'}
+              aria-label="Previous slide"
             >
               <ChevronLeft size={22} />
             </button>
@@ -307,50 +275,10 @@ export function Hero() {
                 e.stopPropagation();
                 nextSlide();
               }}
-              aria-label={language === 'vi' ? 'Ảnh tiếp theo' : 'Next slide'}
+              aria-label="Next slide"
             >
               <ChevronRight size={22} />
             </button>
-
-            {/* Top-Right Index & Style Tag Badge */}
-            <div className="hero-slider__badge" aria-live="polite">
-              <Sparkles size={13} className="hero-slider__badge-icon" />
-              <span>{String(currentSlide + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}</span>
-              <span className="hero-slider__badge-tag">
-                • {language === 'vi' ? currentSlideData.tagVi : currentSlideData.tagEn}
-              </span>
-            </div>
-
-            {/* Bottom-Right Capsule Dot Indicators */}
-            <div className="hero-slider__indicators" role="tablist" aria-label="Slide dots">
-              {HERO_SLIDES.map((slide, index) => (
-                <button
-                  key={slide.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={index === currentSlide}
-                  aria-label={`Slide ${index + 1}`}
-                  className={`hero-slider__dot ${index === currentSlide ? 'is-active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentSlide(index);
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Floating Luxury Tag (Bottom-Left) */}
-            <div className="hero-section__floating-tag" style={{ border: '1px solid var(--color-border)' }}>
-              <ShieldCheck size={18} className="hero-section__floating-icon" style={{ color: 'var(--color-gold)' }} />
-              <div className="hero-section__floating-text">
-                <strong style={{ color: 'var(--color-text-primary)' }}>
-                  {language === 'vi' ? currentSlideData.tagVi : currentSlideData.tagEn}
-                </strong>
-                <span style={{ color: 'var(--color-text-secondary)' }}>
-                  {language === 'vi' ? currentSlideData.subVi : currentSlideData.subEn}
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

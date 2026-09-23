@@ -17,6 +17,7 @@ export function Button({
   id,
   'aria-label': ariaLabel,
   icon: Icon = null,
+  iconPosition = 'left', // 'left' | 'right'
   ...props
 }) {
   const baseClasses = 'atelier-btn';
@@ -24,6 +25,15 @@ export function Button({
   const sizeClass = `atelier-btn--${size}`;
   const widthClass = fullWidth ? 'atelier-btn--full' : '';
   const loadingClass = loading ? 'atelier-btn--loading' : '';
+
+  const iconSize = size === 'lg' ? 20 : size === 'sm' ? 16 : 18;
+  const iconElement = Icon ? (
+    <Icon
+      className={`atelier-btn__icon ${iconPosition === 'right' ? 'atelier-btn__icon--trailing' : 'atelier-btn__icon--leading'}`}
+      size={iconSize}
+      aria-hidden="true"
+    />
+  ) : null;
 
   return (
     <button
@@ -40,8 +50,9 @@ export function Button({
         <span className="atelier-btn__spinner" aria-hidden="true" />
       ) : (
         <>
-          {Icon && <Icon className="atelier-btn__icon" size={18} aria-hidden="true" />}
+          {Icon && iconPosition === 'left' && iconElement}
           <span>{children}</span>
+          {Icon && iconPosition === 'right' && iconElement}
         </>
       )}
     </button>
