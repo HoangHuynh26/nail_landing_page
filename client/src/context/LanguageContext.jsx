@@ -1,68 +1,43 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import vi from '../i18n/vi.json';
+import React, { createContext, useContext, useEffect } from 'react';
 import en from '../i18n/en.json';
 
-const translations = { vi, en };
-
 const LanguageContext = createContext({
-  language: 'vi',
+  language: 'en',
   setLanguage: () => {},
   t: (key) => key,
 });
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguageState] = useState(() => {
-    try {
-      const saved = localStorage.getItem('atelier_lumiere_lang');
-      return saved === 'en' ? 'en' : 'vi';
-    } catch {
-      return 'vi';
-    }
-  });
-
-  const setLanguage = (lang) => {
-    const validLang = lang === 'en' ? 'en' : 'vi';
-    setLanguageState(validLang);
-    try {
-      localStorage.setItem('atelier_lumiere_lang', validLang);
-      document.documentElement.lang = validLang;
-    } catch (err) {
-      console.warn('Unable to persist language preference', err);
-    }
-  };
+  const language = 'en';
 
   useEffect(() => {
-    document.documentElement.lang = language;
-  }, [language]);
+    try {
+      localStorage.setItem('atelier_lumiere_lang', 'en');
+      document.documentElement.lang = 'en';
+    } catch {
+      // ignore
+    }
+  }, []);
 
   /**
-   * Helper to retrieve nested keys e.g. t('hero.titleLine1')
+   * Helper to retrieve nested keys e.g. t('hero.titleLine1') from en.json
    */
   const t = (path) => {
     const keys = path.split('.');
-    let current = translations[language];
+    let current = en;
 
     for (const k of keys) {
       if (current && typeof current === 'object' && k in current) {
         current = current[k];
       } else {
-        // Fallback to Vietnamese if not found
-        let fallback = translations.vi;
-        for (const fbKey of keys) {
-          if (fallback && typeof fallback === 'object' && fbKey in fallback) {
-            fallback = fallback[fbKey];
-          } else {
-            return path;
-          }
-        }
-        return fallback;
+        return path;
       }
     }
     return current;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: () => {}, t }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -71,3 +46,4 @@ export function LanguageProvider({ children }) {
 export function useLanguage() {
   return useContext(LanguageContext);
 }
+

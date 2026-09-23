@@ -12,7 +12,9 @@
     "about": "Về chúng tôi",
     "gallery": "Bộ sưu tập",
     "reviews": "Đánh giá",
+    "location": "Vị trí & Liên hệ",
     "faq": "Hỏi đáp",
+    "contact": "Liên hệ",
     "bookCta": "Đặt lịch hẹn",
     "menu": "Menu"
   },
@@ -78,7 +80,7 @@
   },
   "whyUs": {
     "badge": "Cam kết của chúng tôi",
-    "title": "Tại sao khách hàng chọn Fashion Nails?",
+    "title": "Tại sao khách hàng chọn Fashion Nails Morley?",
     "subtitle": "Chúng tôi tự hào mang đến trải nghiệm làm móng đẹp bền, tận tâm và giá cả hợp lý nhất.",
     "card1": {
       "title": "Kỹ thuật đắp phom sắc nét",
@@ -176,6 +178,8 @@
     "fullNamePlaceholder": "Ví dụ: Nguyễn Lan Anh",
     "phone": "Số điện thoại liên hệ",
     "phonePlaceholder": "0412 345 678 hoặc +61...",
+    "email": "Địa chỉ Email",
+    "emailPlaceholder": "lananh@example.com",
     "notes": "Ghi chú thêm (tuỳ chọn)",
     "notesPlaceholder": "Ví dụ: Cần tháo móng cũ, làm móng nhọn, nhân viên Morley Galleria...",
     "discountDesc": "Áp dụng giảm ngay 10% trên tổng hoá đơn khi thanh toán tại quầy và xuất trình thẻ hợp lệ.",
@@ -203,7 +207,8 @@
       "timeRequired": "Vui lòng chọn khung giờ.",
       "nameRequired": "Vui lòng nhập họ và tên của bạn.",
       "phoneRequired": "Vui lòng nhập số điện thoại hợp lệ (VD: 0412 345 678).",
-      "general": "Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ trực tiếp tiệm qua hotline."
+      "emailRequired": "Vui lòng nhập địa chỉ email hợp lệ.",
+      "general": "Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại hoặc liên hệ trực tiếp tiệm qua hotline."
     }
   },
   "footer": {

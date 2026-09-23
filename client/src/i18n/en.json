@@ -12,7 +12,9 @@
     "about": "About",
     "gallery": "Gallery",
     "reviews": "Reviews",
+    "location": "Location",
     "faq": "FAQ",
+    "contact": "Contact",
     "bookCta": "Book Appointment",
     "menu": "Menu"
   },
@@ -47,7 +49,7 @@
   },
   "services": {
     "badge": "Official Treatment Menu",
-    "title": "Comprehensive Nail Services & Price List",
+    "title": "Comprehensive Nail Services",
     "subtitle": "Explore our full range of services from Builder Gel (BIAB) and Acrylics to Gel X, Shellac, and trending Nail Art.",
     "tabAll": "All Services",
     "tabBiab": "Builder Gel - BIAB",
@@ -78,7 +80,7 @@
   },
   "whyUs": {
     "badge": "Our Commitment",
-    "title": "Why Clients Love Fashion Nails Morley Galleria",
+    "title": "Why Clients Love Fashion Nails Morley?",
     "subtitle": "We are passionate about delivering durable, stunning nail enhancements in a welcoming atmosphere.",
     "card1": {
       "title": "Precision Shaping & Apex",
@@ -176,8 +178,11 @@
     "fullNamePlaceholder": "e.g., Sarah Jenkins",
     "phone": "Mobile Phone",
     "phonePlaceholder": "0412 345 678 or +61...",
-    "notes": "Notes / Special Requests (Optional)",
-    "notesPlaceholder": "e.g., Old acrylic removal needed, Morley Galleria staff, nail art ideas...",
+    "email": "Email Address",
+    "emailPlaceholder": "sarah.jenkins@example.com",
+    "guests": "Number of Guests / Party Size",
+    "notes": "Message / Special Requests (Optional)",
+    "notesPlaceholder": "Optional: e.g., Nail art ideas, old acrylic removal, or specific preferences...",
     "discountDesc": "10% off will be applied upon payment at the salon counter when presenting valid ID/Staff badge.",
     "summaryTitle": "Your Appointment Summary",
     "service": "Selected Treatment",
@@ -203,6 +208,7 @@
       "timeRequired": "Please select a time slot.",
       "nameRequired": "Please enter your full name.",
       "phoneRequired": "Please enter a valid phone number (e.g., 0412 345 678).",
+      "emailRequired": "Please enter a valid email address.",
       "general": "An error occurred. Please try again or call the salon directly."
     }
   },
@@ -268,6 +274,24 @@
     },
     "ctaExplore": "Explore 26 Treatments & Prices",
     "ctaBook": "Book an Appointment"
+  },
+  "location": {
+    "badge": "Location & Directions",
+    "title": "Visit Our Boutique at Morley Galleria",
+    "subtitle": "Conveniently situated opposite Kmart on Level 1. Step in for walk-ins or reserve your bespoke appointment in advance.",
+    "getDirections": "Get Directions",
+    "copyAddress": "Copy Address",
+    "addressCopied": "Address Copied!",
+    "addressTitle": "Salon Address",
+    "hoursTitle": "Opening Hours",
+    "contactTitle": "Contact Information",
+    "phone": "Phone",
+    "email": "Email",
+    "callNow": "Call Now",
+    "sendEmail": "Send Email",
+    "openGoogleMaps": "Open in Google Maps",
+    "parkingTip": "Free multi-deck parking directly adjacent to the Kmart & Target mall entrances.",
+    "interiorTip": "Look for crystal chandeliers and pink marble pedicure thrones directly opposite Kmart."
   },
   "backToHero": {
     "tooltip": "Back to Hero Section",
