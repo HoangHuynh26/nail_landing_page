@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Search, Filter, RefreshCw, CheckCircle, Clock, XCircle,
-  AlertCircle, Phone, Mail, MessageSquare, Calendar, User, ExternalLink,
-  Eye, CheckCheck, Sparkles, X, Shield, Tag, DollarSign, Gift, CheckCircle2,
+  Search, RefreshCw, Clock,
+  Phone, Mail, MessageSquare, Calendar,
+  Eye, CheckCheck, X, Tag, CheckCircle2,
   Percent
 } from 'lucide-react';
 import { servicesData } from '../../data/services';

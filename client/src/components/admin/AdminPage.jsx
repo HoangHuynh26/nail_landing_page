@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, Calendar, Sparkles, Tag,
-  Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink, Image as ImageIcon,
+  LayoutDashboard, Calendar, Sparkles,
+  Lock, ArrowLeft, LogOut, Image as ImageIcon,
   User, Eye, EyeOff, LogIn, Bell
 } from 'lucide-react';
 import AdminOverview from './AdminOverview';
@@ -61,11 +61,10 @@ function AdminDashboardContent({ onBackToWebsite }) {
       if (data.success) {
         localStorage.setItem('atelier_admin_token', data.token);
         setIsAuthenticated(true);
-        fetchDbStatus();
       } else {
         setLoginError(data.message || 'Invalid username or password');
       }
-    } catch (err) {
+    } catch {
       // Offline fallback: check default 'admin' / 'Admin@123'
       if (username.trim().toLowerCase() === 'admin' && password === 'Admin@123') {
         localStorage.setItem('atelier_admin_token', 'local-token');
@@ -199,8 +198,6 @@ function AdminDashboardContent({ onBackToWebsite }) {
       </div>
     );
   }
-
-  const isNeon = dbStatus?.mode === 'neon_postgresql';
 
   // 2. Authenticated Admin Dashboard
   return (
