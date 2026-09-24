@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Search, Filter, RefreshCw, CheckCircle, Clock, XCircle,
   AlertCircle, Phone, Mail, MessageSquare, Calendar, User, ExternalLink,
-  Eye, CheckCheck, Sparkles, X, Shield
+  Eye, CheckCheck, Sparkles, X, Shield, Tag, DollarSign, Gift, CheckCircle2,
+  Percent
 } from 'lucide-react';
+import { servicesData } from '../../data/services';
 import { useAdminSocket } from '../../context/AdminSocketContext';
 
 const MONTH_OPTIONS = [
@@ -22,8 +24,64 @@ const MONTH_OPTIONS = [
   { value: '12', label: '12 - Dec' }
 ];
 
+/**
+ * Checks whether the customer checked the 10% discount / voucher option
+ */
+function checkHas10Discount(booking) {
+  if (!booking) return false;
+  const v = (booking.voucher || '').toLowerCase();
+  const m = (booking.message || '').toLowerCase();
+  const n = (booking.notes || '').toLowerCase();
+  return (
+    v.includes('10%') ||
+    v.includes('discount') ||
+    v.includes('senior') ||
+    v.includes('student') ||
+    v.includes('staff') ||
+    v.includes('community') ||
+    m.includes('10% discount') ||
+    m.includes('10%') ||
+    n.includes('10% discount')
+  );
+}
+
+/**
+ * Matches a booking to the salon catalog services to retrieve official pricing & duration
+ */
+function findServicePricing(booking, servicesList) {
+  if (!booking || !servicesList) return { price: null, pricePrefix: '', duration: 45, serviceObj: null };
+  const targetId = booking.serviceId;
+  const bookingSvcName = (booking.service || '').toLowerCase().trim();
+
+  const found = servicesList.find((s) => {
+    if (targetId && s.id === targetId) return true;
+    const sNameEn = (s.name_en || s.nameEn || '').toLowerCase().trim();
+    const sNameVi = (s.name_vi || s.nameVi || '').toLowerCase().trim();
+    if (sNameEn && bookingSvcName === sNameEn) return true;
+    if (sNameVi && bookingSvcName === sNameVi) return true;
+    if (sNameEn && (bookingSvcName.includes(sNameEn) || sNameEn.includes(bookingSvcName))) return true;
+    return false;
+  });
+
+  if (!found) {
+    return { price: null, pricePrefix: '', duration: 45, serviceObj: null };
+  }
+
+  const rawPrice = found.price != null ? Number(found.price) : null;
+  const pricePrefix = found.price_prefix || found.pricePrefix || '';
+  const duration = found.duration || 45;
+
+  return {
+    price: rawPrice,
+    pricePrefix,
+    duration,
+    serviceObj: found
+  };
+}
+
 export function AdminBookings() {
   const [bookings, setBookings] = useState([]);
+  const [allServices, setAllServices] = useState(servicesData);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
@@ -40,6 +98,18 @@ export function AdminBookings() {
     unreadCount,
     realtimeBookings
   } = useAdminSocket();
+
+  // Fetch live services pricing from backend, fallback to local services catalog
+  useEffect(() => {
+    fetch('/api/services')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.services) && data.services.length > 0) {
+          setAllServices(data.services);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Dynamically compute available years based on bookings data & current year
   const currentYear = new Date().getFullYear();
@@ -377,6 +447,8 @@ export function AdminBookings() {
                 displayedBookings.map((b) => {
                   const id = b.bookingId || b.id;
                   const unviewed = isUnviewed(id);
+                  const rowPricing = findServicePricing(b, allServices);
+                  const rowHas10 = checkHas10Discount(b);
 
                   return (
                     <tr
@@ -429,7 +501,42 @@ export function AdminBookings() {
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: '600', color: '#334155' }}>{b.service}</div>
+                        <div style={{ fontWeight: '700', color: '#0f172a' }}>{b.service}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px', flexWrap: 'wrap' }}>
+                          {rowPricing.price != null && (
+                            <span style={{
+                              fontSize: '11px',
+                              fontWeight: '800',
+                              color: '#0f172a',
+                              background: '#f1f5f9',
+                              border: '1px solid #cbd5e1',
+                              padding: '1px 6px',
+                              borderRadius: '4px'
+                            }}>
+                              AU${rowPricing.price}
+                            </span>
+                          )}
+                          {rowHas10 ? (
+                            <span style={{
+                              fontSize: '10.5px',
+                              fontWeight: '800',
+                              color: '#15803d',
+                              background: '#dcfce7',
+                              border: '1px solid #86efac',
+                              padding: '1px 6px',
+                              borderRadius: '4px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '2px'
+                            }}>
+                              <Percent size={10} /> 10% OFF
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: '10px', color: '#94a3b8' }}>
+                              Standard
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td>
                         <div style={{ color: '#0f172a', fontWeight: '700' }}>{b.date}</div>
@@ -508,110 +615,235 @@ export function AdminBookings() {
         </div>
       </div>
 
-      {/* Appointment Detail Modal */}
-      {selectedBooking && (
-        <div className="admin-modal-overlay" onClick={() => setSelectedBooking(null)}>
-          <div className="admin-modal-box" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <div>
-                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#b45309', fontWeight: '800', letterSpacing: '1px' }}>
-                  Appointment Details
-                </span>
-                <h3 style={{ margin: '4px 0 0', fontSize: '20px', color: '#0f172a', fontWeight: '800' }}>
-                  {selectedBooking.bookingId || `#${selectedBooking.id}`}
-                </h3>
-              </div>
-              <button
-                type="button"
-                className="admin-icon-btn"
-                onClick={() => setSelectedBooking(null)}
-              >
-                <X size={16} />
-              </button>
-            </div>
+      {/* Appointment Detail Modal with Service Pricing & 10% Voucher Check */}
+      {selectedBooking && (() => {
+        const modalPricing = findServicePricing(selectedBooking, allServices);
+        const modalHas10Voucher = checkHas10Discount(selectedBooking);
+        const basePrice = modalPricing.price;
+        const discountAmount = (basePrice && modalHas10Voucher) ? Math.round(basePrice * 0.1) : 0;
+        const finalPrice = (basePrice && modalHas10Voucher) ? (basePrice - discountAmount) : basePrice;
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ padding: '14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Client Information</div>
-                <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginTop: '4px' }}>
-                  {selectedBooking.name}
+        // Clean user personal message (removes the internal [10% Discount: ...] prefix)
+        const cleanedNotes = (selectedBooking.message || '')
+          .replace(/\[10% Discount:.*?\]\s*(-)?\s*/gi, '')
+          .trim();
+
+        const waText = modalHas10Voucher && basePrice != null
+          ? `Hi ${selectedBooking.name}, confirming your appointment for ${selectedBooking.service} on ${selectedBooking.date} at ${selectedBooking.time}. Discounted Price: AU$${finalPrice} (10% Community Discount included). See you soon at Fashion Nails Morley Galleria!`
+          : `Hi ${selectedBooking.name}, confirming your appointment for ${selectedBooking.service} on ${selectedBooking.date} at ${selectedBooking.time}${basePrice != null ? ` (AU$${basePrice})` : ''}. See you soon at Fashion Nails Morley Galleria!`;
+
+        return (
+          <div className="admin-modal-overlay" onClick={() => setSelectedBooking(null)}>
+            <div className="admin-modal-box" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '540px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+                <div>
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#b45309', fontWeight: '800', letterSpacing: '1px' }}>
+                    Appointment Details
+                  </span>
+                  <h3 style={{ margin: '4px 0 0', fontSize: '20px', color: '#0f172a', fontWeight: '800' }}>
+                    {selectedBooking.bookingId || `#${selectedBooking.id}`}
+                  </h3>
                 </div>
-                <div style={{ display: 'flex', gap: '16px', marginTop: '8px', fontSize: '13px' }}>
-                  <a href={`tel:${selectedBooking.phone}`} style={{ color: '#0284c7', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '600' }}>
-                    <Phone size={13} /> {selectedBooking.phone}
-                  </a>
-                  {selectedBooking.email && (
-                    <a href={`mailto:${selectedBooking.email}`} style={{ color: '#64748b', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Mail size={13} /> {selectedBooking.email}
+                <button
+                  type="button"
+                  className="admin-icon-btn"
+                  onClick={() => setSelectedBooking(null)}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {/* Client Info */}
+                <div style={{ padding: '14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Client Information</div>
+                  <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginTop: '4px' }}>
+                    {selectedBooking.name}
+                  </div>
+                  <div style={{ display: 'flex', gap: '16px', marginTop: '8px', fontSize: '13px' }}>
+                    <a href={`tel:${selectedBooking.phone}`} style={{ color: '#0284c7', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '600' }}>
+                      <Phone size={13} /> {selectedBooking.phone}
                     </a>
-                  )}
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0' }}>
-                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Service Selected</div>
-                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#b45309', marginTop: '3px' }}>
-                    {selectedBooking.service}
+                    {selectedBooking.email && (
+                      <a href={`mailto:${selectedBooking.email}`} style={{ color: '#64748b', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Mail size={13} /> {selectedBooking.email}
+                      </a>
+                    )}
                   </div>
                 </div>
 
-                <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0' }}>
-                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Date & Perth Time</div>
-                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', marginTop: '3px' }}>
+                {/* Service & Official Pricing Card */}
+                <div style={{ padding: '14px', background: '#ffffff', borderRadius: '12px', border: '1.5px solid #cbd5e1' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>
+                        Service Booked
+                      </div>
+                      <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', marginTop: '3px' }}>
+                        {selectedBooking.service}
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#64748b', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Clock size={12} /> Duration: ~{modalPricing.duration} mins
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>
+                        Catalog Price
+                      </div>
+                      <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>
+                        {basePrice != null ? `${modalPricing.pricePrefix || ''}AU$${basePrice}` : 'Custom / At Salon'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 10% Voucher & Special Promotion Status (KEY USER REQUIREMENT) */}
+                {modalHas10Voucher ? (
+                  <div style={{
+                    padding: '14px 16px',
+                    background: '#f0fdf4',
+                    borderRadius: '12px',
+                    border: '1.5px solid #86efac',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: '#166534', fontWeight: '800', fontSize: '13.5px' }}>
+                        <CheckCircle2 size={18} style={{ color: '#16a34a' }} />
+                        <span>10% Voucher Applied (YES)</span>
+                      </div>
+                      <span style={{
+                        padding: '2px 8px',
+                        background: '#16a34a',
+                        color: '#ffffff',
+                        fontSize: '11px',
+                        fontWeight: '800',
+                        borderRadius: '6px',
+                        letterSpacing: '0.5px'
+                      }}>
+                        -10% DISCOUNT
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '12px', color: '#15803d', lineHeight: '1.4' }}>
+                      Customer checked the 10% discount box for <strong>Seniors, Students, or Morley Galleria Staff</strong>.
+                    </div>
+
+                    {basePrice != null && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginTop: '4px',
+                        paddingTop: '8px',
+                        borderTop: '1px dashed #bbf7d0',
+                        fontSize: '13px'
+                      }}>
+                        <span style={{ color: '#166534' }}>
+                          Original: <span style={{ textDecoration: 'line-through' }}>AU${basePrice}</span> (Save AU${discountAmount})
+                        </span>
+                        <span style={{ fontWeight: '800', color: '#14532d', fontSize: '16px' }}>
+                          Estimated Due: AU${finalPrice}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{
+                    padding: '12px 16px',
+                    background: '#f8fafc',
+                    borderRadius: '12px',
+                    border: '1.5px solid #e2e8f0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Tag size={16} style={{ color: '#94a3b8' }} />
+                      <div>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#334155' }}>
+                          10% Voucher: Not Selected (NO)
+                        </div>
+                        <div style={{ fontSize: '11px', color: '#64748b' }}>
+                          Customer did not check the 10% discount box (Standard pricing applies)
+                        </div>
+                      </div>
+                    </div>
+                    <span style={{
+                      padding: '2px 8px',
+                      background: '#e2e8f0',
+                      color: '#475569',
+                      fontSize: '10.5px',
+                      fontWeight: '700',
+                      borderRadius: '6px'
+                    }}>
+                      STANDARD RATE
+                    </span>
+                  </div>
+                )}
+
+                {/* Date & Time */}
+                <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Scheduled Date & Time</div>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a' }}>
                     {selectedBooking.date} • {selectedBooking.time}
                   </div>
                 </div>
-              </div>
 
-              {selectedBooking.message && (
-                <div style={{ padding: '14px', background: '#fffbeb', borderRadius: '10px', border: '1.5px solid #fde68a' }}>
-                  <div style={{ fontSize: '11px', color: '#b45309', fontWeight: '700' }}>Special Request / Notes:</div>
-                  <div style={{ fontSize: '13px', color: '#92400e', marginTop: '4px', lineHeight: '1.4', fontWeight: '500' }}>
-                    "{selectedBooking.message}"
+                {/* Special Request / Notes */}
+                {cleanedNotes && (
+                  <div style={{ padding: '12px', background: '#fffbeb', borderRadius: '10px', border: '1.5px solid #fde68a' }}>
+                    <div style={{ fontSize: '11px', color: '#b45309', fontWeight: '700' }}>Customer Special Request / Notes:</div>
+                    <div style={{ fontSize: '13px', color: '#92400e', marginTop: '4px', lineHeight: '1.4', fontWeight: '500' }}>
+                      "{cleanedNotes}"
+                    </div>
                   </div>
+                )}
+
+                {/* Status Selector */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+                  <span style={{ fontSize: '13px', color: '#334155', fontWeight: '700' }}>Appointment Status:</span>
+                  <select
+                    value={selectedBooking.status || 'pending'}
+                    onChange={(e) => handleStatusChange(selectedBooking.bookingId || selectedBooking.id, e.target.value)}
+                    className={`status-badge ${(selectedBooking.status || 'pending').toLowerCase()}`}
+                    style={{ cursor: 'pointer', outline: 'none' }}
+                  >
+                    <option value="pending" style={{ color: '#92400e', backgroundColor: '#fffbeb', fontWeight: '800' }}>
+                      🟡 PENDING
+                    </option>
+                    <option value="confirmed" style={{ color: '#1e40af', backgroundColor: '#eff6ff', fontWeight: '800' }}>
+                      🔵 CONFIRMED
+                    </option>
+                    <option value="completed" style={{ color: '#065f46', backgroundColor: '#ecfdf5', fontWeight: '800' }}>
+                      🟢 COMPLETED
+                    </option>
+                    <option value="cancelled" style={{ color: '#991b1b', backgroundColor: '#fef2f2', fontWeight: '800' }}>
+                      🔴 CANCELLED
+                    </option>
+                  </select>
                 </div>
-              )}
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px' }}>
-                <span style={{ fontSize: '13px', color: '#334155', fontWeight: '700' }}>Appointment Status:</span>
-                <select
-                  value={selectedBooking.status || 'pending'}
-                  onChange={(e) => handleStatusChange(selectedBooking.bookingId || selectedBooking.id, e.target.value)}
-                  className={`status-badge ${(selectedBooking.status || 'pending').toLowerCase()}`}
-                  style={{ cursor: 'pointer', outline: 'none' }}
-                >
-                  <option value="pending" style={{ color: '#92400e', backgroundColor: '#fffbeb', fontWeight: '800' }}>
-                    🟡 PENDING
-                  </option>
-                  <option value="confirmed" style={{ color: '#1e40af', backgroundColor: '#eff6ff', fontWeight: '800' }}>
-                    🔵 CONFIRMED
-                  </option>
-                  <option value="completed" style={{ color: '#065f46', backgroundColor: '#ecfdf5', fontWeight: '800' }}>
-                    🟢 COMPLETED
-                  </option>
-                  <option value="cancelled" style={{ color: '#991b1b', backgroundColor: '#fef2f2', fontWeight: '800' }}>
-                    🔴 CANCELLED
-                  </option>
-                </select>
-              </div>
-
-              <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
-                <a
-                  href={`https://wa.me/${cleanPhoneForWa(selectedBooking.phone)}?text=Hi%20${encodeURIComponent(selectedBooking.name)},%20confirming%20your%20appointment%20for%20${encodeURIComponent(selectedBooking.service)}%20on%20${selectedBooking.date}%20at%20${selectedBooking.time}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="admin-primary-btn"
-                  style={{ flex: 1, justifyContent: 'center' }}
-                >
-                  <MessageSquare size={16} />
-                  <span>Send WhatsApp Confirmation</span>
-                </a>
+                {/* Quick Actions */}
+                <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                  <a
+                    href={`https://wa.me/${cleanPhoneForWa(selectedBooking.phone)}?text=${encodeURIComponent(waText)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="admin-primary-btn"
+                    style={{ flex: 1, justifyContent: 'center' }}
+                  >
+                    <MessageSquare size={16} />
+                    <span>Send WhatsApp Confirmation</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
