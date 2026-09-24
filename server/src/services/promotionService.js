@@ -5,10 +5,17 @@ import { defaultPromotions } from '../data/defaultPromotions.js';
  * Retrieves the currently active promotion for visitor popup display
  */
 export async function getActivePromotion() {
+  const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
   if (!dbState.usingFallback && pool) {
     try {
       const res = await pool.query(
-        'SELECT * FROM promotions WHERE active = true ORDER BY id DESC LIMIT 1'
+        `SELECT * FROM promotions 
+         WHERE active = true 
+           AND (start_date IS NULL OR start_date = '' OR start_date <= $1)
+           AND (end_date IS NULL OR end_date = '' OR end_date >= $1)
+         ORDER BY id DESC LIMIT 1`,
+        [today]
       );
       if (res.rows.length > 0) return mapPostgresPromotion(res.rows[0]);
       return null;
@@ -20,7 +27,12 @@ export async function getActivePromotion() {
   // Fallback
   const store = await readFallbackStore();
   const promos = store.promotions || defaultPromotions;
-  const activePromo = promos.find(p => p.active === true);
+  const activePromo = promos.find(p => {
+    if (!p.active) return false;
+    if (p.start_date && p.start_date > today) return false;
+    if (p.end_date && p.end_date < today) return false;
+    return true;
+  });
   return activePromo || null;
 }
 
@@ -46,9 +58,11 @@ export async function getAllPromotions() {
  */
 export async function createPromotion(promoData) {
   const now = new Date().toISOString();
+  const today = now.split('T')[0];
+  const isCurrentlyRunning = !promoData.start_date || promoData.start_date <= today;
 
-  // If this promo is set to active, optionally deactivate other promos if single-promo mode
-  if (promoData.active) {
+  // If this promo is active and running today, deactivate older running promos
+  if (promoData.active && isCurrentlyRunning) {
     await deactivateAllPromotions();
   }
 

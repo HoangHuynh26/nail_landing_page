@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Calendar, Clock, CheckCircle2, AlertCircle, Tag,
-  Sparkles, ArrowRight, Database, Users, Plus, Phone
+  Sparkles, ArrowRight, Users, Plus, Phone
 } from 'lucide-react';
 import { useAdminSocket } from '../../context/AdminSocketContext';
 
@@ -9,7 +9,6 @@ export function AdminOverview({ setActiveTab }) {
   const [stats, setStats] = useState(null);
   const [recentBookings, setRecentBookings] = useState([]);
   const [activePromo, setActivePromo] = useState(null);
-  const [dbStatus, setDbStatus] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const { isUnviewed, markAsViewed, realtimeBookings } = useAdminSocket();
@@ -39,10 +38,9 @@ export function AdminOverview({ setActiveTab }) {
     async function loadOverview() {
       setLoading(true);
       try {
-        const [bookingsRes, promoRes, dbRes] = await Promise.all([
+        const [bookingsRes, promoRes] = await Promise.all([
           fetch('/api/bookings?limit=5'),
-          fetch('/api/promotions/active'),
-          fetch('/api/admin/status')
+          fetch('/api/promotions/active')
         ]);
 
         if (bookingsRes.ok) {
@@ -57,13 +55,6 @@ export function AdminOverview({ setActiveTab }) {
             setActivePromo(pData.promotion);
           }
         }
-
-        if (dbRes.ok) {
-          const dData = await dbRes.json();
-          if (dData.success && dData.data?.database) {
-            setDbStatus(dData.data.database);
-          }
-        }
       } catch (err) {
         console.error('Error loading admin overview:', err);
       } finally {
@@ -73,8 +64,6 @@ export function AdminOverview({ setActiveTab }) {
 
     loadOverview();
   }, []);
-
-  const isNeon = dbStatus?.mode === 'neon_postgresql';
 
   return (
     <div>
@@ -229,14 +218,14 @@ export function AdminOverview({ setActiveTab }) {
           </div>
         </div>
 
-        {/* Database & Holiday Promo Highlights */}
+        {/* Holiday Promo Highlights & Quick Actions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {/* Active Promo Card */}
           <div className="admin-card">
             <div className="admin-card__header">
               <h3 className="admin-card__title">
                 <Sparkles size={18} className="text-gold" />
-                <span>Holiday & Discount Pop-up Poster</span>
+                <span>Live Holiday Pop-up Poster</span>
               </h3>
               <button
                 type="button"
@@ -252,59 +241,80 @@ export function AdminOverview({ setActiveTab }) {
                 <img
                   src={activePromo.image_url}
                   alt={activePromo.title}
-                  style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: '10px', background: '#090b10' }}
+                  style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: '10px', background: '#090b10', flexShrink: 0 }}
                 />
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: '700', color: '#10b981' }}>
-                    ● ACTIVE ON HOMEPAGE
+                    ● LIVE ON SALON WEBSITE
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: '700', color: '#fff', marginTop: '3px' }}>
                     {activePromo.title || 'Promotional Poster'}
                   </div>
+                  {(activePromo.start_date || activePromo.end_date) && (
+                    <div style={{ fontSize: '12px', color: '#d4af37', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <Clock size={12} />
+                      <span>
+                        {activePromo.start_date || 'Today'} → {activePromo.end_date || 'Indefinite'}
+                      </span>
+                    </div>
+                  )}
                   <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-                    Website visitors will see this image as an announcement pop-up.
+                    Website visitors will see this poster as an announcement pop-up modal.
                   </div>
                 </div>
               </div>
             ) : (
               <div style={{ padding: '24px', textAlign: 'center', color: '#64748b' }}>
-                No promotional pop-up banner is currently active. Go to the <strong>Holiday Pop-up</strong> tab to upload.
+                No promotional pop-up poster is currently running or within active dates. Go to the <strong>Holiday Pop-up</strong> tab to schedule or upload one.
               </div>
             )}
           </div>
 
-          {/* Database Status Card */}
+          {/* Quick Actions Card */}
           <div className="admin-card">
             <div className="admin-card__header">
               <h3 className="admin-card__title">
-                <Database size={18} className="text-gold" />
-                <span>Neon PostgreSQL Status</span>
+                <Users size={18} className="text-gold" />
+                <span>Quick Actions</span>
               </h3>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button
                 type="button"
                 className="admin-secondary-btn"
-                onClick={() => setActiveTab('database')}
+                style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%', cursor: 'pointer' }}
+                onClick={() => setActiveTab('bookings')}
               >
-                <span>Config</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                  <Calendar size={15} className="text-gold" /> View All Appointments
+                </span>
+                <ArrowRight size={14} />
               </button>
-            </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ fontSize: '14px', fontWeight: '700', color: '#fff' }}>
-                  {isNeon ? 'Neon Cloud Database' : 'Local Storage Fallback'}
-                </div>
-                <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '3px' }}>
-                  {isNeon
-                    ? `Latency: ${dbStatus?.pingMs || 0}ms • Auto-synced`
-                    : 'Configure Neon DATABASE_URL in settings to connect cloud'}
-                </div>
-              </div>
+              <button
+                type="button"
+                className="admin-secondary-btn"
+                style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%', cursor: 'pointer' }}
+                onClick={() => setActiveTab('services')}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                  <Sparkles size={15} className="text-gold" /> Manage 28 Services & Pricing
+                </span>
+                <ArrowRight size={14} />
+              </button>
 
-              <span className={`admin-db-pill ${isNeon ? 'is-neon' : 'is-fallback'}`}>
-                <span className="admin-pulse-dot" />
-                {isNeon ? 'CONNECTED' : 'FALLBACK'}
-              </span>
+              <button
+                type="button"
+                className="admin-secondary-btn"
+                style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%', cursor: 'pointer' }}
+                onClick={() => setActiveTab('promotions')}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                  <Tag size={15} className="text-gold" /> Schedule Holiday Pop-up Poster
+                </span>
+                <ArrowRight size={14} />
+              </button>
             </div>
           </div>
         </div>

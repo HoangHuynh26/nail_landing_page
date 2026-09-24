@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, Calendar, Sparkles, Tag, Database,
+  LayoutDashboard, Calendar, Sparkles, Tag,
   Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink, Image as ImageIcon,
   User, Eye, EyeOff, LogIn, Bell
 } from 'lucide-react';
@@ -8,7 +8,6 @@ import AdminOverview from './AdminOverview';
 import AdminBookings from './AdminBookings';
 import AdminServices from './AdminServices';
 import AdminPromotions from './AdminPromotions';
-import AdminDatabase from './AdminDatabase';
 import { AdminSocketProvider, useAdminSocket } from '../../context/AdminSocketContext';
 
 function AdminDashboardContent({ onBackToWebsite }) {
@@ -20,7 +19,6 @@ function AdminDashboardContent({ onBackToWebsite }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
-  const [dbStatus, setDbStatus] = useState(null);
 
   const {
     isConnected,
@@ -37,22 +35,7 @@ function AdminDashboardContent({ onBackToWebsite }) {
       setIsAuthenticated(true);
     }
     setIsCheckingAuth(false);
-    fetchDbStatus();
   }, []);
-
-  const fetchDbStatus = async () => {
-    try {
-      const res = await fetch('/api/admin/status');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success && data.data?.database) {
-          setDbStatus(data.data.database);
-        }
-      }
-    } catch (err) {
-      console.debug('Failed to get status:', err);
-    }
-  };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -242,16 +225,6 @@ function AdminDashboardContent({ onBackToWebsite }) {
             <span>{isConnected ? 'Realtime Live' : 'Connecting...'}</span>
           </div>
 
-          <div
-            className={`admin-db-pill ${isNeon ? 'is-neon' : 'is-fallback'}`}
-            title={isNeon ? 'Connected to Neon PostgreSQL' : 'Using Local Fallback Store'}
-            style={{ cursor: 'pointer' }}
-            onClick={() => setActiveTab('database')}
-          >
-            <span className="admin-pulse-dot" />
-            <span>{isNeon ? 'Neon DB Active' : 'Local Fallback'}</span>
-          </div>
-
           <button
             type="button"
             className="admin-nav-action-btn"
@@ -318,15 +291,6 @@ function AdminDashboardContent({ onBackToWebsite }) {
             <ImageIcon size={16} />
             <span>Holiday & Discount Pop-up</span>
           </button>
-
-          <button
-            type="button"
-            className={`admin-tab-btn ${activeTab === 'database' ? 'is-active' : ''}`}
-            onClick={() => setActiveTab('database')}
-          >
-            <Database size={16} />
-            <span>Neon Database Diagnostics</span>
-          </button>
         </nav>
 
         {/* Tab View Content */}
@@ -334,7 +298,6 @@ function AdminDashboardContent({ onBackToWebsite }) {
         {activeTab === 'bookings' && <AdminBookings />}
         {activeTab === 'services' && <AdminServices />}
         {activeTab === 'promotions' && <AdminPromotions />}
-        {activeTab === 'database' && <AdminDatabase />}
       </main>
 
       {/* Realtime New Booking Floating Toast */}

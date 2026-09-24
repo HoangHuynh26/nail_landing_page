@@ -21,6 +21,12 @@ export function SeasonalPromoModal() {
         // ONLY show popup if an active promotion exists with an uploaded image from admin
         if (data.success && data.hasActivePromotion && data.promotion && data.promotion.image_url) {
           const p = data.promotion;
+          const today = new Date().toISOString().split('T')[0];
+
+          // Check if current date is within scheduled start_date and end_date
+          if (p.start_date && p.start_date > today) return;
+          if (p.end_date && p.end_date < today) return;
+
           const dismissedUntil = localStorage.getItem(`promo_dismissed_${p.id}`);
 
           // If customer dismissed within the last 24 hours, don't show
