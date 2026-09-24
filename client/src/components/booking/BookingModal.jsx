@@ -51,7 +51,14 @@ export function BookingModal() {
         {/* Modal Header */}
         <div className="booking-modal__header">
           <div className="booking-modal__brand-badge">
-            <img src="/images/logo.png" alt="Fashion Nails" className="booking-modal__logo" />
+            <img
+              src="/images/logo-icon.png"
+              alt="Fashion Nails"
+              className="booking-modal__logo"
+              onError={(e) => {
+                e.target.src = '/images/logo.png';
+              }}
+            />
             <div>
               <h2 id="booking-modal-title" className="booking-modal__title">
                 {t('booking.title')}

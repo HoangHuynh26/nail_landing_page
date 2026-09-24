@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, DollarSign, User, Phone, Users, Mail, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Calendar, Clock, DollarSign, User, Phone, Users, Mail, AlertCircle, ShieldCheck, Tag } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { Button } from '../ui/Button';
@@ -54,24 +54,49 @@ export function StepReview() {
             </div>
           </div>
 
-          <div className="booking-summary-item">
+          {/* Service & Price */}
+          <div className="booking-summary-item" style={{ gridColumn: '1 / -1' }}>
             <DollarSign size={16} className="booking-summary-item__icon" />
-            <div className="booking-summary-item__text">
+            <div className="booking-summary-item__text" style={{ width: '100%' }}>
               <span className="booking-summary-item__label">{t('booking.estimatedPrice')}</span>
               {formData.hasDiscount ? (
-                <div>
-                  <span style={{ textDecoration: 'line-through', color: 'var(--color-text-muted)', marginRight: '8px', fontSize: '0.9rem' }}>
-                    ${formData.servicePrice} AUD
-                  </span>
-                  <strong className="booking-summary-item__price" style={{ color: 'var(--color-gold)' }}>
-                    ${Math.round(formData.servicePrice * 0.9)} AUD
-                  </strong>
-                  <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '0.75rem', background: 'var(--color-gold)', color: '#000', fontWeight: 700, padding: '1px 5px', borderRadius: '4px' }}>
-                    -10% Discount
-                  </span>
+                <div style={{
+                  marginTop: '6px',
+                  padding: '10px 14px',
+                  background: 'var(--color-surface, #f8fafc)',
+                  border: '1.5px solid #86efac',
+                  borderRadius: '8px',
+                  fontSize: '13px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#166534', fontWeight: 700 }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <Tag size={14} style={{ color: '#16a34a' }} /> 10% Community Voucher
+                    </span>
+                    <span style={{ background: '#16a34a', color: '#ffffff', padding: '2px 7px', borderRadius: '4px', fontSize: '11px', fontWeight: 800 }}>
+                      -10% APPLIED
+                    </span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: '8px',
+                    paddingTop: '8px',
+                    borderTop: '1px dashed #bbf7d0',
+                    fontSize: '13px'
+                  }}>
+                    <span style={{ color: '#166534' }}>
+                      Original: <span style={{ textDecoration: 'line-through', color: 'var(--color-text-muted)' }}>${formData.servicePrice} AUD</span> (Save ${Math.round(Number(formData.servicePrice || 0) * 0.1)} AUD)
+                    </span>
+                    <span style={{ fontWeight: 800, color: '#14532d', fontSize: '15px' }}>
+                      Final Total: ${Math.round(Number(formData.servicePrice || 0) * 0.9)} AUD
+                    </span>
+                  </div>
                 </div>
               ) : (
-                <strong className="booking-summary-item__price">${formData.servicePrice} AUD</strong>
+                <div style={{ marginTop: '2px' }}>
+                  <strong className="booking-summary-item__price">${formData.servicePrice} AUD</strong>
+                </div>
               )}
             </div>
           </div>
@@ -93,22 +118,20 @@ export function StepReview() {
           </div>
 
           <div className="booking-summary-item">
+            <Mail size={16} className="booking-summary-item__icon" />
+            <div className="booking-summary-item__text">
+              <span className="booking-summary-item__label">{t('booking.email') || 'Email'}</span>
+              <strong style={{ wordBreak: 'break-all' }}>{formData.email || '—'}</strong>
+            </div>
+          </div>
+
+          <div className="booking-summary-item">
             <Users size={16} className="booking-summary-item__icon" />
             <div className="booking-summary-item__text">
               <span className="booking-summary-item__label">Party Size</span>
               <strong>{Number(formData.guests) > 1 ? `${formData.guests} People` : '1 Person'}</strong>
             </div>
           </div>
-
-          {formData.email && (
-            <div className="booking-summary-item">
-              <Mail size={16} className="booking-summary-item__icon" />
-              <div className="booking-summary-item__text">
-                <span className="booking-summary-item__label">Email</span>
-                <strong style={{ wordBreak: 'break-all' }}>{formData.email}</strong>
-              </div>
-            </div>
-          )}
         </div>
 
         {formData.notes && (
