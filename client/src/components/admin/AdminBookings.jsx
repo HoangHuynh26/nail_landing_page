@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Search, RefreshCw, Clock,
   Phone, Mail, MessageSquare, Calendar,
-  Eye, CheckCheck, X, Tag, CheckCircle2,
+  Eye, CheckCheck, X, CheckCircle2,
   Percent
 } from 'lucide-react';
 import { servicesData } from '../../data/services';
@@ -518,7 +518,7 @@ export function AdminBookings() {
                               AU${rowPricing.price}
                             </span>
                           )}
-                          {rowHas10 ? (
+                          {rowHas10 && (
                             <span style={{
                               fontSize: '10.5px',
                               fontWeight: '800',
@@ -532,10 +532,6 @@ export function AdminBookings() {
                               gap: '2px'
                             }}>
                               <Percent size={10} /> 10% OFF
-                            </span>
-                          ) : (
-                            <span style={{ fontSize: '10px', color: '#94a3b8' }}>
-                              Standard
                             </span>
                           )}
                         </div>
@@ -700,8 +696,8 @@ export function AdminBookings() {
                   </div>
                 </div>
 
-                {/* 10% Voucher & Special Promotion Status (KEY USER REQUIREMENT) */}
-                {modalHas10Voucher ? (
+                {/* 10% Voucher & Promotion (Only displayed when customer applied voucher) */}
+                {modalHas10Voucher && (
                   <div style={{
                     padding: '14px 16px',
                     background: '#f0fdf4',
@@ -751,38 +747,6 @@ export function AdminBookings() {
                         </span>
                       </div>
                     )}
-                  </div>
-                ) : (
-                  <div style={{
-                    padding: '12px 16px',
-                    background: '#f8fafc',
-                    borderRadius: '12px',
-                    border: '1.5px solid #e2e8f0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Tag size={16} style={{ color: '#94a3b8' }} />
-                      <div>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#334155' }}>
-                          10% Voucher: Not Selected (NO)
-                        </div>
-                        <div style={{ fontSize: '11px', color: '#64748b' }}>
-                          Customer did not check the 10% discount box (Standard pricing applies)
-                        </div>
-                      </div>
-                    </div>
-                    <span style={{
-                      padding: '2px 8px',
-                      background: '#e2e8f0',
-                      color: '#475569',
-                      fontSize: '10.5px',
-                      fontWeight: '700',
-                      borderRadius: '6px'
-                    }}>
-                      STANDARD RATE
-                    </span>
                   </div>
                 )}
 
