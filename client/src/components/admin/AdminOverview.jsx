@@ -211,7 +211,13 @@ export function AdminOverview({ setActiveTab }) {
                         </td>
                         <td>
                           <span className={`status-badge ${(b.status || 'pending').toLowerCase()}`}>
-                            {b.status || 'pending'}
+                            {b.status === 'confirmed'
+                              ? '🔵 CONFIRMED'
+                              : b.status === 'completed'
+                              ? '🟢 COMPLETED'
+                              : b.status === 'cancelled'
+                              ? '🔴 CANCELLED'
+                              : '🟡 PENDING'}
                           </span>
                         </td>
                       </tr>

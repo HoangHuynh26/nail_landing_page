@@ -330,11 +330,20 @@ export function AdminBookings() {
                           disabled={updatingId === id}
                           className={`status-badge ${(b.status || 'pending').toLowerCase()}`}
                           style={{ cursor: 'pointer', outline: 'none' }}
+                          title="Click to update status"
                         >
-                          <option value="pending">PENDING</option>
-                          <option value="confirmed">CONFIRMED</option>
-                          <option value="completed">COMPLETED</option>
-                          <option value="cancelled">CANCELLED</option>
+                          <option value="pending" style={{ color: '#92400e', backgroundColor: '#fffbeb', fontWeight: '800' }}>
+                            🟡 PENDING
+                          </option>
+                          <option value="confirmed" style={{ color: '#1e40af', backgroundColor: '#eff6ff', fontWeight: '800' }}>
+                            🔵 CONFIRMED
+                          </option>
+                          <option value="completed" style={{ color: '#065f46', backgroundColor: '#ecfdf5', fontWeight: '800' }}>
+                            🟢 COMPLETED
+                          </option>
+                          <option value="cancelled" style={{ color: '#991b1b', backgroundColor: '#fef2f2', fontWeight: '800' }}>
+                            🔴 CANCELLED
+                          </option>
                         </select>
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
@@ -446,10 +455,18 @@ export function AdminBookings() {
                   className={`status-badge ${(selectedBooking.status || 'pending').toLowerCase()}`}
                   style={{ cursor: 'pointer', outline: 'none' }}
                 >
-                  <option value="pending">PENDING</option>
-                  <option value="confirmed">CONFIRMED</option>
-                  <option value="completed">COMPLETED</option>
-                  <option value="cancelled">CANCELLED</option>
+                  <option value="pending" style={{ color: '#92400e', backgroundColor: '#fffbeb', fontWeight: '800' }}>
+                    🟡 PENDING
+                  </option>
+                  <option value="confirmed" style={{ color: '#1e40af', backgroundColor: '#eff6ff', fontWeight: '800' }}>
+                    🔵 CONFIRMED
+                  </option>
+                  <option value="completed" style={{ color: '#065f46', backgroundColor: '#ecfdf5', fontWeight: '800' }}>
+                    🟢 COMPLETED
+                  </option>
+                  <option value="cancelled" style={{ color: '#991b1b', backgroundColor: '#fef2f2', fontWeight: '800' }}>
+                    🔴 CANCELLED
+                  </option>
                 </select>
               </div>
 

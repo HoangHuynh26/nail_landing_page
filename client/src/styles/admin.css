@@ -779,65 +779,110 @@
   border-width: 1.5px;
   border-style: solid;
   outline: none;
+  color-scheme: light !important;
+}
+
+select.status-badge {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+  padding-right: 28px !important;
+  line-height: 1.2;
+}
+
+/* Dropdown Options Styling: High-contrast, crystal clear on all browsers */
+select.status-badge option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  padding: 10px 14px !important;
+}
+
+select.status-badge option[value="pending"] {
+  background-color: #fffbeb !important;
+  color: #92400e !important;
+  font-weight: 800 !important;
+}
+
+select.status-badge option[value="confirmed"] {
+  background-color: #eff6ff !important;
+  color: #1e40af !important;
+  font-weight: 800 !important;
+}
+
+select.status-badge option[value="completed"] {
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+
+select.status-badge option[value="cancelled"] {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  font-weight: 800 !important;
 }
 
 /* PENDING - Radiant Amber / Orange */
 .status-badge.pending {
-  background: #fef3c7 !important;
-  color: #b45309 !important;
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
   border-color: #f59e0b !important;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.22);
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.22);
 }
 
 .status-badge.pending:hover,
 .status-badge.pending:focus {
-  background: #fde68a !important;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  background-color: #fde68a !important;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
   transform: translateY(-1px);
 }
 
 /* CONFIRMED - Royal Cobalt / Ice Blue */
 .status-badge.confirmed {
-  background: #eff6ff !important;
-  color: #1d4ed8 !important;
+  background-color: #eff6ff !important;
+  color: #1e40af !important;
   border-color: #3b82f6 !important;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.22);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.22);
 }
 
 .status-badge.confirmed:hover,
 .status-badge.confirmed:focus {
-  background: #dbeafe !important;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+  background-color: #dbeafe !important;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
   transform: translateY(-1px);
 }
 
 /* COMPLETED - Fresh Forest Emerald */
 .status-badge.completed {
-  background: #ecfdf5 !important;
-  color: #047857 !important;
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
   border-color: #10b981 !important;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.22);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.22);
 }
 
 .status-badge.completed:hover,
 .status-badge.completed:focus {
-  background: #d1fae5 !important;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  background-color: #d1fae5 !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
   transform: translateY(-1px);
 }
 
 /* CANCELLED - Crisp Rose / Crimson Red */
 .status-badge.cancelled {
-  background: #fef2f2 !important;
-  color: #b91c1c !important;
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
   border-color: #ef4444 !important;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.22);
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.22);
 }
 
 .status-badge.cancelled:hover,
 .status-badge.cancelled:focus {
-  background: #fee2e2 !important;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+  background-color: #fee2e2 !important;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
   transform: translateY(-1px);
 }
 
