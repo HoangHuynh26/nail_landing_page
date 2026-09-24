@@ -51,12 +51,12 @@ export function BookingModal() {
         {/* Modal Header */}
         <div className="booking-modal__header">
           <div className="booking-modal__brand-badge">
-            <span className="booking-modal__monogram">FN</span>
+            <img src="/images/logo.png" alt="Fashion Nails" className="booking-modal__logo" />
             <div>
               <h2 id="booking-modal-title" className="booking-modal__title">
                 {t('booking.title')}
               </h2>
-              <span className="booking-modal__subtext">Fashion Nails • Morley Galleria WA</span>
+              <span className="booking-modal__subtext">Fashion Nails Morley Galleria WA</span>
             </div>
           </div>
 

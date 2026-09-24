@@ -259,16 +259,17 @@ export function AdminBookings() {
 
             {/* Box 1: Month Filter (Ô Lọc Tháng) */}
             <div
-              className={`admin-filter-box ${selectedMonth !== 'all' ? 'is-active' : ''}`}
+              className="admin-filter-box"
               title="Filter appointments by Month"
             >
-              <Calendar size={14} className={selectedMonth !== 'all' ? 'text-gold' : 'text-muted'} />
+              <Calendar size={14} className="text-gold" />
               <span className="admin-filter-label">Month:</span>
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 className="admin-filter-select"
                 title="Filter by month"
+                style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
               >
                 {MONTH_OPTIONS.map((m) => (
                   <option key={m.value} value={m.value}>
@@ -280,16 +281,17 @@ export function AdminBookings() {
 
             {/* Box 2: Year Filter (Ô Lọc Năm) */}
             <div
-              className={`admin-filter-box ${selectedYear !== 'all' ? 'is-active' : ''}`}
+              className="admin-filter-box"
               title="Filter appointments by Year"
             >
-              <Calendar size={14} className={selectedYear !== 'all' ? 'text-gold' : 'text-muted'} />
+              <Calendar size={14} className="text-gold" />
               <span className="admin-filter-label">Year:</span>
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
                 className="admin-filter-select"
                 title="Filter by year"
+                style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
               >
                 <option value="all">All Years</option>
                 {availableYears.map((yr) => (

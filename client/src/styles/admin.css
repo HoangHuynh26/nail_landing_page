@@ -531,14 +531,15 @@
 
 .admin-filter-box:focus-within {
   background: #ffffff;
-  border-color: #d97706;
-  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+  border-color: #cbd5e1;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .admin-filter-box.is-active {
-  border-color: #d97706;
-  background: #fffbeb;
-  box-shadow: 0 1px 3px rgba(217, 119, 6, 0.1);
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  box-shadow: none !important;
 }
 
 .admin-filter-box .admin-filter-label {
@@ -551,18 +552,31 @@
 }
 
 .admin-filter-box.is-active .admin-filter-label {
-  color: #b45309;
+  color: #64748b;
 }
 
 .admin-filter-select {
   border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   background: transparent !important;
   color: #0f172a;
   font-size: 13px;
   font-weight: 700;
-  outline: none;
   cursor: pointer;
   padding: 6px 2px;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.admin-filter-select:focus,
+.admin-filter-select:focus-visible,
+.admin-filter-select:active,
+.admin-filter-select:focus-within,
+.admin-filter-select:-moz-focusring {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  outline-offset: 0 !important;
 }
 
 .admin-filter-select option {
