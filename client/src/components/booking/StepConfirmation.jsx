@@ -71,7 +71,7 @@ export function StepConfirmation() {
 
           <div className="booking-confirm-detail-row">
             <MapPin size={16} />
-            <span>Morley Galleria Shopping Centre, Morley WA 6062</span>
+            <span>Morley Galleria Shopping Centre, Morley Western Australia 6062</span>
           </div>
         </div>
 

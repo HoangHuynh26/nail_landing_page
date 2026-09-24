@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Sparkles, Plus, Edit2, Trash2, Check, RefreshCw, Search,
-  DollarSign, Clock, Tag, AlertCircle, ToggleLeft, ToggleRight
+  Clock
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -395,31 +395,25 @@ export function AdminServices() {
                         </div>
                       </td>
                       <td>
-                        <button
-                          type="button"
-                          onClick={() => handleToggleActive(s)}
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: s.active ? '#10b981' : '#64748b',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={s.active}
+                            onClick={() => handleToggleActive(s)}
+                            className={`admin-ios-toggle ${s.active ? 'is-active' : ''}`}
+                            title={s.active ? 'Active on website (Click to hide)' : 'Hidden from website (Click to activate)'}
+                          >
+                            <span className="admin-ios-toggle__thumb" />
+                          </button>
+                          <span style={{
                             fontSize: '12px',
-                            fontWeight: '600'
-                          }}
-                        >
-                          {s.active ? (
-                            <>
-                              <ToggleRight size={22} /> Active
-                            </>
-                          ) : (
-                            <>
-                              <ToggleLeft size={22} /> Hidden
-                            </>
-                          )}
-                        </button>
+                            fontWeight: '700',
+                            color: s.active ? '#15803d' : '#64748b'
+                          }}>
+                            {s.active ? 'Active' : 'Hidden'}
+                          </span>
+                        </div>
                       </td>
                       <td>
                         <div className="admin-action-btn-group">
@@ -567,24 +561,48 @@ export function AdminServices() {
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '20px', margin: '16px 0' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#cbd5e1' }}>
-                  <input
-                    type="checkbox"
-                    checked={formData.active}
-                    onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-                  />
-                  <span>Active & Bookable</span>
-                </label>
+              <div style={{ display: 'flex', gap: '28px', margin: '16px 0', flexWrap: 'wrap' }}>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+                  onClick={() => setFormData({ ...formData, active: !formData.active })}
+                >
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={formData.active}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFormData({ ...formData, active: !formData.active });
+                    }}
+                    className={`admin-ios-toggle ${formData.active ? 'is-active' : ''}`}
+                  >
+                    <span className="admin-ios-toggle__thumb" />
+                  </button>
+                  <span style={{ fontSize: '13px', fontWeight: '700', color: formData.active ? '#15803d' : '#64748b' }}>
+                    {formData.active ? 'Active & Bookable' : 'Hidden from Catalog'}
+                  </span>
+                </div>
 
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#cbd5e1' }}>
-                  <input
-                    type="checkbox"
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                  />
-                  <span>Featured / Popular</span>
-                </label>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+                  onClick={() => setFormData({ ...formData, featured: !formData.featured })}
+                >
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={formData.featured}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFormData({ ...formData, featured: !formData.featured });
+                    }}
+                    className={`admin-ios-toggle ${formData.featured ? 'is-active' : ''}`}
+                  >
+                    <span className="admin-ios-toggle__thumb" />
+                  </button>
+                  <span style={{ fontSize: '13px', fontWeight: '700', color: formData.featured ? '#b45309' : '#64748b' }}>
+                    {formData.featured ? 'Featured Highlight' : 'Standard'}
+                  </span>
+                </div>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
