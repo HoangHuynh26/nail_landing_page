@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, Calendar, Sparkles, Tag, Database,
-  Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink
+  Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink, Image as ImageIcon
 } from 'lucide-react';
 import AdminOverview from './AdminOverview';
 import AdminBookings from './AdminBookings';
@@ -242,8 +242,8 @@ export function AdminPage({ onBackToWebsite }) {
             className={`admin-tab-btn ${activeTab === 'promotions' ? 'is-active' : ''}`}
             onClick={() => setActiveTab('promotions')}
           >
-            <Tag size={16} />
-            <span>Seasonal Promotions & Pop-up</span>
+            <ImageIcon size={16} />
+            <span>Pop-up Giảm Giá / Dịp Lễ</span>
           </button>
 
           <button

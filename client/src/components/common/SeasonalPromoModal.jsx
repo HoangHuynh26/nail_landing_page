@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Copy, Check, Calendar, ArrowRight, Tag } from 'lucide-react';
+import { X, Calendar, ArrowRight } from 'lucide-react';
 import { useBooking } from '../../context/BookingContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 export function SeasonalPromoModal() {
   const [promo, setPromo] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
   const { openBooking } = useBooking();
   const { language } = useLanguage();
 
@@ -19,18 +18,19 @@ export function SeasonalPromoModal() {
         if (!res.ok) return;
         const data = await res.json();
 
-        if (data.success && data.hasActivePromotion && data.promotion) {
+        // ONLY show popup if an active promotion exists with an uploaded image from admin
+        if (data.success && data.hasActivePromotion && data.promotion && data.promotion.image_url) {
           const p = data.promotion;
           const dismissedUntil = localStorage.getItem(`promo_dismissed_${p.id}`);
 
-          // If dismissed within the last 24 hours, don't show
+          // If customer dismissed within the last 24 hours, don't show
           if (dismissedUntil && Date.now() < parseInt(dismissedUntil, 10)) {
             return;
           }
 
           if (isMounted) {
             setPromo(p);
-            // Graceful popup delay so user isn't immediately bombarded upon initial paint
+            // Gentle popup delay (1.8s) so customer first sees the hero
             const timer = setTimeout(() => {
               if (isMounted) setIsOpen(true);
             }, 1800);
@@ -38,7 +38,7 @@ export function SeasonalPromoModal() {
           }
         }
       } catch (err) {
-        // Silently catch network or offline errors
+        // Silently catch network errors
         console.debug('No active promo or network offline:', err.message);
       }
     }
@@ -50,21 +50,11 @@ export function SeasonalPromoModal() {
     };
   }, []);
 
-  if (!isOpen || !promo) return null;
+  if (!isOpen || !promo || !promo.image_url) return null;
 
-  const handleCopyCode = () => {
-    if (promo.voucher_code) {
-      navigator.clipboard.writeText(promo.voucher_code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    }
-  };
-
-  const handleClaimOffer = () => {
-    handleCopyCode();
+  const handleBookNow = () => {
     setIsOpen(false);
-    // Open the booking modal with the voucher prefilled
-    openBooking(null, { voucher: promo.voucher_code });
+    openBooking();
   };
 
   const handleDismissToday = () => {
@@ -84,105 +74,50 @@ export function SeasonalPromoModal() {
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
-      aria-labelledby="promo-title"
+      aria-label="Promotion Announcement"
     >
       <div
-        className="seasonal-promo-card"
+        className="seasonal-promo-poster-card"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
+        {/* Floating Close Button */}
         <button
           type="button"
-          className="seasonal-promo-close-btn"
+          className="seasonal-promo-poster-close-btn"
           onClick={handleClose}
-          aria-label="Close promotion dialog"
+          aria-label="Close"
         >
-          <X size={18} />
+          <X size={20} />
         </button>
 
-        {/* Promotion Banner Visual */}
-        <div className="seasonal-promo-banner-wrap">
+        {/* Uploaded Promotion Image / Poster */}
+        <div className="seasonal-promo-poster-wrap" onClick={handleBookNow} style={{ cursor: 'pointer' }}>
           <img
-            src={promo.image_url || '/images/hero-1.jpg'}
-            alt={promo.title}
-            className="seasonal-promo-banner-img"
-            onError={(e) => {
-              e.currentTarget.src = '/images/hero-1.jpg';
-            }}
+            src={promo.image_url}
+            alt={promo.title || 'Holiday Special Promotion'}
+            className="seasonal-promo-poster-img"
           />
-          <div className="seasonal-promo-banner-overlay" />
-          
-          {/* Badge */}
-          <div className="seasonal-promo-badge">
-            <Sparkles size={13} className="text-gold" />
-            <span>{promo.badge || 'SPECIAL CELEBRATION'}</span>
-          </div>
-
-          {/* Discount Pill */}
-          {promo.discount_text && (
-            <div className="seasonal-promo-discount-tag">
-              {promo.discount_text}
-            </div>
-          )}
         </div>
 
-        {/* Content Body */}
-        <div className="seasonal-promo-content">
-          <h2 id="promo-title" className="seasonal-promo-title">
-            {promo.title}
-          </h2>
+        {/* Actions Bar */}
+        <div className="seasonal-promo-poster-actions">
+          <button
+            type="button"
+            className="seasonal-promo-poster-cta-btn"
+            onClick={handleBookNow}
+          >
+            <Calendar size={18} />
+            <span>{language === 'vi' ? 'Đặt Lịch Ngay' : 'Book an Appointment'}</span>
+            <ArrowRight size={16} />
+          </button>
 
-          <p className="seasonal-promo-desc">
-            {promo.subtitle || 'Celebrate the festive season with our signature nail artistry at exclusive promotional prices.'}
-          </p>
-
-          {/* Voucher Code Box */}
-          {promo.voucher_code && (
-            <div className="seasonal-promo-code-box">
-              <div className="seasonal-promo-code-info">
-                <span className="seasonal-promo-code-label">
-                  <Tag size={12} /> PROMO CODE
-                </span>
-                <span className="seasonal-promo-code-val">{promo.voucher_code}</span>
-              </div>
-              <button
-                type="button"
-                className={`seasonal-promo-copy-btn ${copied ? 'is-copied' : ''}`}
-                onClick={handleCopyCode}
-                title="Copy voucher code"
-              >
-                {copied ? (
-                  <>
-                    <Check size={14} /> Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy size={14} /> Copy
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-
-          {/* CTA Actions */}
-          <div className="seasonal-promo-actions">
-            <button
-              type="button"
-              className="seasonal-promo-claim-btn"
-              onClick={handleClaimOffer}
-            >
-              <span>{language === 'vi' ? 'Nhận Ưu Đãi & Đặt Lịch Ngay' : 'Claim Offer & Book Appointment'}</span>
-              <ArrowRight size={16} />
-            </button>
-
-            <button
-              type="button"
-              className="seasonal-promo-dismiss-btn"
-              onClick={handleDismissToday}
-            >
-              {language === 'vi' ? 'Không hiển thị lại hôm nay' : "Don't show again today"}
-            </button>
-          </div>
+          <button
+            type="button"
+            className="seasonal-promo-poster-dismiss-btn"
+            onClick={handleDismissToday}
+          >
+            {language === 'vi' ? 'Không hiển thị lại hôm nay' : "Don't show again today"}
+          </button>
         </div>
       </div>
     </div>

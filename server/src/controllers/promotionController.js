@@ -46,13 +46,6 @@ export async function createPromotion(req, res, next) {
   try {
     const { title, subtitle, badge, voucher_code, discount_text, active, start_date, end_date } = req.body;
 
-    if (!title || !voucher_code || !discount_text) {
-      return res.status(400).json({
-        success: false,
-        message: 'Title, Voucher Code, and Discount Text are required'
-      });
-    }
-
     // Determine image URL: either uploaded file or custom URL
     let image_url = req.body.image_url;
     if (req.file) {
@@ -60,17 +53,19 @@ export async function createPromotion(req, res, next) {
     }
 
     if (!image_url) {
-      // Default fallback banner
-      image_url = '/images/hero-1.jpg';
+      return res.status(400).json({
+        success: false,
+        message: 'Vui lòng tải lên hình ảnh poster / banner khuyến mãi (Image file is required)'
+      });
     }
 
     const created = await insertPromotion({
-      title,
-      subtitle,
-      badge: badge || 'HOLIDAY SPECIAL',
+      title: title?.trim() || 'Ưu Đãi Lễ Hội / Holiday Celebration',
+      subtitle: subtitle || '',
+      badge: badge || '',
       image_url,
-      voucher_code: voucher_code.trim().toUpperCase(),
-      discount_text: discount_text.trim(),
+      voucher_code: (voucher_code || '').trim().toUpperCase(),
+      discount_text: (discount_text || '').trim(),
       active: active === 'true' || active === true,
       start_date,
       end_date
@@ -78,7 +73,7 @@ export async function createPromotion(req, res, next) {
 
     return res.status(201).json({
       success: true,
-      message: 'Promotion campaign created successfully',
+      message: 'Hình ảnh khuyến mãi đã được tải lên thành công',
       promotion: created
     });
   } catch (err) {

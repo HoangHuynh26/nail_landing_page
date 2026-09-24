@@ -101,15 +101,15 @@ export function AdminOverview({ setActiveTab }) {
 
         <div className="admin-stat-card">
           <div className="admin-stat-icon-wrap purple">
-            <Tag size={24} />
+            <Sparkles size={24} />
           </div>
           <div>
             <div className="admin-stat-num" style={{ fontSize: '18px', fontWeight: '700' }}>
-              {activePromo ? activePromo.voucher_code : 'None'}
+              {activePromo ? 'ĐANG BẬT' : 'ĐANG TẮT'}
             </div>
-            <div className="admin-stat-label">Active Holiday Promo</div>
-            <div style={{ fontSize: '11px', color: activePromo ? '#c084fc' : '#64748b', marginTop: '2px' }}>
-              {activePromo ? activePromo.discount_text : 'No campaign active'}
+            <div className="admin-stat-label">Pop-up Ảnh Giảm Giá</div>
+            <div style={{ fontSize: '11px', color: activePromo ? '#34d399' : '#64748b', marginTop: '2px' }}>
+              {activePromo ? (activePromo.title || 'Đang hiển thị') : 'Không có pop-up nào'}
             </div>
           </div>
         </div>
@@ -191,39 +191,39 @@ export function AdminOverview({ setActiveTab }) {
             <div className="admin-card__header">
               <h3 className="admin-card__title">
                 <Sparkles size={18} className="text-gold" />
-                <span>Visitor Discount Pop-up Banner</span>
+                <span>Hình Ảnh Pop-up Giảm Giá Dịp Lễ</span>
               </h3>
               <button
                 type="button"
                 className="admin-secondary-btn"
                 onClick={() => setActiveTab('promotions')}
               >
-                <span>Manage</span>
+                <span>Quản Lý</span>
               </button>
             </div>
 
             {activePromo ? (
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                 <img
-                  src={activePromo.image_url || '/images/hero-1.jpg'}
+                  src={activePromo.image_url}
                   alt={activePromo.title}
-                  style={{ width: '100px', height: '80px', objectFit: 'cover', borderRadius: '10px' }}
+                  style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: '10px', background: '#090b10' }}
                 />
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#d4af37' }}>
-                    {activePromo.badge || 'PROMOTION'}
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#10b981' }}>
+                    ● ĐANG BẬT TRÊN TRANG CHỦ
                   </div>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#fff', marginTop: '2px' }}>
-                    {activePromo.title}
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#fff', marginTop: '3px' }}>
+                    {activePromo.title || 'Poster Khuyến Mãi'}
                   </div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-                    Code: <strong style={{ color: '#f7d070' }}>{activePromo.voucher_code}</strong> • {activePromo.discount_text}
+                    Khách truy cập website sẽ thấy hình ảnh này bật lên làm Pop-up.
                   </div>
                 </div>
               </div>
             ) : (
-              <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
-                No active promotion running. Go to Promotions to create a holiday campaign.
+              <div style={{ padding: '24px', textAlign: 'center', color: '#64748b' }}>
+                Chưa có hình ảnh pop-up nào đang bật. Vào tab <strong>Pop-up Giảm Giá</strong> để tải ảnh lên.
               </div>
             )}
           </div>

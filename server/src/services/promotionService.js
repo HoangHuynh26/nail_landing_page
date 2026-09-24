@@ -61,12 +61,12 @@ export async function createPromotion(promoData) {
         RETURNING *;
       `;
       const values = [
-        promoData.title,
+        promoData.title || 'Special Celebration',
         promoData.subtitle || '',
-        promoData.badge || 'Holiday Special',
+        promoData.badge || '',
         promoData.image_url,
-        promoData.voucher_code.toUpperCase(),
-        promoData.discount_text,
+        (promoData.voucher_code || '').toUpperCase(),
+        promoData.discount_text || '',
         promoData.active ?? true,
         promoData.start_date || '',
         promoData.end_date || '',
@@ -85,12 +85,12 @@ export async function createPromotion(promoData) {
   const newId = store.promotions.length > 0 ? Math.max(...store.promotions.map(p => p.id || 0)) + 1 : 1;
   const newPromo = {
     id: newId,
-    title: promoData.title,
+    title: promoData.title || 'Special Celebration',
     subtitle: promoData.subtitle || '',
-    badge: promoData.badge || 'Holiday Special',
+    badge: promoData.badge || '',
     image_url: promoData.image_url,
-    voucher_code: promoData.voucher_code.toUpperCase(),
-    discount_text: promoData.discount_text,
+    voucher_code: (promoData.voucher_code || '').toUpperCase(),
+    discount_text: promoData.discount_text || '',
     active: promoData.active ?? true,
     start_date: promoData.start_date || '',
     end_date: promoData.end_date || '',

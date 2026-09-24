@@ -28,24 +28,25 @@
   }
 }
 
-.seasonal-promo-card {
+.seasonal-promo-poster-card {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
   background: #11141c;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(212, 175, 55, 0.4);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85),
-              0 0 40px rgba(212, 175, 55, 0.12);
-  animation: promoSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  color: #f1f3f7;
+  box-shadow: 0 25px 65px -10px rgba(0, 0, 0, 0.9),
+              0 0 50px rgba(212, 175, 55, 0.15);
+  animation: promoSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes promoSlideUp {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.96);
+    transform: translateY(20px) scale(0.95);
   }
   to {
     opacity: 1;
@@ -53,186 +54,69 @@
   }
 }
 
-.seasonal-promo-close-btn {
+.seasonal-promo-poster-close-btn {
   position: absolute;
   top: 14px;
   right: 14px;
-  z-index: 10;
-  width: 34px;
-  height: 34px;
+  z-index: 20;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(10, 12, 18, 0.7);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e2e8f0;
+  background: rgba(10, 12, 18, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   transition: all 0.2s ease;
 }
 
-.seasonal-promo-close-btn:hover {
-  background: rgba(212, 175, 55, 0.3);
-  color: #fff;
+.seasonal-promo-poster-close-btn:hover {
+  background: rgba(212, 175, 55, 0.4);
   transform: rotate(90deg);
 }
 
-.seasonal-promo-banner-wrap {
-  position: relative;
+.seasonal-promo-poster-wrap {
   width: 100%;
-  height: 220px;
+  max-height: 72vh;
   overflow: hidden;
-  background: #090a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #090b10;
 }
 
-.seasonal-promo-banner-img {
+.seasonal-promo-poster-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  height: auto;
+  max-height: 72vh;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
-.seasonal-promo-card:hover .seasonal-promo-banner-img {
-  transform: scale(1.03);
+.seasonal-promo-poster-wrap:hover .seasonal-promo-poster-img {
+  transform: scale(1.01);
 }
 
-.seasonal-promo-banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(17, 20, 28, 0.1) 0%, rgba(17, 20, 28, 0.95) 100%);
-}
-
-.seasonal-promo-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: rgba(17, 20, 28, 0.85);
-  border: 1px solid rgba(212, 175, 55, 0.6);
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #f7d070;
-  backdrop-filter: blur(6px);
-}
-
-.seasonal-promo-discount-tag {
-  position: absolute;
-  bottom: 14px;
-  right: 16px;
-  padding: 6px 14px;
-  background: linear-gradient(135deg, #d4af37 0%, #b89628 100%);
-  color: #0b0c10;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-}
-
-.seasonal-promo-content {
-  padding: 22px 24px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.seasonal-promo-title {
-  margin: 0;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.3;
-}
-
-.seasonal-promo-desc {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #94a3b8;
-}
-
-.seasonal-promo-code-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px dashed rgba(212, 175, 55, 0.45);
-  border-radius: 12px;
-}
-
-.seasonal-promo-code-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.seasonal-promo-code-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #d4af37;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.seasonal-promo-code-val {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #fff;
-}
-
-.seasonal-promo-copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  color: #e2e8f0;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.seasonal-promo-copy-btn:hover {
-  background: rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
-  color: #f7d070;
-}
-
-.seasonal-promo-copy-btn.is-copied {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.6);
-  color: #4ade80;
-}
-
-.seasonal-promo-actions {
+.seasonal-promo-poster-actions {
+  padding: 16px 20px 18px;
+  background: #11141c;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 4px;
 }
 
-.seasonal-promo-claim-btn {
+.seasonal-promo-poster-cta-btn {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   padding: 13px 20px;
   background: linear-gradient(135deg, #d4af37 0%, #aa871c 100%);
   border: none;
@@ -245,23 +129,24 @@
   transition: all 0.25s ease;
 }
 
-.seasonal-promo-claim-btn:hover {
+.seasonal-promo-poster-cta-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(212, 175, 55, 0.5);
   background: linear-gradient(135deg, #e4be42 0%, #ba9524 100%);
 }
 
-.seasonal-promo-dismiss-btn {
+.seasonal-promo-poster-dismiss-btn {
   background: transparent;
   border: none;
   color: #64748b;
   font-size: 12px;
   cursor: pointer;
-  padding: 6px;
+  padding: 4px;
+  text-align: center;
   transition: color 0.2s ease;
 }
 
-.seasonal-promo-dismiss-btn:hover {
+.seasonal-promo-poster-dismiss-btn:hover {
   color: #94a3b8;
   text-decoration: underline;
 }

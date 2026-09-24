@@ -110,15 +110,15 @@ async function createTables(client) {
 
     CREATE TABLE IF NOT EXISTS promotions (
       id SERIAL PRIMARY KEY,
-      title VARCHAR(255) NOT NULL,
-      subtitle TEXT,
-      badge VARCHAR(100) DEFAULT 'Holiday Special',
+      title VARCHAR(255) DEFAULT '',
+      subtitle TEXT DEFAULT '',
+      badge VARCHAR(100) DEFAULT '',
       image_url TEXT NOT NULL,
-      voucher_code VARCHAR(50) NOT NULL,
-      discount_text VARCHAR(100) NOT NULL,
+      voucher_code VARCHAR(50) DEFAULT '',
+      discount_text VARCHAR(100) DEFAULT '',
       active BOOLEAN DEFAULT true,
-      start_date VARCHAR(50),
-      end_date VARCHAR(50),
+      start_date VARCHAR(50) DEFAULT '',
+      end_date VARCHAR(50) DEFAULT '',
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
   `;
