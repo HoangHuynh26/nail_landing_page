@@ -257,13 +257,17 @@ export function AdminBookings() {
               />
             </form>
 
-            {/* Month & Year Filter Group */}
-            <div className="admin-date-filter-group" title="Filter appointments by Month and Year">
-              <Calendar size={14} className="text-gold" />
+            {/* Box 1: Month Filter (Ô Lọc Tháng) */}
+            <div
+              className={`admin-filter-box ${selectedMonth !== 'all' ? 'is-active' : ''}`}
+              title="Filter appointments by Month"
+            >
+              <Calendar size={14} className={selectedMonth !== 'all' ? 'text-gold' : 'text-muted'} />
+              <span className="admin-filter-label">Month:</span>
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
-                className="admin-select"
+                className="admin-filter-select"
                 title="Filter by month"
               >
                 {MONTH_OPTIONS.map((m) => (
@@ -272,11 +276,19 @@ export function AdminBookings() {
                   </option>
                 ))}
               </select>
+            </div>
 
+            {/* Box 2: Year Filter (Ô Lọc Năm) */}
+            <div
+              className={`admin-filter-box ${selectedYear !== 'all' ? 'is-active' : ''}`}
+              title="Filter appointments by Year"
+            >
+              <Calendar size={14} className={selectedYear !== 'all' ? 'text-gold' : 'text-muted'} />
+              <span className="admin-filter-label">Year:</span>
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="admin-select"
+                className="admin-filter-select"
                 title="Filter by year"
               >
                 <option value="all">All Years</option>
@@ -286,33 +298,23 @@ export function AdminBookings() {
                   </option>
                 ))}
               </select>
-
-              {(selectedMonth !== 'all' || selectedYear !== 'all') && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedMonth('all');
-                    setSelectedYear('all');
-                  }}
-                  title="Clear month and year filter"
-                  style={{
-                    border: 'none',
-                    background: '#fef2f2',
-                    color: '#b91c1c',
-                    borderRadius: '6px',
-                    padding: '3px 8px',
-                    fontSize: '11px',
-                    fontWeight: '700',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <X size={12} /> Clear
-                </button>
-              )}
             </div>
+
+            {/* Clear/Reset button if any date filter active */}
+            {(selectedMonth !== 'all' || selectedYear !== 'all') && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedMonth('all');
+                  setSelectedYear('all');
+                }}
+                className="admin-filter-reset-btn"
+                title="Clear month and year filter"
+              >
+                <X size={13} />
+                <span>Reset Date</span>
+              </button>
+            )}
 
             {unreadCount > 0 && (
               <button
