@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Search, Filter, RefreshCw, CheckCircle, Clock, XCircle,
-  AlertCircle, Phone, Mail, MessageSquare, Trash2, Calendar, User, ExternalLink,
+  AlertCircle, Phone, Mail, MessageSquare, Calendar, User, ExternalLink,
   Eye, CheckCheck, Sparkles, X, Shield
 } from 'lucide-react';
 import { useAdminSocket } from '../../context/AdminSocketContext';
@@ -87,27 +87,6 @@ export function AdminBookings() {
       alert('Error updating status: ' + err.message);
     } finally {
       setUpdatingId(null);
-    }
-  };
-
-  const handleDeleteBooking = async (bookingId) => {
-    if (!window.confirm(`Are you sure you want to permanently delete booking #${bookingId}?`)) {
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/bookings/${bookingId}`, {
-        method: 'DELETE'
-      });
-      const data = await res.json();
-      if (data.success) {
-        setBookings((prev) => prev.filter((b) => b.bookingId !== bookingId && b.id !== bookingId));
-        if (selectedBooking && (selectedBooking.bookingId === bookingId || selectedBooking.id === bookingId)) {
-          setSelectedBooking(null);
-        }
-      }
-    } catch (err) {
-      alert('Error deleting booking: ' + err.message);
     }
   };
 
@@ -375,16 +354,6 @@ export function AdminBookings() {
                           >
                             <MessageSquare size={14} />
                           </a>
-
-                          {/* Delete */}
-                          <button
-                            type="button"
-                            className="admin-icon-btn danger"
-                            onClick={() => handleDeleteBooking(id)}
-                            title="Delete booking"
-                          >
-                            <Trash2 size={14} />
-                          </button>
                         </div>
                       </td>
                     </tr>

@@ -141,27 +141,13 @@ export async function updateBookingStatus(req, res, next) {
 }
 
 /**
- * Controller for deleting a booking
+ * Controller for deleting a booking (Disallowed - Bookings cannot be deleted)
  */
-export async function deleteBooking(req, res, next) {
-  try {
-    const { id } = req.params;
-    const deleted = await removeBooking(id);
-
-    if (!deleted) {
-      return res.status(404).json({
-        success: false,
-        message: 'Booking not found'
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: 'Booking deleted successfully'
-    });
-  } catch (err) {
-    next(err);
-  }
+export async function deleteBooking(req, res) {
+  return res.status(403).json({
+    success: false,
+    message: 'Booking deletion is prohibited. All customer booking records must be permanently preserved for salon audit and transaction history. Please set booking status to CANCELLED instead.'
+  });
 }
 
 /**
