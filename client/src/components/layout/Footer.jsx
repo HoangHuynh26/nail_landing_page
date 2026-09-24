@@ -161,6 +161,8 @@ export function Footer() {
             <span style={{ color: 'var(--color-gold)' }}>10% Off Seniors, Students & Staff</span>
             <span>•</span>
             <span>Gift Vouchers Available</span>
+            <span>•</span>
+            <a href="/admin" style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.target.style.color = '#d4af37'} onMouseLeave={(e) => e.target.style.color = 'rgba(255,255,255,0.45)'}>Staff Portal</a>
           </div>
         </div>
       </div>

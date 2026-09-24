@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Clock, Calendar, Sparkles, Search, X, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { servicesData } from '../../data/services';
 import { useLanguage } from '../../context/LanguageContext';
@@ -14,6 +14,18 @@ export function Services() {
   const { openBooking } = useBooking();
   const [activeCategory, setActiveCategory] = useState('biab');
   const [searchQuery, setSearchQuery] = useState('');
+  const [liveServices, setLiveServices] = useState(servicesData);
+
+  useEffect(() => {
+    fetch('/api/services?active=true')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.services) && data.services.length > 0) {
+          setLiveServices(data.services);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const categories = [
     { key: 'biab', label: t('services.tabBiab') },
@@ -27,18 +39,18 @@ export function Services() {
 
   const isSearching = searchQuery.trim().length > 0;
 
-  // Search across ALL 26 services ranked by best match
+  // Search across all services ranked by best match
   const filteredServices = useMemo(() => {
-    return rankAndFilterServices(servicesData, searchQuery, activeCategory);
-  }, [activeCategory, searchQuery]);
+    return rankAndFilterServices(liveServices, searchQuery, activeCategory);
+  }, [liveServices, activeCategory, searchQuery]);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
     categories.forEach(c => {
-      counts[c.key] = servicesData.filter(s => s.category === c.key).length;
+      counts[c.key] = liveServices.filter(s => s.category === c.key).length;
     });
     return counts;
-  }, [categories]);
+  }, [categories, liveServices]);
 
   const categoryMap = useMemo(() => {
     return Object.fromEntries(categories.map(c => [c.key, c.label]));

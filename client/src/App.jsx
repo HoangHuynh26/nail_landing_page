@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from './context/LanguageContext';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/Hero';
@@ -7,8 +7,10 @@ import { MobileStickyCTA } from './components/layout/MobileStickyCTA';
 import { BackToHero } from './components/layout/BackToHero';
 import { QuickChatbot } from './components/chat/QuickChatbot';
 import { BookingModal } from './components/booking/BookingModal';
+import { SeasonalPromoModal } from './components/common/SeasonalPromoModal';
+import { AdminPage } from './components/admin/AdminPage';
 
-// Direct imports for smooth, lag-free scroll reveal (Ẩn rồi hiện lên êm dịu)
+// Direct imports for smooth, lag-free scroll reveal
 import TrustBar from './components/sections/TrustBar';
 import SalonStorytelling from './components/sections/SalonStorytelling';
 import Services from './components/sections/Services';
@@ -23,7 +25,56 @@ import Footer from './components/layout/Footer';
 
 export function App() {
   const { language } = useLanguage();
+  
+  // URL-based routing to /admin or #admin
+  const [isAdminView, setIsAdminView] = useState(() => {
+    return (
+      window.location.pathname.startsWith('/admin') ||
+      window.location.hash === '#admin'
+    );
+  });
 
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setIsAdminView(
+        window.location.pathname.startsWith('/admin') ||
+        window.location.hash === '#admin'
+      );
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+
+    // Also intercept clicking on internal /admin links without full reload
+    const handleLinkClick = (e) => {
+      const anchor = e.target.closest('a');
+      if (anchor && anchor.getAttribute('href') === '/admin') {
+        e.preventDefault();
+        window.history.pushState({}, '', '/admin');
+        setIsAdminView(true);
+      }
+    };
+    document.addEventListener('click', handleLinkClick);
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+      document.removeEventListener('click', handleLinkClick);
+    };
+  }, []);
+
+  const handleBackToWebsite = () => {
+    window.history.pushState({}, '', '/');
+    setIsAdminView(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // If in Admin view, render Executive Admin Suite
+  if (isAdminView) {
+    return <AdminPage onBackToWebsite={handleBackToWebsite} />;
+  }
+
+  // Otherwise render Luxury Landing Page
   return (
     <div className="atelier-app lang-en">
       {/* Accessibility: Skip to Main Content */}
@@ -44,47 +95,42 @@ export function App() {
           <TrustBar />
         </LazySection>
 
-        {/* 3. Salon Storytelling: 4 Chapters */}
-        {/* <LazySection id="salon-story" minHeight="650px" hasOwnId={true}>
-          <SalonStorytelling />
-        </LazySection> */}
-
-        {/* 4. Services Catalog & Search */}
+        {/* 3. Services Catalog & Search (Live Dynamic Prices & Services) */}
         <LazySection id="services" minHeight="750px" hasOwnId={true}>
           <Services />
         </LazySection>
 
-        {/* 5. Why Choose Us: 4 Core Pillars */}
+        {/* 4. Why Choose Us: 4 Core Pillars */}
         <LazySection id="why-us" minHeight="450px" hasOwnId={true}>
           <WhyChooseUs />
         </LazySection>
 
-        {/* 6. About Salon & Founder Philosophy */}
+        {/* 5. About Salon & Serene Architecture */}
         <LazySection id="about" minHeight="500px" hasOwnId={true}>
           <About />
         </LazySection>
 
-        {/* 7. Craftsmanship Gallery */}
+        {/* 6. Craftsmanship Gallery */}
         <LazySection id="gallery" minHeight="650px" hasOwnId={true}>
           <Gallery />
         </LazySection>
 
-        {/* 8. Google Maps Reviews & Social Proof */}
+        {/* 7. Verified Client Reviews & Social Proof */}
         <LazySection id="reviews" minHeight="600px" hasOwnId={true}>
           <Testimonials />
         </LazySection>
 
-        {/* 9. 13 Australian Salon FAQs */}
+        {/* 8. 13 Australian Salon FAQs */}
         <LazySection id="faq" minHeight="600px" hasOwnId={true}>
           <FAQ />
         </LazySection>
 
-        {/* 10. Salon Location, Hours & Google Maps */}
+        {/* 9. Salon Location, Hours & Google Maps */}
         <LazySection id="location" minHeight="580px" hasOwnId={true}>
           <Location />
         </LazySection>
 
-        {/* 11. Final Call to Action */}
+        {/* 10. Final Call to Action */}
         <LazySection id="final-cta" minHeight="380px" hasOwnId={false}>
           <FinalCTA />
         </LazySection>
@@ -106,9 +152,11 @@ export function App() {
 
       {/* Global Frictionless 6-Step Booking Modal */}
       <BookingModal />
+
+      {/* Seasonal & Holiday Promotion Visitor Pop-up Modal */}
+      <SeasonalPromoModal />
     </div>
   );
 }
 
 export default App;
-
