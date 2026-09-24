@@ -1159,33 +1159,42 @@ select.status-badge option[value="cancelled"] {
   box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
 }
 
-/* Floating Realtime Booking Toast */
+/* Floating Realtime Booking Toast (Góc phải trên màn hình) */
 .admin-realtime-toast {
   position: fixed;
-  bottom: 24px;
+  top: 24px;
   right: 24px;
-  z-index: 9999;
-  width: 380px;
+  z-index: 99999;
+  width: 390px;
   max-width: calc(100vw - 32px);
   background: #ffffff;
   border: 2px solid #d97706;
   border-radius: 16px;
   padding: 18px 20px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15), 0 0 25px rgba(217, 119, 6, 0.15);
-  animation: slideInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18), 0 0 25px rgba(217, 119, 6, 0.15);
+  animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-@keyframes slideInUp {
+@keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.96);
+    transform: translate3d(50px, -10px, 0) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-realtime-toast {
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
   }
 }
 

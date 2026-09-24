@@ -421,8 +421,8 @@ export function AdminBookings() {
                 <th>Booking Ref</th>
                 <th>Client Name</th>
                 <th>Contact</th>
-                <th>Service Selected</th>
-                <th>Date & Perth Time</th>
+                <th>Service</th>
+                <th>Date & Time</th>
                 <th>Notes / Details</th>
                 <th>Status (Click to Change)</th>
                 <th>Quick Actions</th>

@@ -302,7 +302,8 @@ function AdminDashboardContent({ onBackToWebsite }) {
         <div className="admin-realtime-toast" role="alert">
           <div className="admin-realtime-toast__header">
             <div className="admin-realtime-toast__title-wrap">
-              <Bell size={18} style={{ color: '#d4af37' }} />
+              <span className="admin-pulse-dot" style={{ background: '#d97706' }} />
+              <Bell size={18} style={{ color: '#d97706' }} />
               <span className="admin-realtime-toast__title">New Booking Received!</span>
             </div>
             <button
@@ -326,6 +327,11 @@ function AdminDashboardContent({ onBackToWebsite }) {
             <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '15px' }}>
               {liveToast.booking.name}
             </div>
+            {liveToast.booking.phone && (
+              <div style={{ fontSize: '12px', color: '#0284c7', marginTop: '1px', fontWeight: '600' }}>
+                📞 {liveToast.booking.phone}
+              </div>
+            )}
             <div style={{ color: '#b45309', fontSize: '13px', marginTop: '3px', fontWeight: '700' }}>
               {liveToast.booking.service}
             </div>
