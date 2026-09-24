@@ -32,7 +32,7 @@ export function BookingProvider({ children }) {
   });
 
 
-  const openBooking = (preferredServiceId = null) => {
+  const openBooking = (preferredServiceId = null, extraData = {}) => {
     setError(null);
     let targetService = servicesData[0];
     if (preferredServiceId) {
@@ -47,7 +47,8 @@ export function BookingProvider({ children }) {
       servicePrice: targetService.price,
       serviceDuration: targetService.duration,
       // Default to today's date in Western Australia (Perth) if not chosen
-      date: prev.date || getPerthDateString(0)
+      date: prev.date || getPerthDateString(0),
+      ...(extraData?.voucher ? { voucher: extraData.voucher } : {})
     }));
 
     setStep(preferredServiceId ? 2 : 1);

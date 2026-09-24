@@ -8,7 +8,7 @@ export const defaultPromotions = [
     title: "Seasonal Glow & Luxury Care Celebration",
     subtitle: "Pamper yourself with 15% OFF all BIAB & Gel Services this festive season. Limited booking slots available this week!",
     badge: "FESTIVE GLOW OFFER",
-    image_url: "/images/hero-1.jpg",
+    image_url: "/images/hero.jpg",
     voucher_code: "GLOW15",
     discount_text: "15% OFF",
     active: true,
