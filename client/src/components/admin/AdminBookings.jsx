@@ -149,26 +149,13 @@ export function AdminBookings() {
               />
             </form>
 
-            <select
-              className="admin-select"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="all">All Statuses</option>
-              <option value="unviewed">Unviewed / New ({unreadCount})</option>
-              <option value="pending">Pending Approval</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-
             {unreadCount > 0 && (
               <button
                 type="button"
                 className="admin-secondary-btn"
                 onClick={markAllAsViewed}
                 title="Mark all new appointments as viewed"
-                style={{ borderColor: 'rgba(212, 175, 55, 0.5)', color: '#d4af37' }}
+                style={{ borderColor: '#d97706', color: '#b45309', background: '#fffbeb' }}
               >
                 <CheckCheck size={14} />
                 <span>Mark All Viewed ({unreadCount})</span>
@@ -187,6 +174,68 @@ export function AdminBookings() {
           </div>
         </div>
 
+        {/* Quick Status Filter Pills (Prominent & High-Contrast) */}
+        <div className="admin-status-filter-bar">
+          <button
+            type="button"
+            className={`admin-status-pill-btn ${statusFilter === 'all' ? 'is-active' : ''}`}
+            onClick={() => setStatusFilter('all')}
+          >
+            <span>All Bookings</span>
+            <span className="admin-pill-counter">{stats?.total ?? bookings.length}</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-status-pill-btn unviewed ${statusFilter === 'unviewed' ? 'is-active' : ''}`}
+            onClick={() => setStatusFilter('unviewed')}
+          >
+            <span className="status-dot unviewed" />
+            <span>Unviewed / New</span>
+            <span className="admin-pill-counter" style={{ background: '#d97706', color: '#fff' }}>{unreadCount}</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-status-pill-btn pending ${statusFilter === 'pending' ? 'is-active' : ''}`}
+            onClick={() => setStatusFilter('pending')}
+          >
+            <span className="status-dot pending" />
+            <span>Pending</span>
+            <span className="admin-pill-counter">{stats?.pending ?? 0}</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-status-pill-btn confirmed ${statusFilter === 'confirmed' ? 'is-active' : ''}`}
+            onClick={() => setStatusFilter('confirmed')}
+          >
+            <span className="status-dot confirmed" />
+            <span>Confirmed</span>
+            <span className="admin-pill-counter">{stats?.confirmed ?? 0}</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-status-pill-btn completed ${statusFilter === 'completed' ? 'is-active' : ''}`}
+            onClick={() => setStatusFilter('completed')}
+          >
+            <span className="status-dot completed" />
+            <span>Completed</span>
+            <span className="admin-pill-counter">{stats?.completed ?? 0}</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-status-pill-btn cancelled ${statusFilter === 'cancelled' ? 'is-active' : ''}`}
+            onClick={() => setStatusFilter('cancelled')}
+          >
+            <span className="status-dot cancelled" />
+            <span>Cancelled</span>
+            <span className="admin-pill-counter">{stats?.cancelled ?? 0}</span>
+          </button>
+        </div>
+
         {/* Bookings Table */}
         <div className="admin-table-wrap">
           <table className="admin-table">
@@ -198,7 +247,7 @@ export function AdminBookings() {
                 <th>Service Selected</th>
                 <th>Date & Perth Time</th>
                 <th>Notes / Details</th>
-                <th>Status</th>
+                <th>Status (Click to Change)</th>
                 <th>Quick Actions</th>
               </tr>
             </thead>
@@ -206,7 +255,7 @@ export function AdminBookings() {
               {loading ? (
                 <tr>
                   <td colSpan="8" style={{ textAlign: 'center', padding: '36px' }}>
-                    <div style={{ color: '#94a3b8' }}>Loading bookings...</div>
+                    <div style={{ color: '#64748b' }}>Loading bookings...</div>
                   </td>
                 </tr>
               ) : displayedBookings.length === 0 ? (
@@ -235,18 +284,18 @@ export function AdminBookings() {
                     >
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontFamily: 'monospace', fontWeight: '700', color: '#d4af37' }}>
+                          <span style={{ fontFamily: 'monospace', fontWeight: '800', color: '#b45309' }}>
                             {b.bookingId || `#${b.id}`}
                           </span>
                           {unviewed && (
                             <span className="admin-unread-pill" title="New appointment received via socket">
-                              <span className="admin-pulse-dot" style={{ background: '#090c13' }} /> NEW
+                              <span className="admin-pulse-dot" style={{ background: '#ffffff' }} /> NEW
                             </span>
                           )}
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: '600', color: '#fff' }}>{b.name}</div>
+                        <div style={{ fontWeight: '700', color: '#0f172a' }}>{b.name}</div>
                         <div style={{ fontSize: '11px', color: '#64748b' }}>
                           {b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
                         </div>
@@ -256,7 +305,7 @@ export function AdminBookings() {
                           <a
                             href={`tel:${b.phone}`}
                             onClick={(e) => e.stopPropagation()}
-                            style={{ color: '#38bdf8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
+                            style={{ color: '#0284c7', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '600' }}
                           >
                             <Phone size={12} /> {b.phone}
                           </a>
@@ -264,7 +313,7 @@ export function AdminBookings() {
                             <a
                               href={`mailto:${b.email}`}
                               onClick={(e) => e.stopPropagation()}
-                              style={{ color: '#94a3b8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
+                              style={{ color: '#64748b', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
                             >
                               <Mail size={12} /> {b.email}
                             </a>
@@ -272,19 +321,19 @@ export function AdminBookings() {
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: '500', color: '#f1f5f9' }}>{b.service}</div>
+                        <div style={{ fontWeight: '600', color: '#334155' }}>{b.service}</div>
                       </td>
                       <td>
-                        <div style={{ color: '#e2e8f0', fontWeight: '600' }}>{b.date}</div>
-                        <div style={{ color: '#d4af37', fontSize: '12px' }}>{b.time}</div>
+                        <div style={{ color: '#0f172a', fontWeight: '700' }}>{b.date}</div>
+                        <div style={{ color: '#b45309', fontSize: '12px', fontWeight: '700' }}>{b.time}</div>
                       </td>
                       <td>
                         {b.message ? (
-                          <div style={{ fontSize: '12px', color: '#94a3b8', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <div style={{ fontSize: '12px', color: '#64748b', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {b.message}
                           </div>
                         ) : (
-                          <span style={{ color: '#475569', fontSize: '12px' }}>—</span>
+                          <span style={{ color: '#94a3b8', fontSize: '12px' }}>—</span>
                         )}
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
@@ -353,10 +402,10 @@ export function AdminBookings() {
           <div className="admin-modal-box" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <div>
-                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#d4af37', fontWeight: '700', letterSpacing: '1px' }}>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#b45309', fontWeight: '800', letterSpacing: '1px' }}>
                   Appointment Details
                 </span>
-                <h3 style={{ margin: '4px 0 0', fontSize: '20px', color: '#fff', fontWeight: '700' }}>
+                <h3 style={{ margin: '4px 0 0', fontSize: '20px', color: '#0f172a', fontWeight: '800' }}>
                   {selectedBooking.bookingId || `#${selectedBooking.id}`}
                 </h3>
               </div>
@@ -370,17 +419,17 @@ export function AdminBookings() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ padding: '14px', background: '#090c13', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase' }}>Client Information</div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: '#fff', marginTop: '4px' }}>
+              <div style={{ padding: '14px', background: '#f8fafc', borderRadius: '12px', border: '1.5px solid #e2e8f0' }}>
+                <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Client Information</div>
+                <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginTop: '4px' }}>
                   {selectedBooking.name}
                 </div>
                 <div style={{ display: 'flex', gap: '16px', marginTop: '8px', fontSize: '13px' }}>
-                  <a href={`tel:${selectedBooking.phone}`} style={{ color: '#38bdf8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <a href={`tel:${selectedBooking.phone}`} style={{ color: '#0284c7', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '600' }}>
                     <Phone size={13} /> {selectedBooking.phone}
                   </a>
                   {selectedBooking.email && (
-                    <a href={`mailto:${selectedBooking.email}`} style={{ color: '#94a3b8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <a href={`mailto:${selectedBooking.email}`} style={{ color: '#64748b', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Mail size={13} /> {selectedBooking.email}
                     </a>
                   )}
@@ -388,32 +437,32 @@ export function AdminBookings() {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div style={{ padding: '12px', background: '#090c13', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>Service</div>
-                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#d4af37', marginTop: '3px' }}>
+                <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Service Selected</div>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#b45309', marginTop: '3px' }}>
                     {selectedBooking.service}
                   </div>
                 </div>
 
-                <div style={{ padding: '12px', background: '#090c13', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>Date & Time</div>
-                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#fff', marginTop: '3px' }}>
+                <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Date & Perth Time</div>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', marginTop: '3px' }}>
                     {selectedBooking.date} • {selectedBooking.time}
                   </div>
                 </div>
               </div>
 
               {selectedBooking.message && (
-                <div style={{ padding: '12px', background: 'rgba(212, 175, 55, 0.06)', borderRadius: '10px', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
-                  <div style={{ fontSize: '11px', color: '#d4af37', fontWeight: '600' }}>Special Request / Notes:</div>
-                  <div style={{ fontSize: '13px', color: '#f1f5f9', marginTop: '4px', lineHeight: '1.4' }}>
+                <div style={{ padding: '14px', background: '#fffbeb', borderRadius: '10px', border: '1.5px solid #fde68a' }}>
+                  <div style={{ fontSize: '11px', color: '#b45309', fontWeight: '700' }}>Special Request / Notes:</div>
+                  <div style={{ fontSize: '13px', color: '#92400e', marginTop: '4px', lineHeight: '1.4', fontWeight: '500' }}>
                     "{selectedBooking.message}"
                   </div>
                 </div>
               )}
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px' }}>
-                <span style={{ fontSize: '13px', color: '#94a3b8' }}>Appointment Status:</span>
+                <span style={{ fontSize: '13px', color: '#334155', fontWeight: '700' }}>Appointment Status:</span>
                 <select
                   value={selectedBooking.status || 'pending'}
                   onChange={(e) => handleStatusChange(selectedBooking.bookingId || selectedBooking.id, e.target.value)}

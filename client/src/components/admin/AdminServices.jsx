@@ -329,31 +329,32 @@ export function AdminServices() {
                   return (
                     <tr key={s.id} style={{ opacity: s.active ? 1 : 0.55 }}>
                       <td>
-                        <div style={{ fontWeight: '600', color: '#fff' }}>{s.name_en}</div>
-                        <div style={{ fontSize: '12px', color: '#94a3b8' }}>{s.name_vi}</div>
+                        <div style={{ fontWeight: '700', color: '#0f172a' }}>{s.name_en}</div>
+                        <div style={{ fontSize: '12px', color: '#64748b' }}>{s.name_vi}</div>
                       </td>
                       <td>
                         <span style={{
-                          padding: '3px 8px',
+                          padding: '4px 10px',
                           borderRadius: '6px',
-                          background: 'rgba(255, 255, 255, 0.06)',
+                          background: '#f1f5f9',
                           fontSize: '11px',
                           textTransform: 'uppercase',
-                          fontWeight: '600',
-                          color: '#cbd5e1'
+                          fontWeight: '700',
+                          color: '#475569',
+                          border: '1px solid #e2e8f0'
                         }}>
                           {s.category}
                         </span>
                       </td>
                       <td>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#94a3b8' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#64748b', fontWeight: '500' }}>
                           <Clock size={13} /> {s.duration} mins
                         </span>
                       </td>
                       <td>
                         {/* Live Price Adjuster */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ color: '#d4af37', fontWeight: '700' }}>
+                          <span style={{ color: '#b45309', fontWeight: '800' }}>
                             {s.price_prefix || s.pricePrefix || '$'}
                           </span>
                           <input
@@ -369,11 +370,11 @@ export function AdminServices() {
                             }}
                             style={{
                               width: '75px',
-                              padding: '5px 8px',
-                              background: '#090c13',
-                              border: hasPriceChanged ? '1px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.15)',
+                              padding: '6px 8px',
+                              background: '#ffffff',
+                              border: hasPriceChanged ? '2px solid #d97706' : '1.5px solid #cbd5e1',
                               borderRadius: '8px',
-                              color: '#fff',
+                              color: '#0f172a',
                               fontWeight: '700',
                               fontSize: '14px',
                               outline: 'none'
@@ -454,7 +455,7 @@ export function AdminServices() {
         <div className="admin-modal-overlay" onClick={() => setIsModalOpen(false)}>
           <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', color: '#fff', fontWeight: '700' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', color: '#0f172a', fontWeight: '800' }}>
                 {editingService ? 'Edit Service' : 'Add New Service'}
               </h3>
               <button

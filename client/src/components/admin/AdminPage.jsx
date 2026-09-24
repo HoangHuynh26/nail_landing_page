@@ -102,14 +102,14 @@ function AdminDashboardContent({ onBackToWebsite }) {
             <Lock size={32} />
           </div>
 
-          <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '700', color: '#fff' }}>
+          <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>
             Fashion Nails Atelier
           </h2>
-          <div style={{ fontSize: '12px', color: '#d4af37', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#b45309', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px', fontWeight: '700' }}>
             Executive Admin Portal
           </div>
 
-          <p style={{ fontSize: '13px', color: '#94a3b8', margin: '14px 0 20px', lineHeight: '1.5' }}>
+          <p style={{ fontSize: '13px', color: '#64748b', margin: '14px 0 20px', lineHeight: '1.5' }}>
             Enter your administrative credentials to access salon bookings, services catalog, and promotion settings.
           </p>
 
@@ -326,14 +326,14 @@ function AdminDashboardContent({ onBackToWebsite }) {
           </div>
 
           <div className="admin-realtime-toast__body">
-            <div style={{ fontWeight: '700', color: '#fff', fontSize: '15px' }}>
+            <div style={{ fontWeight: '800', color: '#0f172a', fontSize: '15px' }}>
               {liveToast.booking.name}
             </div>
-            <div style={{ color: '#d4af37', fontSize: '13px', marginTop: '3px', fontWeight: '600' }}>
+            <div style={{ color: '#b45309', fontSize: '13px', marginTop: '3px', fontWeight: '700' }}>
               {liveToast.booking.service}
             </div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-              📅 {liveToast.booking.date} at <strong style={{ color: '#fff' }}>{liveToast.booking.time}</strong>
+            <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+              📅 {liveToast.booking.date} at <strong style={{ color: '#0f172a' }}>{liveToast.booking.time}</strong>
             </div>
           </div>
 

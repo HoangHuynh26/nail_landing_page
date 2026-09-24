@@ -289,12 +289,12 @@ export function AdminPromotions() {
           <div style={{
             textAlign: 'center',
             padding: '56px 20px',
-            border: '2px dashed rgba(255, 255, 255, 0.1)',
+            border: '2px dashed #cbd5e1',
             borderRadius: '16px',
             color: '#64748b'
           }}>
             <ImageIcon size={44} style={{ margin: '0 auto 12px', opacity: 0.5 }} />
-            <div style={{ fontSize: '16px', color: '#fff', fontWeight: '600' }}>
+            <div style={{ fontSize: '16px', color: '#0f172a', fontWeight: '700' }}>
               No pop-up banners uploaded yet
             </div>
             <p style={{ fontSize: '13px', margin: '6px auto 18px', maxWidth: '420px' }}>
@@ -318,7 +318,7 @@ export function AdminPromotions() {
                   {/* Poster Preview Thumb */}
                   <div
                     className="admin-promo-card__thumb"
-                    style={{ height: '230px', background: '#080a0f', cursor: 'pointer', position: 'relative' }}
+                    style={{ height: '230px', background: '#f1f5f9', cursor: 'pointer', position: 'relative' }}
                     onClick={() => setPreviewPromo(p)}
                     title="Click to zoom in"
                   >
@@ -364,7 +364,7 @@ export function AdminPromotions() {
                   </div>
 
                   <div className="admin-promo-card__body" style={{ padding: '14px 16px' }}>
-                    <h3 style={{ margin: 0, fontSize: '15px', color: '#fff', fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <h3 style={{ margin: 0, fontSize: '15px', color: '#0f172a', fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {p.title}
                     </h3>
 
@@ -374,8 +374,9 @@ export function AdminPromotions() {
                       alignItems: 'center',
                       gap: '6px',
                       fontSize: '12px',
-                      color: '#cbd5e1',
-                      background: 'rgba(255, 255, 255, 0.04)',
+                      color: '#334155',
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
                       padding: '7px 10px',
                       borderRadius: '8px',
                       marginTop: '8px'
@@ -465,7 +466,7 @@ export function AdminPromotions() {
         <div className="admin-modal-overlay" onClick={() => !isUploading && setIsModalOpen(false)}>
           <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', color: '#fff', fontWeight: '700' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', color: '#0f172a', fontWeight: '800' }}>
                 Upload Holiday / Discount Pop-up Poster
               </h3>
               <button
@@ -485,12 +486,12 @@ export function AdminPromotions() {
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   style={{
-                    border: '2px dashed rgba(212, 175, 55, 0.45)',
+                    border: '2px dashed #cbd5e1',
                     borderRadius: '14px',
                     padding: '24px 16px',
                     textAlign: 'center',
                     cursor: 'pointer',
-                    background: '#090c13',
+                    background: '#f8fafc',
                     transition: 'border-color 0.2s ease',
                     position: 'relative',
                     overflow: 'hidden'
@@ -503,14 +504,14 @@ export function AdminPromotions() {
                         alt="Preview"
                         style={{ maxHeight: '220px', maxWidth: '100%', borderRadius: '8px', objectFit: 'contain' }}
                       />
-                      <div style={{ fontSize: '13px', color: '#d4af37', marginTop: '10px', fontWeight: '600' }}>
+                      <div style={{ fontSize: '13px', color: '#b45309', marginTop: '10px', fontWeight: '700' }}>
                         Click to choose a different image
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <Upload size={38} style={{ color: '#d4af37', margin: '0 auto 10px' }} />
-                      <div style={{ fontWeight: '700', color: '#fff', fontSize: '15px' }}>
+                      <Upload size={38} style={{ color: '#d97706', margin: '0 auto 10px' }} />
+                      <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>
                         Click or drag to select an image from your device
                       </div>
                       <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
@@ -614,10 +615,11 @@ export function AdminPromotions() {
 
               <div style={{
                 padding: '12px',
-                background: 'rgba(212, 175, 55, 0.08)',
+                background: '#fffbeb',
+                border: '1.5px solid #fde68a',
                 borderRadius: '10px',
                 fontSize: '12px',
-                color: '#cbd5e1',
+                color: '#92400e',
                 lineHeight: '1.5'
               }}>
                 ✨ Pop-up will display to visitors between <strong>{startDate || 'Today'}</strong> and <strong>{endDate || 'indefinitely'}</strong>.
@@ -650,7 +652,7 @@ export function AdminPromotions() {
         <div className="admin-modal-overlay" onClick={() => !isSavingEdit && setEditingPromo(null)}>
           <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', color: '#fff', fontWeight: '700' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', color: '#0f172a', fontWeight: '800' }}>
                 Edit Pop-up Schedule & Dates
               </h3>
               <button

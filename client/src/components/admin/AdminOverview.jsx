@@ -188,21 +188,21 @@ export function AdminOverview({ setActiveTab }) {
                       >
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ fontWeight: '600', color: '#fff' }}>{b.name}</span>
+                            <span style={{ fontWeight: '700', color: '#0f172a' }}>{b.name}</span>
                             {unviewed && (
                               <span className="admin-unread-pill" title="New appointment">
-                                <span className="admin-pulse-dot" style={{ background: '#090c13' }} /> NEW
+                                <span className="admin-pulse-dot" style={{ background: '#ffffff' }} /> NEW
                               </span>
                             )}
                           </div>
                           <div style={{ fontSize: '11px', color: '#64748b' }}>{b.phone}</div>
                         </td>
                         <td>
-                          <div style={{ fontSize: '13px', color: '#e2e8f0' }}>{b.service}</div>
+                          <div style={{ fontSize: '13px', color: '#334155', fontWeight: '500' }}>{b.service}</div>
                         </td>
                         <td>
-                          <div style={{ color: '#fff' }}>{b.date}</div>
-                          <div style={{ color: '#d4af37', fontSize: '11px' }}>{b.time}</div>
+                          <div style={{ color: '#0f172a', fontWeight: '700' }}>{b.date}</div>
+                          <div style={{ color: '#b45309', fontSize: '11px', fontWeight: '700' }}>{b.time}</div>
                         </td>
                         <td>
                           <span className={`status-badge ${(b.status || 'pending').toLowerCase()}`}>
@@ -241,24 +241,24 @@ export function AdminOverview({ setActiveTab }) {
                 <img
                   src={activePromo.image_url}
                   alt={activePromo.title}
-                  style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: '10px', background: '#090b10', flexShrink: 0 }}
+                  style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', flexShrink: 0 }}
                 />
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#10b981' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#047857' }}>
                     ● LIVE ON SALON WEBSITE
                   </div>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#fff', marginTop: '3px' }}>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', marginTop: '3px' }}>
                     {activePromo.title || 'Promotional Poster'}
                   </div>
                   {(activePromo.start_date || activePromo.end_date) && (
-                    <div style={{ fontSize: '12px', color: '#d4af37', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <div style={{ fontSize: '12px', color: '#b45309', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px', fontWeight: '600' }}>
                       <Clock size={12} />
                       <span>
                         {activePromo.start_date || 'Today'} → {activePromo.end_date || 'Indefinite'}
                       </span>
                     </div>
                   )}
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
                     Website visitors will see this poster as an announcement pop-up modal.
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export function AdminOverview({ setActiveTab }) {
                 style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%', cursor: 'pointer' }}
                 onClick={() => setActiveTab('bookings')}
               >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a', fontWeight: '600' }}>
                   <Calendar size={15} className="text-gold" /> View All Appointments
                 </span>
                 <ArrowRight size={14} />
@@ -298,7 +298,7 @@ export function AdminOverview({ setActiveTab }) {
                 style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%', cursor: 'pointer' }}
                 onClick={() => setActiveTab('services')}
               >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a', fontWeight: '600' }}>
                   <Sparkles size={15} className="text-gold" /> Manage 28 Services & Pricing
                 </span>
                 <ArrowRight size={14} />
@@ -310,7 +310,7 @@ export function AdminOverview({ setActiveTab }) {
                 style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%', cursor: 'pointer' }}
                 onClick={() => setActiveTab('promotions')}
               >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a', fontWeight: '600' }}>
                   <Tag size={15} className="text-gold" /> Schedule Holiday Pop-up Poster
                 </span>
                 <ArrowRight size={14} />
