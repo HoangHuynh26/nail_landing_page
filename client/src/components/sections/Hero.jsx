@@ -78,8 +78,8 @@ export function Hero() {
   const touchEndXRef = useRef(0);
 
   // Ratings Count-up animation
-  const ratingScore = useCountUp(4.9, 1500, 1);
-  const clientsCount = useCountUp(500, 1500, 0);
+  const ratingScore = useCountUp(4.5, 1500, 1);
+  const clientsCount = useCountUp(214, 1500, 0);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
@@ -136,7 +136,7 @@ export function Hero() {
                 Exquisite Luxury Nail Care
               </span>
               <span className="hero-section__title-line hero-section__title-line--italic" style={{ color: 'var(--color-gold)' }}>
-                At Morley Galleria WA
+                At Morley Galleria Western Australia
               </span>
             </h1>
 

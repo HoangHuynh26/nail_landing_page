@@ -12,17 +12,14 @@ export function About() {
         <div className="about-section__visual">
           <div className="about-section__frame">
               <img
-                src="/images/about.jpg"
+                src="./dist/images/about.jpg"
                 alt="Fashion Nails Morley Galleria serene interior"
                 className="about-section__image"
                 loading="lazy"
                 decoding="async"
-                width="600"
-                height="480"
+                width="620"
+                height="500"
               />
-              <div className="about-section__caption">
-                <span>Fashion Nails • Morley Galleria Shopping Centre, WA</span>
-              </div>
           </div>
         </div>
 

@@ -19,6 +19,17 @@ import { testimonialsData, googleMapsCommunityPhotos } from '../../data/testimon
 import { useLanguage } from '../../context/LanguageContext';
 import { SectionHeader } from '../ui/SectionHeader';
 
+const AVATAR_PALETTE = [
+  'linear-gradient(135deg, #D48278, #A34E45)', // Rose Quartz
+  'linear-gradient(135deg, #BD6D64, #7D342C)', // Atelier Coral
+  'linear-gradient(135deg, #8E5A73, #5D2A42)', // Velvet Plum
+  'linear-gradient(135deg, #C28E72, #8E5B3F)', // Warm Terracotta
+  'linear-gradient(135deg, #7A8B78, #4D5E4B)', // Sage Green
+  'linear-gradient(135deg, #A87D67, #6B4938)', // Bronze Umber
+  'linear-gradient(135deg, #9C7A97, #664661)', // Mauve Quartz
+  'linear-gradient(135deg, #D9A05B, #A66E2E)', // Amber Gold
+];
+
 export function Testimonials() {
   const { t } = useLanguage();
   const [autoDrift, setAutoDrift] = useState(true);
@@ -85,13 +96,17 @@ export function Testimonials() {
                   loading="lazy"
                 />
               ) : (
-                <div className="testimonial-slider-card__avatar-initial">
+                <div
+                  className="testimonial-slider-card__avatar-initial"
+                  style={{
+                    background: AVATAR_PALETTE[index % AVATAR_PALETTE.length],
+                    color: '#FFFFFF',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                  }}
+                >
                   {item.name?.charAt(0) || 'C'}
                 </div>
               )}
-              <div className="testimonial-slider-card__verified-badge" title={t('testimonials.verified')}>
-                <CheckCircle2 size={12} />
-              </div>
             </div>
 
             <div className="testimonial-slider-card__client-meta">
@@ -162,8 +177,8 @@ export function Testimonials() {
               ))}
             </div>
             <div className="testimonials-trust-text">
-              <strong>4.9 / 5.0 on Google Reviews</strong>
-              <span>528+ verified reviews & client photos</span>
+              <strong>4.5 / 5.0 on Google Reviews</strong>
+              <span>214+ verified reviews & client photos</span>
             </div>
             <ExternalLink size={14} style={{ color: 'var(--color-gold)', marginLeft: '4px' }} />
           </a>
