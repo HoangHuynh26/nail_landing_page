@@ -243,7 +243,7 @@ export function AdminPage({ onBackToWebsite }) {
             onClick={() => setActiveTab('promotions')}
           >
             <ImageIcon size={16} />
-            <span>Pop-up Giảm Giá / Dịp Lễ</span>
+            <span>Holiday & Discount Pop-up</span>
           </button>
 
           <button

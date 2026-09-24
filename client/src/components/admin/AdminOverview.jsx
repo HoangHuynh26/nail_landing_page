@@ -105,11 +105,11 @@ export function AdminOverview({ setActiveTab }) {
           </div>
           <div>
             <div className="admin-stat-num" style={{ fontSize: '18px', fontWeight: '700' }}>
-              {activePromo ? 'ĐANG BẬT' : 'ĐANG TẮT'}
+              {activePromo ? 'ACTIVE' : 'INACTIVE'}
             </div>
-            <div className="admin-stat-label">Pop-up Ảnh Giảm Giá</div>
+            <div className="admin-stat-label">Holiday Pop-up Banner</div>
             <div style={{ fontSize: '11px', color: activePromo ? '#34d399' : '#64748b', marginTop: '2px' }}>
-              {activePromo ? (activePromo.title || 'Đang hiển thị') : 'Không có pop-up nào'}
+              {activePromo ? (activePromo.title || 'Currently displaying') : 'No active pop-up'}
             </div>
           </div>
         </div>
@@ -191,14 +191,14 @@ export function AdminOverview({ setActiveTab }) {
             <div className="admin-card__header">
               <h3 className="admin-card__title">
                 <Sparkles size={18} className="text-gold" />
-                <span>Hình Ảnh Pop-up Giảm Giá Dịp Lễ</span>
+                <span>Holiday & Discount Pop-up Poster</span>
               </h3>
               <button
                 type="button"
                 className="admin-secondary-btn"
                 onClick={() => setActiveTab('promotions')}
               >
-                <span>Quản Lý</span>
+                <span>Manage</span>
               </button>
             </div>
 
@@ -211,19 +211,19 @@ export function AdminOverview({ setActiveTab }) {
                 />
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: '700', color: '#10b981' }}>
-                    ● ĐANG BẬT TRÊN TRANG CHỦ
+                    ● ACTIVE ON HOMEPAGE
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: '700', color: '#fff', marginTop: '3px' }}>
-                    {activePromo.title || 'Poster Khuyến Mãi'}
+                    {activePromo.title || 'Promotional Poster'}
                   </div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-                    Khách truy cập website sẽ thấy hình ảnh này bật lên làm Pop-up.
+                    Website visitors will see this image as an announcement pop-up.
                   </div>
                 </div>
               </div>
             ) : (
               <div style={{ padding: '24px', textAlign: 'center', color: '#64748b' }}>
-                Chưa có hình ảnh pop-up nào đang bật. Vào tab <strong>Pop-up Giảm Giá</strong> để tải ảnh lên.
+                No promotional pop-up banner is currently active. Go to the <strong>Holiday Pop-up</strong> tab to upload.
               </div>
             )}
           </div>

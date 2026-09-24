@@ -60,14 +60,14 @@ export function AdminPromotions() {
   const handleUploadPromotion = async (e) => {
     e.preventDefault();
     if (!selectedFile && !previewImageUrl) {
-      alert('Vui lòng chọn hình ảnh poster / banner khuyến mãi để tải lên!');
+      alert('Please select a promotional poster or banner image to upload!');
       return;
     }
 
     setIsUploading(true);
     try {
       const formPayload = new FormData();
-      formPayload.append('title', title.trim() || 'Ưu Đãi Lễ Hội');
+      formPayload.append('title', title.trim() || 'Holiday Special');
       formPayload.append('active', 'true'); // Automatically activate newly uploaded promo
 
       if (selectedFile) {
@@ -83,10 +83,10 @@ export function AdminPromotions() {
         setIsModalOpen(false);
         fetchPromotions();
       } else {
-        alert('Tải lên thất bại: ' + data.message);
+        alert('Upload failed: ' + data.message);
       }
     } catch (err) {
-      alert('Lỗi kết nối upload: ' + err.message);
+      alert('Upload connection error: ' + err.message);
     } finally {
       setIsUploading(false);
     }
@@ -111,12 +111,12 @@ export function AdminPromotions() {
         );
       }
     } catch (err) {
-      alert('Lỗi cập nhật trạng thái: ' + err.message);
+      alert('Status update error: ' + err.message);
     }
   };
 
   const handleDeletePromotion = async (promo) => {
-    if (!window.confirm(`Bạn có chắc chắn muốn xóa hình ảnh khuyến mãi "${promo.title}"?`)) return;
+    if (!window.confirm(`Are you sure you want to delete promotional image "${promo.title}"?`)) return;
     try {
       const res = await fetch(`/api/promotions/${promo.id}`, { method: 'DELETE' });
       const data = await res.json();
@@ -124,7 +124,7 @@ export function AdminPromotions() {
         setPromotions(prev => prev.filter(p => p.id !== promo.id));
       }
     } catch (err) {
-      alert('Lỗi xóa: ' + err.message);
+      alert('Delete error: ' + err.message);
     }
   };
 
@@ -137,10 +137,10 @@ export function AdminPromotions() {
           <div>
             <h2 className="admin-card__title">
               <ImageIcon size={20} className="text-gold" />
-              <span>Quản Lý Hình Ảnh Pop-up Giảm Giá / Mùa Lễ</span>
+              <span>Holiday & Special Event Pop-up Manager</span>
             </h2>
             <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#94a3b8' }}>
-              Khi tới dịp lễ, Tết hoặc chương trình tri ân, tải lên hình ảnh poster giảm giá tại đây. Khách vào trang web sẽ tự động nhìn thấy hình ảnh poster này bật lên dạng Pop-up.
+              Upload holiday discount posters or special event flyers here. Visitors to your salon website will automatically see your active poster as an announcement pop-up.
             </p>
           </div>
 
@@ -150,7 +150,7 @@ export function AdminPromotions() {
             onClick={handleOpenCreate}
           >
             <Upload size={16} />
-            <span>Tải Lên Hình Ảnh Mới</span>
+            <span>Upload New Poster</span>
           </button>
         </div>
 
@@ -175,20 +175,20 @@ export function AdminPromotions() {
             }} />
             <span style={{ color: activePromoCount > 0 ? '#34d399' : '#94a3b8' }}>
               {activePromoCount > 0
-                ? 'Đang BẬT: Khách hàng truy cập website sẽ thấy hình ảnh pop-up khuyến mãi.'
-                : 'Đang TẮT: Không có hình ảnh pop-up nào hiển thị cho khách hàng.'}
+                ? 'ACTIVE: Website visitors will see this promotional pop-up banner.'
+                : 'INACTIVE: No pop-up banner is currently displayed to visitors.'}
             </span>
           </div>
 
           <span style={{ fontSize: '12px', color: '#64748b' }}>
-            Tổng cộng: {promotions.length} hình ảnh
+            Total: {promotions.length} posters
           </span>
         </div>
 
         {/* Promotions Grid */}
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-            Đang tải danh sách hình ảnh...
+            Loading pop-up banners...
           </div>
         ) : promotions.length === 0 ? (
           <div style={{
@@ -200,10 +200,10 @@ export function AdminPromotions() {
           }}>
             <ImageIcon size={44} style={{ margin: '0 auto 12px', opacity: 0.5 }} />
             <div style={{ fontSize: '16px', color: '#fff', fontWeight: '600' }}>
-              Chưa có hình ảnh pop-up nào được tải lên
+              No pop-up banners uploaded yet
             </div>
             <p style={{ fontSize: '13px', margin: '6px auto 18px', maxWidth: '420px' }}>
-              Nhấn nút bên dưới để chọn hình ảnh poster hoặc flyer giảm giá nhân dịp lễ từ máy tính của bạn.
+              Click the button below to upload a holiday promotion flyer or discount poster from your device.
             </p>
             <button
               type="button"
@@ -211,7 +211,7 @@ export function AdminPromotions() {
               onClick={handleOpenCreate}
             >
               <Upload size={16} />
-              <span>Tải Lên Hình Ảnh Ngay</span>
+              <span>Upload Poster Now</span>
             </button>
           </div>
         ) : (
@@ -223,7 +223,7 @@ export function AdminPromotions() {
                   className="admin-promo-card__thumb"
                   style={{ height: '230px', background: '#080a0f', cursor: 'pointer' }}
                   onClick={() => setPreviewPromo(p)}
-                  title="Bấm để xem ảnh phóng to"
+                  title="Click to zoom in"
                 >
                   <img
                     src={p.image_url}
@@ -243,7 +243,7 @@ export function AdminPromotions() {
                     alignItems: 'center',
                     gap: '4px'
                   }}>
-                    <Eye size={12} /> Bấm xem thử
+                    <Eye size={12} /> Preview
                   </div>
                 </div>
 
@@ -252,7 +252,7 @@ export function AdminPromotions() {
                     {p.title}
                   </h3>
                   <div style={{ fontSize: '11px', color: '#64748b' }}>
-                    Ngày tải lên: {p.created_at ? new Date(p.created_at).toLocaleDateString('vi-VN') : ''}
+                    Uploaded: {p.created_at ? new Date(p.created_at).toLocaleDateString('en-AU') : ''}
                   </div>
                 </div>
 
@@ -274,11 +274,11 @@ export function AdminPromotions() {
                   >
                     {p.active ? (
                       <>
-                        <ToggleRight size={24} /> ĐANG BẬT POP-UP
+                        <ToggleRight size={24} /> ACTIVE POP-UP
                       </>
                     ) : (
                       <>
-                        <ToggleLeft size={24} /> ĐANG TẮT
+                        <ToggleLeft size={24} /> INACTIVE
                       </>
                     )}
                   </button>
@@ -288,7 +288,7 @@ export function AdminPromotions() {
                       type="button"
                       className="admin-icon-btn"
                       onClick={() => setPreviewPromo(p)}
-                      title="Xem trước Pop-up khách hàng nhìn thấy"
+                      title="Preview visitor pop-up"
                     >
                       <Eye size={15} />
                     </button>
@@ -296,7 +296,7 @@ export function AdminPromotions() {
                       type="button"
                       className="admin-icon-btn danger"
                       onClick={() => handleDeletePromotion(p)}
-                      title="Xóa hình ảnh"
+                      title="Delete image"
                     >
                       <Trash2 size={15} />
                     </button>
@@ -314,7 +314,7 @@ export function AdminPromotions() {
           <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h3 style={{ margin: 0, fontSize: '18px', color: '#fff', fontWeight: '700' }}>
-                Tải Lên Hình Ảnh Pop-up Giảm Giá / Dịp Lễ
+                Upload Holiday / Discount Pop-up Poster
               </h3>
               <button
                 type="button"
@@ -329,7 +329,7 @@ export function AdminPromotions() {
             <form onSubmit={handleUploadPromotion}>
               {/* Image Picker Dropzone */}
               <div className="admin-form-group">
-                <label>Chọn file hình ảnh từ thiết bị (Poster / Flyer)</label>
+                <label>Select image file from device (Poster / Flyer)</label>
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   style={{
@@ -352,17 +352,17 @@ export function AdminPromotions() {
                         style={{ maxHeight: '220px', maxWidth: '100%', borderRadius: '8px', objectFit: 'contain' }}
                       />
                       <div style={{ fontSize: '13px', color: '#d4af37', marginTop: '10px', fontWeight: '600' }}>
-                        Bấm để chọn hình ảnh khác
+                        Click to choose a different image
                       </div>
                     </div>
                   ) : (
                     <div>
                       <Upload size={38} style={{ color: '#d4af37', margin: '0 auto 10px' }} />
                       <div style={{ fontWeight: '700', color: '#fff', fontSize: '15px' }}>
-                        Bấm vào đây để chọn hình ảnh từ máy tính
+                        Click or drag to select an image from your device
                       </div>
                       <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
-                        Hỗ trợ ảnh JPG, PNG, WEBP (Tự động canh chỉnh vừa vặn màn hình)
+                        Supports JPG, PNG, WEBP (auto-fits display modal nicely)
                       </div>
                     </div>
                   )}
@@ -377,11 +377,11 @@ export function AdminPromotions() {
               </div>
 
               <div className="admin-form-group">
-                <label>Tên dịp lễ / Mô tả (để bạn dễ nhớ)</label>
+                <label>Promotion Title / Holiday Occasion</label>
                 <input
                   type="text"
                   className="admin-form-input"
-                  placeholder="Ví dụ: Giảm giá Tết Âm Lịch 2026, Giáng Sinh, Easter..."
+                  placeholder="e.g. Easter Special 2026, Lunar New Year, Mother's Day..."
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
@@ -395,7 +395,7 @@ export function AdminPromotions() {
                 color: '#cbd5e1',
                 lineHeight: '1.5'
               }}>
-                ✨ Sau khi tải lên thành công, hình ảnh này sẽ được tự động kích hoạt làm Pop-up cho khách khi truy cập website salon.
+                ✨ Once uploaded, this poster will automatically be activated as the live pop-up for salon website visitors.
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
@@ -405,14 +405,14 @@ export function AdminPromotions() {
                   onClick={() => setIsModalOpen(false)}
                   disabled={isUploading}
                 >
-                  Hủy
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="admin-primary-btn"
                   disabled={isUploading}
                 >
-                  {isUploading ? 'Đang Tải Ảnh Lên...' : 'Tải Lên & Bật Pop-up'}
+                  {isUploading ? 'Uploading Poster...' : 'Upload & Activate Pop-up'}
                 </button>
               </div>
             </form>
@@ -428,7 +428,7 @@ export function AdminPromotions() {
               type="button"
               className="seasonal-promo-poster-close-btn"
               onClick={() => setPreviewPromo(null)}
-              title="Đóng"
+              title="Close"
             >
               ✕
             </button>
@@ -445,10 +445,10 @@ export function AdminPromotions() {
               <button
                 type="button"
                 className="seasonal-promo-poster-cta-btn"
-                onClick={() => alert('Chế độ xem trước: Khách hàng bấm nút này sẽ mở form Đặt Lịch Hẹn!')}
+                onClick={() => alert('Preview Mode: Clicking this button on the website opens the Appointment Booking form.')}
               >
                 <Calendar size={18} />
-                <span>Đặt Lịch Ngay / Book an Appointment</span>
+                <span>Book an Appointment</span>
               </button>
 
               <button
@@ -456,7 +456,7 @@ export function AdminPromotions() {
                 className="seasonal-promo-poster-dismiss-btn"
                 onClick={() => setPreviewPromo(null)}
               >
-                Đóng xem trước
+                Close Preview
               </button>
             </div>
           </div>
