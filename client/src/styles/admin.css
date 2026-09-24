@@ -550,6 +550,139 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
+/* Unread / Unviewed Booking Highlight - Realtime Notification */
+.admin-table tr.is-unread-booking td {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.16) 0%, rgba(212, 175, 55, 0.04) 100%) !important;
+  color: #fff !important;
+}
+
+.admin-table tr.is-unread-booking {
+  border-left: 4px solid #d4af37 !important;
+  box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.08);
+  animation: unreadPulse 2.5s infinite ease-in-out;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.admin-table tr.is-unread-booking:hover td {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.24) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+}
+
+@keyframes unreadPulse {
+  0%, 100% {
+    box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.08);
+  }
+  50% {
+    box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.22);
+  }
+}
+
+.admin-unread-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #d4af37;
+  color: #090c13;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+  animation: badgeBlink 1.8s infinite ease-in-out;
+  margin-left: 6px;
+}
+
+@keyframes badgeBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+.admin-tab-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  background: #d4af37;
+  color: #0b0c10;
+  margin-left: 6px;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Floating Realtime Booking Toast */
+.admin-realtime-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  background: #111622;
+  border: 1px solid #d4af37;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 175, 55, 0.25);
+  animation: slideInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.admin-realtime-toast__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-realtime-toast__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-realtime-toast__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-realtime-toast__body {
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.4;
+}
+
+.admin-realtime-toast__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 /* Status Badges */
 .status-badge {
   display: inline-flex;

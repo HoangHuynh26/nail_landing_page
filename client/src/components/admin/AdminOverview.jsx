@@ -3,6 +3,7 @@ import {
   Calendar, Clock, CheckCircle2, AlertCircle, Tag,
   Sparkles, ArrowRight, Database, Users, Plus, Phone
 } from 'lucide-react';
+import { useAdminSocket } from '../../context/AdminSocketContext';
 
 export function AdminOverview({ setActiveTab }) {
   const [stats, setStats] = useState(null);
@@ -10,6 +11,29 @@ export function AdminOverview({ setActiveTab }) {
   const [activePromo, setActivePromo] = useState(null);
   const [dbStatus, setDbStatus] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { isUnviewed, markAsViewed, realtimeBookings } = useAdminSocket();
+
+  // Sync real-time incoming bookings from WebSocket into recent list
+  useEffect(() => {
+    if (realtimeBookings.length > 0) {
+      setRecentBookings((prev) => {
+        const existingIds = new Set(prev.map((b) => String(b.bookingId || b.id)));
+        const newItems = realtimeBookings.filter((rb) => !existingIds.has(String(rb.bookingId || rb.id)));
+        return newItems.length > 0 ? [...newItems, ...prev].slice(0, 6) : prev;
+      });
+      setStats((prev) =>
+        prev
+          ? {
+              ...prev,
+              total: (prev.total || 0) + 1,
+              pending: (prev.pending || 0) + 1,
+              today: (prev.today || 0) + 1
+            }
+          : prev
+      );
+    }
+  }, [realtimeBookings]);
 
   useEffect(() => {
     async function loadOverview() {
@@ -158,26 +182,47 @@ export function AdminOverview({ setActiveTab }) {
                     </td>
                   </tr>
                 ) : (
-                  recentBookings.map((b) => (
-                    <tr key={b.bookingId || b.id}>
-                      <td>
-                        <div style={{ fontWeight: '600', color: '#fff' }}>{b.name}</div>
-                        <div style={{ fontSize: '11px', color: '#64748b' }}>{b.phone}</div>
-                      </td>
-                      <td>
-                        <div style={{ fontSize: '13px', color: '#e2e8f0' }}>{b.service}</div>
-                      </td>
-                      <td>
-                        <div style={{ color: '#fff' }}>{b.date}</div>
-                        <div style={{ color: '#d4af37', fontSize: '11px' }}>{b.time}</div>
-                      </td>
-                      <td>
-                        <span className={`status-badge ${(b.status || 'pending').toLowerCase()}`}>
-                          {b.status || 'pending'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
+                  recentBookings.map((b) => {
+                    const id = b.bookingId || b.id;
+                    const unviewed = isUnviewed(id);
+
+                    return (
+                      <tr
+                        key={id}
+                        className={unviewed ? 'is-unread-booking' : ''}
+                        onClick={() => {
+                          if (unviewed) markAsViewed(id);
+                          setActiveTab('bookings');
+                        }}
+                        style={{ cursor: 'pointer' }}
+                        title={unviewed ? 'New unviewed booking! Click to view in Bookings' : 'Click to view in Bookings'}
+                      >
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontWeight: '600', color: '#fff' }}>{b.name}</span>
+                            {unviewed && (
+                              <span className="admin-unread-pill" title="New appointment">
+                                <span className="admin-pulse-dot" style={{ background: '#090c13' }} /> NEW
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ fontSize: '11px', color: '#64748b' }}>{b.phone}</div>
+                        </td>
+                        <td>
+                          <div style={{ fontSize: '13px', color: '#e2e8f0' }}>{b.service}</div>
+                        </td>
+                        <td>
+                          <div style={{ color: '#fff' }}>{b.date}</div>
+                          <div style={{ color: '#d4af37', fontSize: '11px' }}>{b.time}</div>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${(b.status || 'pending').toLowerCase()}`}>
+                            {b.status || 'pending'}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

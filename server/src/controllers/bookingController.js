@@ -6,6 +6,7 @@ import {
   getBookingStats
 } from '../services/bookingService.js';
 import { sendToMakeWebhook } from '../services/makeWebhook.js';
+import { broadcastNewBooking, broadcastBookingStatusUpdate } from '../socket.js';
 
 /**
  * Generates memorable luxury booking code e.g. AURA-8492
@@ -40,6 +41,13 @@ export async function createBooking(req, res, next) {
     ]);
 
     console.info(`[Booking] ${bookingId} processed -> DB: ${saved ? 'SAVED' : 'FAIL'}, Make.com Webhook: ${makeResult?.sent ? 'SENT' : 'SKIPPED/ERROR'}`);
+
+    // 3. Broadcast real-time event to all connected admin clients
+    broadcastNewBooking({
+      ...newBooking,
+      id: saved?.id || bookingId,
+      isNew: true
+    });
 
     const isEn = rawData.language === 'en';
     const message = isEn
@@ -119,6 +127,8 @@ export async function updateBookingStatus(req, res, next) {
         message: 'Booking not found'
       });
     }
+
+    broadcastBookingStatusUpdate(id, status.toLowerCase());
 
     return res.status(200).json({
       success: true,

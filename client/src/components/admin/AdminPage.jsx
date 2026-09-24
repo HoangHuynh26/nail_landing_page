@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, Calendar, Sparkles, Tag, Database,
   Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink, Image as ImageIcon,
-  User, Eye, EyeOff, LogIn
+  User, Eye, EyeOff, LogIn, Bell
 } from 'lucide-react';
 import AdminOverview from './AdminOverview';
 import AdminBookings from './AdminBookings';
 import AdminServices from './AdminServices';
 import AdminPromotions from './AdminPromotions';
 import AdminDatabase from './AdminDatabase';
+import { AdminSocketProvider, useAdminSocket } from '../../context/AdminSocketContext';
 
-export function AdminPage({ onBackToWebsite }) {
+function AdminDashboardContent({ onBackToWebsite }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +21,14 @@ export function AdminPage({ onBackToWebsite }) {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [dbStatus, setDbStatus] = useState(null);
+
+  const {
+    isConnected,
+    unreadCount,
+    liveToast,
+    dismissToast,
+    markAsViewed
+  } = useAdminSocket();
 
   // Check saved token on mount
   useEffect(() => {
@@ -224,6 +233,15 @@ export function AdminPage({ onBackToWebsite }) {
         </div>
 
         <div className="admin-navbar__status-area">
+          {/* WebSocket Status Indicator */}
+          <div
+            className={`admin-db-pill ${isConnected ? 'is-neon' : 'is-fallback'}`}
+            title={isConnected ? 'Realtime WebSocket Active - Live Booking Updates' : 'Connecting to WebSocket...'}
+          >
+            <span className="admin-pulse-dot" />
+            <span>{isConnected ? 'Realtime Live' : 'Connecting...'}</span>
+          </div>
+
           <div
             className={`admin-db-pill ${isNeon ? 'is-neon' : 'is-fallback'}`}
             title={isNeon ? 'Connected to Neon PostgreSQL' : 'Using Local Fallback Store'}
@@ -272,9 +290,15 @@ export function AdminPage({ onBackToWebsite }) {
             type="button"
             className={`admin-tab-btn ${activeTab === 'bookings' ? 'is-active' : ''}`}
             onClick={() => setActiveTab('bookings')}
+            style={{ position: 'relative' }}
           >
             <Calendar size={16} />
             <span>Bookings & Appointments</span>
+            {unreadCount > 0 && (
+              <span className="admin-tab-count-badge" title={`${unreadCount} unviewed new appointments`}>
+                {unreadCount} NEW
+              </span>
+            )}
           </button>
 
           <button
@@ -312,7 +336,78 @@ export function AdminPage({ onBackToWebsite }) {
         {activeTab === 'promotions' && <AdminPromotions />}
         {activeTab === 'database' && <AdminDatabase />}
       </main>
+
+      {/* Realtime New Booking Floating Toast */}
+      {liveToast && (
+        <div className="admin-realtime-toast" role="alert">
+          <div className="admin-realtime-toast__header">
+            <div className="admin-realtime-toast__title-wrap">
+              <Bell size={18} style={{ color: '#d4af37' }} />
+              <span className="admin-realtime-toast__title">New Booking Received!</span>
+            </div>
+            <button
+              type="button"
+              onClick={dismissToast}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                fontSize: '14px',
+                padding: '4px'
+              }}
+              title="Dismiss"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="admin-realtime-toast__body">
+            <div style={{ fontWeight: '700', color: '#fff', fontSize: '15px' }}>
+              {liveToast.booking.name}
+            </div>
+            <div style={{ color: '#d4af37', fontSize: '13px', marginTop: '3px', fontWeight: '600' }}>
+              {liveToast.booking.service}
+            </div>
+            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+              📅 {liveToast.booking.date} at <strong style={{ color: '#fff' }}>{liveToast.booking.time}</strong>
+            </div>
+          </div>
+
+          <div className="admin-realtime-toast__actions">
+            <button
+              type="button"
+              className="admin-secondary-btn"
+              onClick={dismissToast}
+              style={{ padding: '6px 12px', fontSize: '12px' }}
+            >
+              Dismiss
+            </button>
+            <button
+              type="button"
+              className="admin-primary-btn"
+              onClick={() => {
+                markAsViewed(liveToast.booking.bookingId || liveToast.booking.id);
+                dismissToast();
+                setActiveTab('bookings');
+              }}
+              style={{ padding: '6px 14px', fontSize: '12px' }}
+            >
+              <Eye size={13} />
+              <span>View Appointment</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+export function AdminPage(props) {
+  return (
+    <AdminSocketProvider>
+      <AdminDashboardContent {...props} />
+    </AdminSocketProvider>
   );
 }
 

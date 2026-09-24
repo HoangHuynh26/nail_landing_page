@@ -1,9 +1,11 @@
 import express from 'express';
+import http from 'http';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { config } from './config/env.js';
 import { initDatabase, getDbStatus } from './db/db.js';
+import { initSocket } from './socket.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import promotionRoutes from './routes/promotionRoutes.js';
@@ -77,10 +79,14 @@ async function startServer() {
     console.error('Initial DB bootstrap error:', err.message);
   }
 
-  app.listen(config.port, () => {
+  const httpServer = http.createServer(app);
+  initSocket(httpServer);
+
+  httpServer.listen(config.port, () => {
     console.log(`✨ Fashion Nails Morley Galleria API Server running on port ${config.port}`);
     console.log(`📍 Environment: ${config.nodeEnv}`);
     console.log(`🔗 Health Check: http://localhost:${config.port}/api/health`);
+    console.log(`⚡ WebSocket / Socket.io active on port ${config.port}`);
     console.log(`📁 Uploads served at: http://localhost:${config.port}/uploads/`);
   });
 }
