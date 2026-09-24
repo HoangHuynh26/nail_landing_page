@@ -202,7 +202,12 @@ export function AdminOverview({ setActiveTab }) {
                         </td>
                         <td>
                           <div style={{ color: '#0f172a', fontWeight: '700' }}>{b.date}</div>
-                          <div style={{ color: '#b45309', fontSize: '11px', fontWeight: '700' }}>{b.time}</div>
+                          <div
+                            className="admin-booking-time"
+                            style={{ color: unviewed ? '#78350f' : '#b45309', fontSize: '11px', fontWeight: '700' }}
+                          >
+                            {b.time}
+                          </div>
                         </td>
                         <td>
                           <span className={`status-badge ${(b.status || 'pending').toLowerCase()}`}>

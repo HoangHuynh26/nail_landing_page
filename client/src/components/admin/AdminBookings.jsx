@@ -263,7 +263,10 @@ export function AdminBookings() {
                     >
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontFamily: 'monospace', fontWeight: '800', color: '#b45309' }}>
+                          <span
+                            className="admin-booking-id"
+                            style={{ fontFamily: 'monospace', fontWeight: '800', color: unviewed ? '#78350f' : '#b45309' }}
+                          >
                             {b.bookingId || `#${b.id}`}
                           </span>
                           {unviewed && (
@@ -304,7 +307,12 @@ export function AdminBookings() {
                       </td>
                       <td>
                         <div style={{ color: '#0f172a', fontWeight: '700' }}>{b.date}</div>
-                        <div style={{ color: '#b45309', fontSize: '12px', fontWeight: '700' }}>{b.time}</div>
+                        <div
+                          className="admin-booking-time"
+                          style={{ color: unviewed ? '#78350f' : '#b45309', fontSize: '12px', fontWeight: '700' }}
+                        >
+                          {b.time}
+                        </div>
                       </td>
                       <td>
                         {b.message ? (

@@ -681,31 +681,42 @@
   background: #f8fafc;
 }
 
-/* Unread / Unviewed Booking Highlight - Realtime Notification in Light Mode */
-.admin-table tr.is-unread-booking td {
-  background: linear-gradient(90deg, #fef3c7 0%, #fffbeb 100%) !important;
-  color: #0f172a !important;
-}
-
+/* Unread / Unviewed Booking Highlight - Continuous Full-Row Solid Highlight */
 .admin-table tr.is-unread-booking {
-  border-left: 5px solid #d97706 !important;
-  box-shadow: inset 0 0 15px rgba(217, 119, 6, 0.08);
-  animation: unreadPulseLight 2.5s infinite ease-in-out;
+  background-color: #fef3c7 !important;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background-color 0.2s ease;
 }
 
+.admin-table tr.is-unread-booking td {
+  background-color: #fef3c7 !important;
+  color: #0f172a !important;
+  border-top: 1.5px solid #fde68a !important;
+  border-bottom: 2px solid #f59e0b !important;
+}
+
+.admin-table tr.is-unread-booking td:first-child {
+  border-left: 6px solid #d97706 !important;
+}
+
+.admin-table tr.is-unread-booking td:last-child {
+  border-right: 1.5px solid #fde68a !important;
+}
+
+.admin-table tr.is-unread-booking:hover,
 .admin-table tr.is-unread-booking:hover td {
-  background: linear-gradient(90deg, #fde68a 0%, #fef3c7 100%) !important;
+  background-color: #fde68a !important;
+  border-bottom-color: #d97706 !important;
 }
 
-@keyframes unreadPulseLight {
-  0%, 100% {
-    box-shadow: inset 0 0 12px rgba(217, 119, 6, 0.08);
-  }
-  50% {
-    box-shadow: inset 0 0 22px rgba(217, 119, 6, 0.2);
-  }
+.admin-table tr.is-unread-booking .admin-booking-id {
+  color: #78350f !important;
+  font-weight: 800;
+}
+
+.admin-table tr.is-unread-booking .admin-booking-time {
+  color: #78350f !important;
+  font-weight: 700;
 }
 
 .admin-unread-pill {
