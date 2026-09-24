@@ -205,7 +205,13 @@ function AdminDashboardContent({ onBackToWebsite }) {
       {/* Top Navbar */}
       <header className="admin-navbar">
         <div className="admin-navbar__brand">
-          <div className="admin-navbar__logo-badge">FN</div>
+          <div className="admin-navbar__logo-badge">
+            <img
+              src="/images/logo.png"
+              alt="Fashion Nails"
+              style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '3px' }}
+            />
+          </div>
           <div>
             <h1 className="admin-navbar__title">Fashion Nails Morley Galleria</h1>
             <div className="admin-navbar__subtitle">Executive Admin Management Suite</div>
