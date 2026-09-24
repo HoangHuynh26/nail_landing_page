@@ -81,11 +81,13 @@ export async function createBooking(req, res, next) {
  */
 export async function listBookings(req, res, next) {
   try {
-    const { status, search, limit = 50, offset = 0 } = req.query;
+    const { status, search, year, month, limit = 100, offset = 0 } = req.query;
 
     const result = await getBookings({
       status: status || 'all',
       search: search || '',
+      year: year || '',
+      month: month || '',
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10)
     });

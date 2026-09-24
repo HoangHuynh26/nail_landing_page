@@ -42,38 +42,54 @@ export async function saveBooking(booking) {
 /**
  * Retrieves bookings with optional filtering, search, and pagination
  */
-export async function getBookings({ status = 'all', search = '', limit = 100, offset = 0 } = {}) {
+export async function getBookings({ status = 'all', search = '', year = '', month = '', limit = 100, offset = 0 } = {}) {
   if (!dbState.usingFallback && pool) {
     try {
       let query = 'SELECT * FROM bookings WHERE 1=1';
+      let countQuery = 'SELECT COUNT(*) FROM bookings WHERE 1=1';
       const params = [];
+      const countParams = [];
 
       if (status && status !== 'all') {
         params.push(status);
         query += ` AND status = $${params.length}`;
+        countParams.push(status);
+        countQuery += ` AND status = $${countParams.length}`;
       }
 
       if (search && search.trim()) {
-        params.push(`%${search.trim().toLowerCase()}%`);
+        const s = `%${search.trim().toLowerCase()}%`;
+        params.push(s);
         query += ` AND (LOWER(name) LIKE $${params.length} OR LOWER(phone) LIKE $${params.length} OR LOWER(email) LIKE $${params.length} OR LOWER(booking_id) LIKE $${params.length} OR LOWER(service) LIKE $${params.length})`;
+        countParams.push(s);
+        countQuery += ` AND (LOWER(name) LIKE $${countParams.length} OR LOWER(phone) LIKE $${countParams.length} OR LOWER(email) LIKE $${countParams.length} OR LOWER(booking_id) LIKE $${countParams.length} OR LOWER(service) LIKE $${countParams.length})`;
+      }
+
+      // Year & Month Filter
+      if (year && year !== 'all' && month && month !== 'all') {
+        const ym = `${year}-${month.padStart(2, '0')}`;
+        params.push(`${ym}%`, ym);
+        query += ` AND (date LIKE $${params.length - 1} OR TO_CHAR(created_at, 'YYYY-MM') = $${params.length})`;
+        countParams.push(`${ym}%`, ym);
+        countQuery += ` AND (date LIKE $${countParams.length - 1} OR TO_CHAR(created_at, 'YYYY-MM') = $${countParams.length})`;
+      } else if (year && year !== 'all') {
+        const y = String(year);
+        params.push(`${y}%`, y);
+        query += ` AND (date LIKE $${params.length - 1} OR TO_CHAR(created_at, 'YYYY') = $${params.length})`;
+        countParams.push(`${y}%`, y);
+        countQuery += ` AND (date LIKE $${countParams.length - 1} OR TO_CHAR(created_at, 'YYYY') = $${countParams.length})`;
+      } else if (month && month !== 'all') {
+        const m = month.padStart(2, '0');
+        params.push(`%-${m}-%`, m);
+        query += ` AND (date LIKE $${params.length - 1} OR TO_CHAR(created_at, 'MM') = $${params.length})`;
+        countParams.push(`%-${m}-%`, m);
+        countQuery += ` AND (date LIKE $${countParams.length - 1} OR TO_CHAR(created_at, 'MM') = $${countParams.length})`;
       }
 
       query += ' ORDER BY created_at DESC LIMIT $' + (params.length + 1) + ' OFFSET $' + (params.length + 2);
       params.push(limit, offset);
 
       const res = await pool.query(query, params);
-
-      // Total count query
-      let countQuery = 'SELECT COUNT(*) FROM bookings WHERE 1=1';
-      const countParams = [];
-      if (status && status !== 'all') {
-        countParams.push(status);
-        countQuery += ` AND status = $${countParams.length}`;
-      }
-      if (search && search.trim()) {
-        countParams.push(`%${search.trim().toLowerCase()}%`);
-        countQuery += ` AND (LOWER(name) LIKE $${countParams.length} OR LOWER(phone) LIKE $${countParams.length} OR LOWER(email) LIKE $${countParams.length} OR LOWER(booking_id) LIKE $${countParams.length} OR LOWER(service) LIKE $${countParams.length})`;
-      }
       const countRes = await pool.query(countQuery, countParams);
 
       return {
@@ -102,6 +118,31 @@ export async function getBookings({ status = 'all', search = '', limit = 100, of
       (b.bookingId && b.bookingId.toLowerCase().includes(q)) ||
       (b.service && b.service.toLowerCase().includes(q))
     );
+  }
+
+  if (year && year !== 'all' && month && month !== 'all') {
+    const ym = `${year}-${month.padStart(2, '0')}`;
+    list = list.filter(b => {
+      const bDate = b.date || '';
+      const bCreated = b.createdAt ? String(b.createdAt) : '';
+      return bDate.startsWith(ym) || bCreated.startsWith(ym);
+    });
+  } else if (year && year !== 'all') {
+    const y = String(year);
+    list = list.filter(b => {
+      const bDate = b.date || '';
+      const bCreated = b.createdAt ? String(b.createdAt) : '';
+      return bDate.startsWith(y) || bCreated.startsWith(y);
+    });
+  } else if (month && month !== 'all') {
+    const m = month.padStart(2, '0');
+    list = list.filter(b => {
+      const bDate = b.date || '';
+      const bCreated = b.createdAt ? String(b.createdAt) : '';
+      const dateParts = bDate.split('-');
+      const createdParts = bCreated.slice(0, 10).split('-');
+      return (dateParts.length >= 2 && dateParts[1] === m) || (createdParts.length >= 2 && createdParts[1] === m);
+    });
   }
 
   const total = list.length;

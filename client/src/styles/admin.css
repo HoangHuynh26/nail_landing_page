@@ -485,6 +485,45 @@
   box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
 }
 
+.admin-date-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  padding: 2px 8px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.admin-date-filter-group:focus-within {
+  background: #ffffff;
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+}
+
+.admin-date-filter-group .admin-select {
+  border: none !important;
+  background: transparent !important;
+  padding: 7px 6px !important;
+  font-size: 13px !important;
+  box-shadow: none !important;
+}
+
+.admin-filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1.5px solid #fde68a;
+  margin-left: auto;
+}
+
 .admin-primary-btn {
   display: inline-flex;
   align-items: center;

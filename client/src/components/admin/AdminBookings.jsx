@@ -6,12 +6,30 @@ import {
 } from 'lucide-react';
 import { useAdminSocket } from '../../context/AdminSocketContext';
 
+const MONTH_OPTIONS = [
+  { value: 'all', label: 'All Months' },
+  { value: '01', label: '01 - Jan' },
+  { value: '02', label: '02 - Feb' },
+  { value: '03', label: '03 - Mar' },
+  { value: '04', label: '04 - Apr' },
+  { value: '05', label: '05 - May' },
+  { value: '06', label: '06 - Jun' },
+  { value: '07', label: '07 - Jul' },
+  { value: '08', label: '08 - Aug' },
+  { value: '09', label: '09 - Sep' },
+  { value: '10', label: '10 - Oct' },
+  { value: '11', label: '11 - Nov' },
+  { value: '12', label: '12 - Dec' }
+];
+
 export function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('all');
+  const [selectedYear, setSelectedYear] = useState('all');
   const [updatingId, setUpdatingId] = useState(null);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
@@ -23,6 +41,23 @@ export function AdminBookings() {
     realtimeBookings
   } = useAdminSocket();
 
+  // Dynamically compute available years based on bookings data & current year
+  const currentYear = new Date().getFullYear();
+  const availableYears = React.useMemo(() => {
+    const yearsSet = new Set([currentYear + 1, currentYear, currentYear - 1, 2026, 2025, 2024]);
+    bookings.forEach((b) => {
+      if (b.date && b.date.length >= 4) {
+        const y = parseInt(b.date.substring(0, 4), 10);
+        if (!isNaN(y)) yearsSet.add(y);
+      }
+      if (b.createdAt && String(b.createdAt).length >= 4) {
+        const y = parseInt(String(b.createdAt).substring(0, 4), 10);
+        if (!isNaN(y)) yearsSet.add(y);
+      }
+    });
+    return Array.from(yearsSet).sort((a, b) => b - a);
+  }, [bookings, currentYear]);
+
   const fetchBookings = async () => {
     setLoading(true);
     try {
@@ -31,6 +66,8 @@ export function AdminBookings() {
         params.append('status', statusFilter);
       }
       if (searchQuery.trim()) params.append('search', searchQuery.trim());
+      if (selectedMonth !== 'all') params.append('month', selectedMonth);
+      if (selectedYear !== 'all') params.append('year', selectedYear);
 
       const res = await fetch(`/api/bookings?${params.toString()}`);
       if (!res.ok) throw new Error('Failed to fetch bookings');
@@ -48,7 +85,7 @@ export function AdminBookings() {
 
   useEffect(() => {
     fetchBookings();
-  }, [statusFilter]);
+  }, [statusFilter, selectedMonth, selectedYear]);
 
   // Synchronize new incoming bookings from WebSocket in real time
   useEffect(() => {
@@ -94,10 +131,32 @@ export function AdminBookings() {
     return phone ? phone.replace(/[^0-9]/g, '') : '';
   };
 
-  // Filter for unviewed / new bookings
-  const displayedBookings = statusFilter === 'unviewed'
-    ? bookings.filter((b) => isUnviewed(b.bookingId || b.id))
-    : bookings;
+  // Filter bookings for status, month, and year (ensures real-time socket events also respect filters)
+  const displayedBookings = bookings.filter((b) => {
+    if (statusFilter === 'unviewed' && !isUnviewed(b.bookingId || b.id)) {
+      return false;
+    }
+
+    const bDate = b.date || '';
+    const bCreated = b.createdAt ? String(b.createdAt) : '';
+
+    if (selectedYear !== 'all' && selectedMonth !== 'all') {
+      const ym = `${selectedYear}-${selectedMonth.padStart(2, '0')}`;
+      if (!bDate.startsWith(ym) && !bCreated.startsWith(ym)) return false;
+    } else if (selectedYear !== 'all') {
+      if (!bDate.startsWith(selectedYear) && !bCreated.startsWith(selectedYear)) return false;
+    } else if (selectedMonth !== 'all') {
+      const m = selectedMonth.padStart(2, '0');
+      const dateParts = bDate.split('-');
+      const createdParts = bCreated.slice(0, 10).split('-');
+      const matchesMonth =
+        (dateParts.length >= 2 && dateParts[1] === m) ||
+        (createdParts.length >= 2 && createdParts[1] === m);
+      if (!matchesMonth) return false;
+    }
+
+    return true;
+  });
 
   return (
     <div>
@@ -128,6 +187,63 @@ export function AdminBookings() {
               />
             </form>
 
+            {/* Month & Year Filter Group */}
+            <div className="admin-date-filter-group" title="Filter appointments by Month and Year">
+              <Calendar size={14} className="text-gold" />
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="admin-select"
+                title="Filter by month"
+              >
+                {MONTH_OPTIONS.map((m) => (
+                  <option key={m.value} value={m.value}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="admin-select"
+                title="Filter by year"
+              >
+                <option value="all">All Years</option>
+                {availableYears.map((yr) => (
+                  <option key={yr} value={String(yr)}>
+                    {yr}
+                  </option>
+                ))}
+              </select>
+
+              {(selectedMonth !== 'all' || selectedYear !== 'all') && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedMonth('all');
+                    setSelectedYear('all');
+                  }}
+                  title="Clear month and year filter"
+                  style={{
+                    border: 'none',
+                    background: '#fef2f2',
+                    color: '#b91c1c',
+                    borderRadius: '6px',
+                    padding: '3px 8px',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <X size={12} /> Clear
+                </button>
+              )}
+            </div>
+
             {unreadCount > 0 && (
               <button
                 type="button"
@@ -153,7 +269,7 @@ export function AdminBookings() {
           </div>
         </div>
 
-        {/* Quick Status Filter Pills (Prominent & High-Contrast) */}
+        {/* Quick Status Filter Pills & Active Filter Indicator */}
         <div className="admin-status-filter-bar">
           <button
             type="button"
@@ -213,6 +329,16 @@ export function AdminBookings() {
             <span>Cancelled</span>
             <span className="admin-pill-counter">{stats?.cancelled ?? 0}</span>
           </button>
+
+          {(selectedMonth !== 'all' || selectedYear !== 'all') && (
+            <div className="admin-filter-badge" title="Active Month/Year Filter">
+              <Calendar size={13} />
+              <span>
+                {selectedMonth !== 'all' ? MONTH_OPTIONS.find((m) => m.value === selectedMonth)?.label : 'All Months'}{' '}
+                {selectedYear !== 'all' ? selectedYear : ''} ({displayedBookings.length} {displayedBookings.length === 1 ? 'booking' : 'bookings'})
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Bookings Table */}
