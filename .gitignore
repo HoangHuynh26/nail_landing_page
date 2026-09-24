@@ -17,6 +17,8 @@ client/dist/
 # Temporary & scratch files
 scratch/
 tmp/
+server/uploads/
+server/data/fallback_db.json
 *.log
 npm-debug.log*
 yarn-debug.log*
