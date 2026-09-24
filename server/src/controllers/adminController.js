@@ -22,16 +22,38 @@ export async function getSystemStatus(req, res, next) {
 }
 
 /**
- * Verifies admin PIN / Access key
+ * Verifies admin credentials (Username & Password, with PIN backwards-compatibility)
  */
 export async function verifyAdminPin(req, res) {
-  const { pin } = req.body;
-  const configuredPin = config.adminPin || '8888';
+  const { username, password, pin } = req.body;
+  const configuredUsername = config.adminUsername || 'admin';
+  const configuredPassword = config.adminPassword || 'Admin@123';
 
+  // 1. Username & Password verification
+  if (username !== undefined || password !== undefined) {
+    const isUserValid = String(username || '').trim() === String(configuredUsername).trim();
+    const isPassValid = String(password || '').trim() === String(configuredPassword).trim();
+
+    if (!isUserValid || !isPassValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or password'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Authentication successful',
+      token: Buffer.from(`admin:${Date.now()}:${configuredUsername}`).toString('base64')
+    });
+  }
+
+  // 2. Legacy PIN verification fallback
+  const configuredPin = config.adminPin || '8888';
   if (!pin || String(pin).trim() !== String(configuredPin).trim()) {
     return res.status(401).json({
       success: false,
-      message: 'Invalid Admin Access PIN'
+      message: 'Invalid credentials'
     });
   }
 

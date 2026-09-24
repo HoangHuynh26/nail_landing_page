@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, Calendar, Sparkles, Tag, Database,
-  Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink, Image as ImageIcon
+  Lock, ArrowLeft, LogOut, ShieldCheck, ExternalLink, Image as ImageIcon,
+  User, Eye, EyeOff, LogIn
 } from 'lucide-react';
 import AdminOverview from './AdminOverview';
 import AdminBookings from './AdminBookings';
@@ -11,8 +12,11 @@ import AdminDatabase from './AdminDatabase';
 
 export function AdminPage({ onBackToWebsite }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pin, setPin] = useState('');
-  const [pinError, setPinError] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [dbStatus, setDbStatus] = useState(null);
@@ -41,15 +45,24 @@ export function AdminPage({ onBackToWebsite }) {
     }
   };
 
-  const handlePinSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    setPinError('');
+    setLoginError('');
 
+    if (!username.trim() || !password) {
+      setLoginError('Please enter both username and password.');
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pin: pin.trim() })
+        body: JSON.stringify({
+          username: username.trim(),
+          password: password
+        })
       });
       const data = await res.json();
 
@@ -58,23 +71,26 @@ export function AdminPage({ onBackToWebsite }) {
         setIsAuthenticated(true);
         fetchDbStatus();
       } else {
-        setPinError(data.message || 'Incorrect PIN code');
+        setLoginError(data.message || 'Invalid username or password');
       }
     } catch (err) {
-      // Offline fallback: check default '8888'
-      if (pin.trim() === '8888') {
+      // Offline fallback: check default 'admin' / 'Admin@123'
+      if (username.trim().toLowerCase() === 'admin' && password === 'Admin@123') {
         localStorage.setItem('atelier_admin_token', 'local-token');
         setIsAuthenticated(true);
       } else {
-        setPinError('Incorrect PIN code. Default is 8888');
+        setLoginError('Invalid username or password. Default is admin / Admin@123');
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('atelier_admin_token');
     setIsAuthenticated(false);
-    setPin('');
+    setUsername('');
+    setPassword('');
   };
 
   if (isCheckingAuth) {
@@ -85,7 +101,7 @@ export function AdminPage({ onBackToWebsite }) {
     );
   }
 
-  // 1. PIN Lock Screen
+  // 1. Username & Password Login Screen
   if (!isAuthenticated) {
     return (
       <div className="admin-lock-screen">
@@ -98,41 +114,74 @@ export function AdminPage({ onBackToWebsite }) {
             Fashion Nails Atelier
           </h2>
           <div style={{ fontSize: '12px', color: '#d4af37', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>
-            Management Portal
+            Executive Admin Portal
           </div>
 
-          <p style={{ fontSize: '13px', color: '#94a3b8', margin: '14px 0 0', lineHeight: '1.5' }}>
-            Enter your 4-digit Security PIN to access salon bookings, services, and promotion settings.
+          <p style={{ fontSize: '13px', color: '#94a3b8', margin: '14px 0 20px', lineHeight: '1.5' }}>
+            Enter your administrative credentials to access salon bookings, services catalog, and promotion settings.
           </p>
 
-          <form onSubmit={handlePinSubmit}>
-            <input
-              type="password"
-              maxLength="8"
-              autoFocus
-              className="admin-pin-input"
-              placeholder="••••"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-            />
+          <form onSubmit={handleLoginSubmit}>
+            <div className="admin-login-field">
+              <label className="admin-login-label">Username</label>
+              <div className="admin-login-input-wrap">
+                <User size={16} className="admin-login-icon" />
+                <input
+                  type="text"
+                  autoFocus
+                  className="admin-login-input"
+                  placeholder="admin"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  disabled={isSubmitting}
+                  required
+                />
+              </div>
+            </div>
 
-            {pinError && (
-              <div style={{ color: '#f87171', fontSize: '13px', marginBottom: '14px' }}>
-                {pinError}
+            <div className="admin-login-field">
+              <label className="admin-login-label">Password</label>
+              <div className="admin-login-input-wrap">
+                <Lock size={16} className="admin-login-icon" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className="admin-login-input"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isSubmitting}
+                  required
+                />
+                <button
+                  type="button"
+                  className="admin-password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex="-1"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {loginError && (
+              <div style={{ color: '#f87171', fontSize: '13px', margin: '10px 0 14px', textAlign: 'center' }}>
+                {loginError}
               </div>
             )}
 
             <button
               type="submit"
               className="admin-primary-btn"
-              style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: '15px' }}
+              style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: '15px', marginTop: '6px' }}
+              disabled={isSubmitting}
             >
-              <ShieldCheck size={18} />
-              <span>Unlock Admin Dashboard</span>
+              <LogIn size={18} />
+              <span>{isSubmitting ? 'Signing In...' : 'Sign In to Dashboard'}</span>
             </button>
           </form>
 
-          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ marginTop: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <button
               type="button"
               onClick={onBackToWebsite}
@@ -151,7 +200,7 @@ export function AdminPage({ onBackToWebsite }) {
             </button>
 
             <span style={{ fontSize: '11px', color: '#64748b' }}>
-              Default PIN: <strong style={{ color: '#d4af37' }}>8888</strong>
+              Default: <strong style={{ color: '#d4af37' }}>admin</strong> / <strong style={{ color: '#d4af37' }}>Admin@123</strong>
             </span>
           </div>
         </div>

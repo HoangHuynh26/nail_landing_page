@@ -761,6 +761,69 @@
   color: #d4af37;
 }
 
+.admin-login-field {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.admin-login-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-login-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-login-input-wrap svg.admin-login-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.admin-login-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 42px 12px 42px;
+  background: #090c13;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.admin-login-input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
+}
+
+.admin-password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.admin-password-toggle-btn:hover {
+  color: #d4af37;
+}
+
 .admin-pin-input {
   width: 100%;
   box-sizing: border-box;
