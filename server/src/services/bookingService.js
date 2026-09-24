@@ -193,7 +193,11 @@ export async function getBookingStats() {
     else if (s === 'completed') completed++;
     else if (s === 'cancelled') cancelled++;
 
-    if (b.date === todayStr || (b.createdAt && b.createdAt.startsWith(todayStr))) {
+    const createdDateStr = b.createdAt instanceof Date
+      ? b.createdAt.toISOString()
+      : (b.createdAt ? String(b.createdAt) : '');
+
+    if (b.date === todayStr || (createdDateStr && createdDateStr.startsWith(todayStr))) {
       todayCount++;
     }
   });
@@ -224,6 +228,6 @@ function mapPostgresBooking(row) {
     message: row.message,
     voucher: row.voucher,
     status: row.status,
-    createdAt: row.created_at
+    createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : (row.created_at || null)
   };
 }

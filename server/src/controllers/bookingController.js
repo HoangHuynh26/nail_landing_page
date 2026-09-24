@@ -33,13 +33,13 @@ export async function createBooking(req, res, next) {
       source: 'website'
     };
 
-    // 1. Save to Database (Neon PostgreSQL or Fallback)
-    const saved = await persistBooking(newBooking);
+    // 1. Save to Database (Neon PostgreSQL) & 2. Dispatch to Make.com webhook concurrently to send email
+    const [saved, makeResult] = await Promise.all([
+      persistBooking(newBooking),
+      sendToMakeWebhook(newBooking)
+    ]);
 
-    // 2. Dispatch to Make.com asynchronously
-    sendToMakeWebhook(newBooking).catch(err => {
-      console.error('Make.com webhook dispatch error:', err.message);
-    });
+    console.info(`[Booking] ${bookingId} processed -> DB: ${saved ? 'SAVED' : 'FAIL'}, Make.com Webhook: ${makeResult?.sent ? 'SENT' : 'SKIPPED/ERROR'}`);
 
     const isEn = rawData.language === 'en';
     const message = isEn

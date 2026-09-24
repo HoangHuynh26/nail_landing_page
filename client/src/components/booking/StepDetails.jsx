@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Phone, Mail, Users, FileText, AlertCircle, Gift } from 'lucide-react';
+import { User, Phone, Mail, Users, FileText, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useBooking } from '../../context/BookingContext';
 import { Button } from '../ui/Button';
@@ -161,22 +161,6 @@ export function StepDetails() {
             value={formData.notes || ''}
             onChange={(e) => updateFormData({ notes: e.target.value })}
             className="booking-field__textarea"
-          />
-        </div>
-
-        {/* Voucher / Gift Card Field (Optional) */}
-        <div className="booking-field">
-          <label htmlFor="booking-voucher-input" className="booking-field__label">
-            <Gift size={15} />
-            <span>{language === 'vi' ? 'Mã Voucher / Phiếu Quà Tặng (Tuỳ chọn)' : 'Voucher / Gift Card Code (Optional)'}</span>
-          </label>
-          <input
-            id="booking-voucher-input"
-            type="text"
-            placeholder={language === 'vi' ? 'Nhập mã voucher nếu có (ví dụ: GIFT-50)...' : 'e.g., GIFT-50, VOUCHER-10...'}
-            value={formData.voucher || ''}
-            onChange={(e) => updateFormData({ voucher: e.target.value })}
-            className="booking-field__input"
           />
         </div>
 

@@ -118,15 +118,6 @@ export function StepReview() {
           </div>
         )}
 
-        {formData.voucher && (
-          <div className="booking-summary-notes" style={{ marginTop: '8px' }}>
-            <span className="booking-summary-notes__label">Voucher / Promo Code:</span>
-            <p className="booking-summary-notes__text" style={{ fontWeight: 600, color: 'var(--color-gold-dark)' }}>
-              {formData.voucher}
-            </p>
-          </div>
-        )}
-
         <div className="booking-summary-policy">
           <ShieldCheck size={16} className="booking-summary-policy__icon" />
           <p>{t('booking.policyNotice')}</p>
