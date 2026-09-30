@@ -1,0 +1,30 @@
+/* ---------------------------------------------------
+   7. SECTION HEADER COMPONENT
+   --------------------------------------------------- */
+.section-header {
+  margin-bottom: var(--space-12);
+}
+
+.section-header--center {
+  text-align: center;
+  max-width: var(--max-width-text);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header--left {
+  text-align: left;
+  max-width: var(--max-width-text);
+}
+
+.section-header__title {
+  margin-top: var(--space-4);
+  font-size: var(--text-h2);
+}
+
+.section-header__subtitle {
+  margin-top: var(--space-3);
+  font-size: var(--text-body-lg);
+  color: var(--color-text-secondary);
+}
+

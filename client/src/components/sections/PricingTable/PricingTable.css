@@ -1,0 +1,240 @@
+/* ---------------------------------------------------
+   11. PRICING TABLE SECTION
+   --------------------------------------------------- */
+.pricing-section {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Special Promo Card in Pricing */
+.pricing-promo-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: linear-gradient(135deg, rgba(232, 216, 181, 0.35) 0%, rgba(250, 247, 240, 0.95) 100%);
+  border: 1.5px solid var(--color-gold-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-8);
+  box-shadow: 0 4px 16px rgba(198, 161, 91, 0.12);
+  gap: var(--space-4);
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pricing-promo-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+}
+
+.pricing-promo-icon {
+  color: var(--color-gold-dark);
+  flex-shrink: 0;
+}
+
+.pricing-promo-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .pricing-promo-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .pricing-promo-divider {
+    display: none;
+  }
+}
+
+/* Pricing Filter Tabs */
+.pricing-filter-tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .pricing-filter-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 2px 4px 8px 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pricing-filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pricing-filter-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+.pricing-filter-btn {
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.pricing-filter-btn:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-hover);
+}
+
+.pricing-filter-btn.is-active {
+  background: var(--color-gold-dark);
+  color: #FFFFFF;
+  border-color: var(--color-gold-dark);
+}
+
+.pricing-card-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.pricing-table-container {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-subtle);
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.pricing-table th {
+  padding: var(--space-4) var(--space-6);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(231, 225, 215, 0.25);
+}
+
+.pricing-table td {
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+  vertical-align: middle;
+}
+
+.pricing-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Category Group Header in Table */
+.pricing-table__group-header td {
+  background: #F4EFE6 !important;
+  padding: var(--space-3) var(--space-6) !important;
+  border-top: 1.5px solid var(--color-border);
+  border-bottom: 1.5px solid var(--color-border) !important;
+}
+
+.pricing-table__group-badge {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-gold-dark);
+  text-transform: uppercase;
+}
+
+.pricing-table__service-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.pricing-table__popular-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  background: var(--color-gold-subtle);
+  border: 1px solid rgba(198, 161, 91, 0.25);
+  border-radius: var(--radius-full);
+  padding: 1px 6px;
+}
+
+.pricing-table__service-name {
+  display: block;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 0.9375rem;
+}
+
+.pricing-table__service-desc {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.pricing-table__duration {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.pricing-table__price-num {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.pricing-table__currency {
+  font-size: 0.75rem;
+  color: var(--color-gold-dark);
+}
+
+.pricing-section__note {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--space-4);
+  font-style: italic;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.salon-menu-group__title-icon {
+  opacity: 0.8;
+}
+
+.pricing-table__actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}

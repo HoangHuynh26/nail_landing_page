@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { servicesData } from '../data/services';
 import { useLanguage } from './LanguageContext';
 import { getPerthDateString } from '../utils/perthTime';
@@ -18,6 +18,7 @@ export function BookingProvider({ children }) {
   const [formData, setFormData] = useState({
     serviceId: servicesData[0].id,
     serviceName: servicesData[0].name_en,
+    serviceCategory: servicesData[0].category || 'biab',
     servicePrice: servicesData[0].price,
     serviceDuration: servicesData[0].duration,
     date: '',
@@ -31,19 +32,138 @@ export function BookingProvider({ children }) {
     hasDiscount: false
   });
 
+  // Voucher State
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [voucherError, setVoucherError] = useState(null);
+  const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
+
+
+  // Live services from API
+  const [services, setServices] = useState(servicesData);
+  const [servicesLoading, setServicesLoading] = useState(true);
+
+  // Live categories from API
+  const DEFAULT_CATEGORIES = [
+    { id: 'biab', key: 'biab', label: 'Builder Gel - BIAB', name_en: 'Builder Gel - BIAB' },
+    { id: 'acrylic', key: 'acrylic', label: 'Acrylic Nails', name_en: 'Acrylic Nails' },
+    { id: 'shellac', key: 'shellac', label: 'Shellac Nails', name_en: 'Shellac Nails' },
+    { id: 'gelx', key: 'gelx', label: 'Gel X Extensions', name_en: 'Gel X Extensions' },
+    { id: 'sns', key: 'sns', label: 'SNS Dipping', name_en: 'SNS Dipping' },
+    { id: 'polish', key: 'polish', label: 'Nail Polish', name_en: 'Nail Polish' },
+    { id: 'extra', key: 'extra', label: 'Extra Services', name_en: 'Extra Services' }
+  ];
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('/api/categories?active=true');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.categories) && data.categories.length > 0) {
+        setCategories(data.categories.map(c => ({
+          ...c,
+          key: c.id,
+          label: c.name || c.name_en || c.label || c.id
+        })));
+      }
+    } catch (err) {
+      console.warn('[BookingContext] Failed to fetch categories from API:', err);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
+
+  // Live schedule locks from API (admin locked dates/slots & custom slots)
+  const [scheduleLocks, setScheduleLocks] = useState({
+    locks: [],
+    lockedDates: [],
+    lockedSlots: {},
+    dateReasons: {},
+    slotReasons: {},
+    customSlots: {},
+    dateHours: {}
+  });
+
+  const fetchLocks = async () => {
+    try {
+      const res = await fetch('/api/schedule/locks');
+      const data = await res.json();
+      if (data.success) {
+        setScheduleLocks({
+          locks: data.locks || [],
+          lockedDates: data.lockedDates || [],
+          lockedSlots: data.lockedSlots || {},
+          dateReasons: data.dateReasons || {},
+          slotReasons: data.slotReasons || {},
+          customSlots: data.customSlots || {},
+          dateHours: data.dateHours || {}
+        });
+      }
+    } catch (err) {
+      console.warn('[BookingContext] Failed to fetch schedule locks:', err);
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      const res = await fetch('/api/services?active=true');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.services) && data.services.length > 0) {
+        setServices(data.services);
+      }
+    } catch (err) {
+      console.warn('[BookingContext] Failed to fetch services from API:', err);
+    } finally {
+      setServicesLoading(false);
+    }
+  };
+
+  // Fetch live active services, categories, and schedule locks from backend API
+  useEffect(() => {
+    fetchServices();
+    fetchLocks();
+    fetchCategories();
+  }, []);
 
   const openBooking = (preferredServiceId = null, extraData = {}) => {
     setError(null);
-    let targetService = servicesData[0];
+    fetchServices();
+    fetchLocks();
+    fetchCategories();
+    const activeList = services && services.length > 0 ? services : servicesData;
+    let targetService = activeList[0] || servicesData[0];
     if (preferredServiceId) {
-      const found = servicesData.find(s => s.id === preferredServiceId);
+      const found = activeList.find(s => s.id === preferredServiceId) || servicesData.find(s => s.id === preferredServiceId);
       if (found) targetService = found;
     }
+
+    const serviceName = targetService.name || targetService.name_en;
+
+    const resolveCategoryDisplayName = (cat) => {
+      if (!cat) return '';
+      const OFFICIAL_MAP = {
+        biab: 'Builder Gel - BIAB',
+        shellac: 'Shellac Nails',
+        acrylic: 'Acrylic Nails',
+        gelx: 'Gel X Extensions',
+        sns: 'SNS Dipping',
+        polish: 'Nail Polish',
+        extra: 'Extra Services'
+      };
+      const lower = String(cat).toLowerCase().trim();
+      if (OFFICIAL_MAP[lower]) return OFFICIAL_MAP[lower];
+      const foundCat = (categories || []).find(c => (c.id || c.key || '').toLowerCase() === lower);
+      if (foundCat && (foundCat.name_en || foundCat.name || foundCat.label)) {
+        return foundCat.name_en || foundCat.name || foundCat.label;
+      }
+      return cat;
+    };
 
     setFormData(prev => ({
       ...prev,
       serviceId: targetService.id,
-      serviceName: targetService.name_en,
+      serviceName: serviceName,
+      serviceCategory: targetService.category || 'biab',
       servicePrice: targetService.price,
       serviceDuration: targetService.duration,
       // Default to today's date in Western Australia (Perth) if not chosen
@@ -62,7 +182,15 @@ export function BookingProvider({ children }) {
   };
 
   const updateFormData = (fields) => {
-    setFormData(prev => ({ ...prev, ...fields }));
+    setFormData(prev => {
+      const next = { ...prev, ...fields };
+      if (fields.guests !== undefined && fields.guests !== prev.guests && next.voucher) {
+        setTimeout(() => {
+          applyVoucher(next.voucher, fields.guests);
+        }, 0);
+      }
+      return next;
+    });
     if (error) setError(null);
   };
 
@@ -70,11 +198,28 @@ export function BookingProvider({ children }) {
     setStep(1);
     setBookingResult(null);
     setError(null);
+    const activeList = services && services.length > 0 ? services : servicesData;
+    const initialService = activeList[0] || servicesData[0];
+    const serviceName = initialService.name || initialService.name_en;
+
+    const OFFICIAL_MAP = {
+      biab: 'Builder Gel - BIAB',
+      shellac: 'Shellac Nails',
+      acrylic: 'Acrylic Nails',
+      gelx: 'Gel X Extensions',
+      sns: 'SNS Dipping',
+      polish: 'Nail Polish',
+      extra: 'Extra Services'
+    };
+    const catLower = String(initialService.category || '').toLowerCase().trim();
+    const initialCatName = OFFICIAL_MAP[catLower] || initialService.category || '';
+
     setFormData({
-      serviceId: servicesData[0].id,
-      serviceName: servicesData[0].name_en,
-      servicePrice: servicesData[0].price,
-      serviceDuration: servicesData[0].duration,
+      serviceId: initialService.id,
+      serviceName: serviceName,
+      serviceCategory: initialCatName,
+      servicePrice: initialService.price,
+      serviceDuration: initialService.duration,
       date: getPerthDateString(0),
       time: '',
       fullName: '',
@@ -85,6 +230,63 @@ export function BookingProvider({ children }) {
       voucher: '',
       hasDiscount: false
     });
+    setAppliedVoucher(null);
+    setVoucherError(null);
+  };
+
+  const applyVoucher = async (codeToApply, overrideGuests = null) => {
+    const clean = (codeToApply || formData.voucher || '').trim().toUpperCase();
+    if (!clean) {
+      setVoucherError('Please enter a voucher code.');
+      return false;
+    }
+
+    const guestsCount = Number(overrideGuests ?? formData.guests) || 1;
+    const baseServicePrice = Number(formData.servicePrice) || 0;
+    const totalSubtotal = baseServicePrice * guestsCount;
+
+    setIsApplyingVoucher(true);
+    setVoucherError(null);
+
+    try {
+      const res = await fetch('/api/vouchers/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: clean,
+          servicePrice: totalSubtotal,
+          bookingDate: formData.date
+        })
+      });
+
+      const data = await res.json();
+      if (data.success && data.valid) {
+        setAppliedVoucher(data);
+        setFormData(prev => ({
+          ...prev,
+          voucher: data.voucher.code,
+          hasDiscount: false
+        }));
+        setVoucherError(null);
+        return true;
+      } else {
+        setAppliedVoucher(null);
+        setVoucherError(data.message || 'Invalid or expired voucher code.');
+        return false;
+      }
+    } catch (err) {
+      console.error('Apply voucher error:', err);
+      setVoucherError('Unable to validate voucher right now. Please try again.');
+      return false;
+    } finally {
+      setIsApplyingVoucher(false);
+    }
+  };
+
+  const removeVoucher = () => {
+    setAppliedVoucher(null);
+    setVoucherError(null);
+    setFormData(prev => ({ ...prev, voucher: '' }));
   };
 
   const submitBooking = async () => {
@@ -99,6 +301,40 @@ export function BookingProvider({ children }) {
         formData.notes.trim()
       ].filter(Boolean).join(' - ');
 
+      const guestsCount = Number(formData.guests) || 1;
+      const unitPrice = Number(formData.servicePrice) || 0;
+      const subtotal = unitPrice * guestsCount;
+
+      let finalPrice = subtotal;
+      let originalPrice = subtotal;
+      if (appliedVoucher) {
+        finalPrice = Number(appliedVoucher.finalPrice);
+        originalPrice = Number(appliedVoucher.originalPrice || subtotal);
+      } else if (formData.hasDiscount) {
+        const discountAmount = Math.round(subtotal * 0.1);
+        finalPrice = Math.max(0, subtotal - discountAmount);
+        originalPrice = subtotal;
+      }
+
+      const catMap = {
+        biab: 'Builder Gel - BIAB',
+        shellac: 'Shellac Nails',
+        acrylic: 'Acrylic Nails',
+        gelx: 'Gel X Extensions',
+        sns: 'SNS Dipping',
+        polish: 'Nail Polish',
+        extra: 'Extra Services'
+      };
+      let resolvedCategory = (formData.serviceCategory || '').trim();
+      if (catMap[resolvedCategory.toLowerCase()]) {
+        resolvedCategory = catMap[resolvedCategory.toLowerCase()];
+      } else {
+        const foundCat = (categories || []).find(c => (c.id || c.key || '').toLowerCase() === resolvedCategory.toLowerCase());
+        if (foundCat && (foundCat.name_en || foundCat.name || foundCat.label)) {
+          resolvedCategory = foundCat.name_en || foundCat.name || foundCat.label;
+        }
+      }
+
       const payload = {
         name: formData.fullName.trim(),
         fullName: formData.fullName.trim(),
@@ -106,13 +342,17 @@ export function BookingProvider({ children }) {
         email: (formData.email || '').trim(),
         service: formData.serviceName,
         serviceName: formData.serviceName,
+        category: resolvedCategory || formData.serviceCategory || '',
         serviceId: formData.serviceId,
         date: formData.date,
         time: formData.time,
         message: finalNotes,
         notes: finalNotes,
-        voucher: (formData.voucher || (formData.hasDiscount ? '10% Off Community Discount' : '')).trim(),
-        guests: Number(formData.guests) || 1,
+        voucher: (formData.voucher || (formData.hasDiscount ? '10% Discount' : '')).trim(),
+        guests: guestsCount,
+        price: finalPrice,
+        originalPrice: originalPrice,
+        unitPrice: unitPrice,
         language: 'en'
       };
 
@@ -134,8 +374,13 @@ export function BookingProvider({ children }) {
       setBookingResult({
         bookingId: data.bookingId,
         ...formData,
+        price: finalPrice,
+        originalPrice: originalPrice,
+        unitPrice: unitPrice,
+        voucher: (appliedVoucher?.voucher?.code || formData.voucher || '').trim(),
+        appliedVoucher: appliedVoucher,
         email: (formData.email || '').trim(),
-        guests: Number(formData.guests) || 1,
+        guests: guestsCount,
         createdAt: data.data?.createdAt || new Date().toISOString()
       });
       setStep(6);
@@ -225,6 +470,20 @@ export function BookingProvider({ children }) {
   return (
     <BookingContext.Provider
       value={{
+        services,
+        servicesLoading,
+        fetchServices,
+        categories,
+        categoriesLoading,
+        fetchCategories,
+        scheduleLocks,
+        lockedDates: scheduleLocks.lockedDates || [],
+        lockedSlots: scheduleLocks.lockedSlots || {},
+        dateReasons: scheduleLocks.dateReasons || {},
+        slotReasons: scheduleLocks.slotReasons || {},
+        customSlots: scheduleLocks.customSlots || {},
+        dateHours: scheduleLocks.dateHours || {},
+        fetchScheduleLocks: fetchLocks,
         isBookingOpen,
         openBooking,
         closeBooking,
@@ -237,6 +496,12 @@ export function BookingProvider({ children }) {
         error,
         bookingResult,
         resetBooking,
+        appliedVoucher,
+        voucherError,
+        setVoucherError,
+        isApplyingVoucher,
+        applyVoucher,
+        removeVoucher,
         downloadICS,
         getGoogleCalendarUrl
       }}

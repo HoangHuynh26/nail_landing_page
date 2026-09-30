@@ -1,0 +1,68 @@
+Created At: 2026-09-30T10:36:06+07:00
+Completed At: 2026-09-30T10:36:06+07:00
+File Path: `file:///c:/nail_salon_landing_page/client/src/components/admin/AdminPage/AdminPage.jsx`
+Total Lines: 527
+Total Bytes: 18971
+Showing lines 1 to 60
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: import './AdminPage.css';
+2: import React, { useState, useEffect } from 'react';
+3: import {
+4:   LayoutDashboard, Calendar, Sparkles,
+5:   Lock, ArrowLeft, LogOut, Image as ImageIcon,
+6:   User, Eye, EyeOff, LogIn, Bell, Layers, CalendarClock, Ticket,
+7:   Menu, X
+8: } from 'lucide-react';
+9: import AdminOverview from '../AdminOverview/AdminOverview';
+10: import AdminBookings from '../AdminBookings/AdminBookings';
+11: import AdminServices from '../AdminServices/AdminServices';
+12: import AdminPromotions from '../AdminPromotions/AdminPromotions';
+13: import AdminGallery from '../AdminGallery/AdminGallery';
+14: import AdminSchedule from '../AdminSchedule/AdminSchedule';
+15: import AdminVouchers from '../AdminVouchers/AdminVouchers';
+16: import { AdminSocketProvider, useAdminSocket } from '../../../context/AdminSocketContext';
+17: import { getPerthDateString } from '../../../utils/perthTime';
+18: 
+19: function AdminDashboardContent({ onBackToWebsite }) {
+20:   const [isAuthenticated, setIsAuthenticated] = useState(false);
+21:   const [username, setUsername] = useState('');
+22:   const [password, setPassword] = useState('');
+23:   const [showPassword, setShowPassword] = useState(false);
+24:   const [loginError, setLoginError] = useState('');
+25:   const [isSubmitting, setIsSubmitting] = useState(false);
+26:   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+27:   const [activeTab, setActiveTab] = useState('overview');
+28:   const [targetBookingId, setTargetBookingId] = useState(null);
+29:   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+30: 
+31:   const {
+32:     isConnected,
+33:     unreadCount,
+34:     liveToast,
+35:     dismissToast,
+36:     markAsViewed
+37:   } = useAdminSocket();
+38: 
+39:   // Check saved token on mount
+40:   useEffect(() => {
+41:     const savedToken = localStorage.getItem('atelier_admin_token');
+42:     if (savedToken) {
+43:       setIsAuthenticated(true);
+44:     }
+45:     setIsCheckingAuth(false);
+46:   }, []);
+47: 
+48:   const handleLoginSubmit = async (e) => {
+49:     e.preventDefault();
+50:     setLoginError('');
+51: 
+52:     if (!username.trim() || !password) {
+53:       setLoginError('Please enter both username and password.');
+54:       return;
+55:     }
+56: 
+57:     setIsSubmitting(true);
+58:     try {
+59:       const res = await fetch('/api/admin/login', {
+60:         method: 'POST',
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

@@ -54,14 +54,16 @@ export async function getServiceById(id) {
 export async function createService(serviceData) {
   const id = serviceData.id || `custom-${Date.now()}`;
   const now = new Date().toISOString();
+  const name = serviceData.name || serviceData.name_en || 'New Service';
+  const desc = serviceData.description || serviceData.description_en || '';
 
   const newService = {
     id,
     category: serviceData.category || 'extra',
-    name_vi: serviceData.name_vi || serviceData.name_en || 'Dịch vụ mới',
-    name_en: serviceData.name_en || serviceData.name_vi || 'New Service',
-    description_vi: serviceData.description_vi || '',
-    description_en: serviceData.description_en || '',
+    name,
+    name_en: name,
+    description: desc,
+    description_en: desc,
     duration: parseInt(serviceData.duration, 10) || 45,
     price: parseFloat(serviceData.price) || 0,
     price_prefix: serviceData.price_prefix || '',
@@ -76,14 +78,14 @@ export async function createService(serviceData) {
     try {
       const query = `
         INSERT INTO services (
-          id, category, name_vi, name_en, description_vi, description_en,
+          id, category, name, name_en, description, description_en,
           duration, price, price_prefix, featured, active, sort_order, created_at, updated_at
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
         RETURNING *;
       `;
       const values = [
-        newService.id, newService.category, newService.name_vi, newService.name_en,
-        newService.description_vi, newService.description_en, newService.duration,
+        newService.id, newService.category, newService.name, newService.name_en,
+        newService.description, newService.description_en, newService.duration,
         newService.price, newService.price_prefix, newService.featured,
         newService.active, newService.sort_order, newService.created_at, newService.updated_at
       ];
@@ -116,10 +118,16 @@ export async function updateService(id, updates) {
       let idx = 1;
 
       if (updates.category !== undefined) { fields.push(`category = $${idx++}`); values.push(updates.category); }
-      if (updates.name_vi !== undefined) { fields.push(`name_vi = $${idx++}`); values.push(updates.name_vi); }
-      if (updates.name_en !== undefined) { fields.push(`name_en = $${idx++}`); values.push(updates.name_en); }
-      if (updates.description_vi !== undefined) { fields.push(`description_vi = $${idx++}`); values.push(updates.description_vi); }
-      if (updates.description_en !== undefined) { fields.push(`description_en = $${idx++}`); values.push(updates.description_en); }
+      if (updates.name !== undefined || updates.name_en !== undefined) {
+        const val = updates.name || updates.name_en;
+        fields.push(`name = $${idx++}`); values.push(val);
+        fields.push(`name_en = $${idx++}`); values.push(val);
+      }
+      if (updates.description !== undefined || updates.description_en !== undefined) {
+        const val = updates.description !== undefined ? updates.description : updates.description_en;
+        fields.push(`description = $${idx++}`); values.push(val);
+        fields.push(`description_en = $${idx++}`); values.push(val);
+      }
       if (updates.duration !== undefined) { fields.push(`duration = $${idx++}`); values.push(parseInt(updates.duration, 10)); }
       if (updates.price !== undefined) { fields.push(`price = $${idx++}`); values.push(parseFloat(updates.price)); }
       if (updates.price_prefix !== undefined) { fields.push(`price_prefix = $${idx++}`); values.push(updates.price_prefix); }
@@ -188,10 +196,12 @@ export async function resetServicesToDefault() {
     try {
       await pool.query('DELETE FROM services');
       for (const s of defaultServices) {
+        const name = s.name || s.name_en;
+        const desc = s.description || s.description_en || '';
         await pool.query(
-          `INSERT INTO services (id, category, name_vi, name_en, description_vi, description_en, duration, price, price_prefix, featured, active, sort_order)
+          `INSERT INTO services (id, category, name, name_en, description, description_en, duration, price, price_prefix, featured, active, sort_order)
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-          [s.id, s.category, s.name_vi, s.name_en, s.description_vi, s.description_en, s.duration, s.price, s.price_prefix || '', s.featured || false, s.active ?? true, s.sort_order || 0]
+          [s.id, s.category, name, name, desc, desc, s.duration, s.price, s.price_prefix || '', s.featured || false, s.active ?? true, s.sort_order || 0]
         );
       }
       return defaultServices;
@@ -207,13 +217,15 @@ export async function resetServicesToDefault() {
 }
 
 function mapPostgresService(row) {
+  const name = row.name || row.name_en || '';
+  const desc = row.description || row.description_en || '';
   return {
     id: row.id,
     category: row.category,
-    name_vi: row.name_vi,
-    name_en: row.name_en,
-    description_vi: row.description_vi,
-    description_en: row.description_en,
+    name,
+    name_en: name,
+    description: desc,
+    description_en: desc,
     duration: parseInt(row.duration, 10),
     price: parseFloat(row.price),
     pricePrefix: row.price_prefix || '',

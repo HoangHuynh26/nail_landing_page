@@ -1,0 +1,86 @@
+/* ---------------------------------------------------
+   13. ABOUT SECTION
+   --------------------------------------------------- */
+.about-section {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.about-section__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.about-section__frame {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+}
+
+.about-section__image {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+}
+
+.about-section__caption {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-canvas);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.about-section__title {
+  margin-top: var(--space-4);
+  font-size: var(--text-h2);
+}
+
+.about-section__paragraphs {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-size: 1.0625rem;
+  line-height: var(--leading-relaxed);
+}
+
+.about-section__quote {
+  margin-top: var(--space-8);
+  padding: var(--space-4) var(--space-6);
+  border-left: 3px solid var(--color-gold);
+  background: var(--color-canvas);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.about-section__quote p {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--color-text-primary);
+}
+
+.about-section__author {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold-dark);
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 1024px) {
+  .about-section__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .about-section__image {
+    height: 380px;
+  }
+}

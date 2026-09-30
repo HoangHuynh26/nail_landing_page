@@ -1,0 +1,169 @@
+/* ---------------------------------------------------
+   1. BUTTONS & INTERACTIVE CONTROLS
+   --------------------------------------------------- */
+.atelier-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-wide);
+  border-radius: var(--radius-full);
+  min-height: 46px;
+  /* Meets Apple 44px HIG touch target */
+  padding: 0 var(--space-6);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-normal) var(--ease-apple);
+  position: relative;
+  overflow: hidden;
+}
+
+.atelier-btn--sm {
+  min-height: 38px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-caption);
+}
+
+.atelier-btn--md {
+  min-height: 46px;
+  padding: 0 var(--space-6);
+  font-size: var(--text-body-sm);
+}
+
+.atelier-btn--lg {
+  min-height: 54px;
+  padding: 0 var(--space-8);
+  font-size: 1rem;
+}
+
+.atelier-btn--full {
+  width: 100%;
+}
+
+/* Button Icon Dimensions & Anti-collapse */
+.atelier-btn__icon,
+.atelier-btn svg {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  max-width: none;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+  pointer-events: none;
+  transition: transform var(--duration-fast, 0.2s) var(--ease-apple, ease);
+}
+
+.atelier-btn--sm .atelier-btn__icon,
+.atelier-btn--sm svg {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+}
+
+.atelier-btn--md .atelier-btn__icon,
+.atelier-btn--md svg {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+}
+
+.atelier-btn--lg .atelier-btn__icon,
+.atelier-btn--lg svg {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.atelier-btn:hover .lucide-arrow-right,
+.atelier-btn:hover .atelier-btn__icon--trailing {
+  transform: translateX(3px);
+}
+
+/* Primary Button (Warm Gold Luxury Fill) */
+.atelier-btn--primary {
+  background: var(--color-gold);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.28);
+  border: 1px solid var(--color-gold);
+}
+
+.atelier-btn--primary:hover:not(:disabled) {
+  background: var(--color-gold-hover);
+  border-color: var(--color-gold-hover);
+  box-shadow: 0 6px 20px rgba(198, 161, 91, 0.38);
+  transform: translateY(-1px);
+}
+
+.atelier-btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(198, 161, 91, 0.25);
+}
+
+/* Secondary Button (Deep Charcoal & Clean Line) */
+.atelier-btn--secondary {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-subtle);
+}
+
+.atelier-btn--secondary:hover:not(:disabled) {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-soft);
+  transform: translateY(-1px);
+}
+
+/* Outline Button */
+.atelier-btn--outline {
+  background: transparent;
+  color: var(--color-gold-dark);
+  border: 1px solid var(--color-gold-light);
+}
+
+.atelier-btn--outline:hover:not(:disabled) {
+  background: var(--color-gold-subtle);
+  border-color: var(--color-gold);
+}
+
+/* Ghost Button */
+.atelier-btn--ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid transparent;
+}
+
+.atelier-btn--ghost:hover:not(:disabled) {
+  background: var(--color-surface-soft);
+  color: var(--color-text-primary);
+}
+
+.atelier-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.atelier-btn__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

@@ -2,9 +2,10 @@ import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.j
 import { defaultPromotions } from '../data/defaultPromotions.js';
 
 /**
- * Retrieves the currently active promotion for visitor popup display
+/**
+ * Retrieves all currently active promotions for visitor popup display
  */
-export async function getActivePromotion() {
+export async function getActivePromotions() {
   const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
   if (!dbState.usingFallback && pool) {
@@ -14,26 +15,32 @@ export async function getActivePromotion() {
          WHERE active = true 
            AND (start_date IS NULL OR start_date = '' OR start_date <= $1)
            AND (end_date IS NULL OR end_date = '' OR end_date >= $1)
-         ORDER BY id DESC LIMIT 1`,
+         ORDER BY id DESC`,
         [today]
       );
-      if (res.rows.length > 0) return mapPostgresPromotion(res.rows[0]);
-      return null;
+      return res.rows.map(mapPostgresPromotion);
     } catch (err) {
-      console.error('[DB] Failed to get active promotion from Neon, using fallback:', err.message);
+      console.error('[DB] Failed to get active promotions from Neon, using fallback:', err.message);
     }
   }
 
   // Fallback
   const store = await readFallbackStore();
   const promos = store.promotions || defaultPromotions;
-  const activePromo = promos.find(p => {
+  return promos.filter(p => {
     if (!p.active) return false;
     if (p.start_date && p.start_date > today) return false;
     if (p.end_date && p.end_date < today) return false;
     return true;
   });
-  return activePromo || null;
+}
+
+/**
+ * Retrieves the single primary active promotion (for backward compatibility)
+ */
+export async function getActivePromotion() {
+  const list = await getActivePromotions();
+  return list.length > 0 ? list[0] : null;
 }
 
 /**
@@ -58,13 +65,7 @@ export async function getAllPromotions() {
  */
 export async function createPromotion(promoData) {
   const now = new Date().toISOString();
-  const today = now.split('T')[0];
-  const isCurrentlyRunning = !promoData.start_date || promoData.start_date <= today;
 
-  // If this promo is active and running today, deactivate older running promos
-  if (promoData.active && isCurrentlyRunning) {
-    await deactivateAllPromotions();
-  }
 
   if (!dbState.usingFallback && pool) {
     try {
@@ -121,9 +122,6 @@ export async function createPromotion(promoData) {
 export async function updatePromotion(id, updates) {
   const promoId = parseInt(id, 10);
 
-  if (updates.active) {
-    await deactivateAllPromotions(promoId);
-  }
 
   if (!dbState.usingFallback && pool) {
     try {

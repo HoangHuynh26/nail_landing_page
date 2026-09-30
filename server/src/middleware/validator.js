@@ -100,6 +100,12 @@ export function validateBooking(req, res, next) {
   const parsedGuests = parseInt(guests, 10);
   const cleanGuests = (!isNaN(parsedGuests) && parsedGuests >= 1 && parsedGuests <= 20) ? parsedGuests : 1;
 
+  // Price calculations
+  const parsedPrice = parseFloat(req.body.price);
+  const cleanPrice = (!isNaN(parsedPrice) && parsedPrice >= 0) ? Math.round(parsedPrice * 100) / 100 : null;
+  const parsedOriginalPrice = parseFloat(req.body.originalPrice);
+  const cleanOriginalPrice = (!isNaN(parsedOriginalPrice) && parsedOriginalPrice >= 0) ? Math.round(parsedOriginalPrice * 100) / 100 : cleanPrice;
+
   if (errors.length > 0) {
     return res.status(400).json({
       success: false,
@@ -110,6 +116,7 @@ export function validateBooking(req, res, next) {
 
   const cleanMessage = sanitize(message !== undefined ? message : (notes || ''));
   const cleanVoucher = sanitize(voucher || '');
+  const cleanCategory = sanitize(req.body.category || req.body.serviceCategory || '');
   const finalServiceName = cleanService || sanitize(serviceName) || sanitize(serviceId) || 'Gel Manicure';
 
   // Attach sanitized fields to req.sanitizedBooking
@@ -120,6 +127,7 @@ export function validateBooking(req, res, next) {
     phone: sanitize(phone),
     email: cleanEmail,
     service: finalServiceName,
+    category: cleanCategory,
     serviceName: finalServiceName,
     serviceId: sanitize(serviceId) || 'service-general',
     date: sanitize(date),
@@ -128,6 +136,8 @@ export function validateBooking(req, res, next) {
     notes: cleanMessage,
     voucher: cleanVoucher,
     guests: cleanGuests,
+    price: cleanPrice,
+    originalPrice: cleanOriginalPrice,
     language: language === 'en' ? 'en' : 'vi'
   };
 

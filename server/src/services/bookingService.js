@@ -1,15 +1,51 @@
 import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.js';
+import { defaultServices } from '../data/defaultServices.js';
+
+const CATEGORY_NAME_MAP = {
+  biab: 'Builder Gel - BIAB',
+  shellac: 'Shellac Nails',
+  acrylic: 'Acrylic Nails',
+  gelx: 'Gel X Extensions',
+  sns: 'SNS Dipping',
+  polish: 'Nail Polish',
+  extra: 'Extra Services'
+};
+
+export function resolveCategoryName(category, serviceName) {
+  if (category && CATEGORY_NAME_MAP[category.toLowerCase()]) {
+    return CATEGORY_NAME_MAP[category.toLowerCase()];
+  }
+  if (category && category.trim()) {
+    return category.trim();
+  }
+  if (serviceName) {
+    const matched = defaultServices.find(s =>
+      s.name_en?.toLowerCase() === serviceName.toLowerCase() ||
+      s.name?.toLowerCase() === serviceName.toLowerCase() ||
+      s.id === serviceName
+    );
+    if (matched && matched.category) {
+      return CATEGORY_NAME_MAP[matched.category.toLowerCase()] || matched.category;
+    }
+  }
+  return '';
+}
 
 /**
  * Saves a new booking into Neon PostgreSQL or fallback store
  */
 export async function saveBooking(booking) {
+  const guests = parseInt(booking.guests, 10) || 1;
+  const price = booking.price != null ? parseFloat(booking.price) : 0;
+  const originalPrice = booking.originalPrice != null ? parseFloat(booking.originalPrice) : price;
+  const category = resolveCategoryName(booking.category, booking.service);
+
   if (!dbState.usingFallback && pool) {
     try {
       const query = `
         INSERT INTO bookings (
-          booking_id, name, phone, email, service, date, time, message, voucher, status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+          booking_id, name, phone, email, service, category, date, time, message, voucher, status, guests, price, original_price, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
         RETURNING *;
       `;
       const values = [
@@ -18,15 +54,19 @@ export async function saveBooking(booking) {
         booking.phone,
         booking.email,
         booking.service,
+        category,
         booking.date,
         booking.time,
         booking.message || '',
         booking.voucher || '',
         booking.status || 'pending',
+        guests,
+        price,
+        originalPrice,
         booking.createdAt || new Date().toISOString()
       ];
       const res = await pool.query(query, values);
-      return res.rows[0];
+      return mapPostgresBooking(res.rows[0]);
     } catch (err) {
       console.error('[DB] Failed to insert booking into Neon, saving to fallback:', err.message);
     }
@@ -34,15 +74,22 @@ export async function saveBooking(booking) {
 
   // Fallback
   const store = await readFallbackStore();
-  store.bookings.unshift(booking);
+  const fallbackBooking = {
+    ...booking,
+    category,
+    guests,
+    price,
+    originalPrice
+  };
+  store.bookings.unshift(fallbackBooking);
   await writeFallbackStore(store);
-  return booking;
+  return fallbackBooking;
 }
 
 /**
  * Retrieves bookings with optional filtering, search, and pagination
  */
-export async function getBookings({ status = 'all', search = '', year = '', month = '', limit = 100, offset = 0 } = {}) {
+export async function getBookings({ status = 'all', search = '', year = '', month = '', day = '', limit = 100, offset = 0 } = {}) {
   if (!dbState.usingFallback && pool) {
     try {
       let query = 'SELECT * FROM bookings WHERE 1=1';
@@ -65,25 +112,30 @@ export async function getBookings({ status = 'all', search = '', year = '', mont
         countQuery += ` AND (LOWER(name) LIKE $${countParams.length} OR LOWER(phone) LIKE $${countParams.length} OR LOWER(email) LIKE $${countParams.length} OR LOWER(booking_id) LIKE $${countParams.length} OR LOWER(service) LIKE $${countParams.length})`;
       }
 
-      // Year & Month Filter
-      if (year && year !== 'all' && month && month !== 'all') {
-        const ym = `${year}-${month.padStart(2, '0')}`;
-        params.push(`${ym}%`, ym);
-        query += ` AND (date LIKE $${params.length - 1} OR TO_CHAR(created_at, 'YYYY-MM') = $${params.length})`;
-        countParams.push(`${ym}%`, ym);
-        countQuery += ` AND (date LIKE $${countParams.length - 1} OR TO_CHAR(created_at, 'YYYY-MM') = $${countParams.length})`;
-      } else if (year && year !== 'all') {
-        const y = String(year);
-        params.push(`${y}%`, y);
-        query += ` AND (date LIKE $${params.length - 1} OR TO_CHAR(created_at, 'YYYY') = $${params.length})`;
-        countParams.push(`${y}%`, y);
-        countQuery += ` AND (date LIKE $${countParams.length - 1} OR TO_CHAR(created_at, 'YYYY') = $${countParams.length})`;
-      } else if (month && month !== 'all') {
-        const m = month.padStart(2, '0');
-        params.push(`%-${m}-%`, m);
-        query += ` AND (date LIKE $${params.length - 1} OR TO_CHAR(created_at, 'MM') = $${params.length})`;
-        countParams.push(`%-${m}-%`, m);
-        countQuery += ` AND (date LIKE $${countParams.length - 1} OR TO_CHAR(created_at, 'MM') = $${countParams.length})`;
+      // Year & Month & Day Filter (Strictly matches the Appointment Date `date`)
+      const effectiveDateExpr = "TRIM(COALESCE(NULLIF(date, ''), TO_CHAR(created_at, 'YYYY-MM-DD')))";
+
+      if (year && year !== 'all') {
+        params.push(String(year));
+        query += ` AND SUBSTRING(${effectiveDateExpr}, 1, 4) = $${params.length}`;
+        countParams.push(String(year));
+        countQuery += ` AND SUBSTRING(${effectiveDateExpr}, 1, 4) = $${countParams.length}`;
+      }
+
+      if (month && month !== 'all') {
+        const m = String(month).padStart(2, '0');
+        params.push(m);
+        query += ` AND SUBSTRING(${effectiveDateExpr}, 6, 2) = $${params.length}`;
+        countParams.push(m);
+        countQuery += ` AND SUBSTRING(${effectiveDateExpr}, 6, 2) = $${countParams.length}`;
+      }
+
+      if (day && day !== 'all') {
+        const d = String(day).padStart(2, '0');
+        params.push(d);
+        query += ` AND SUBSTRING(${effectiveDateExpr}, 9, 2) = $${params.length}`;
+        countParams.push(d);
+        countQuery += ` AND SUBSTRING(${effectiveDateExpr}, 9, 2) = $${countParams.length}`;
       }
 
       query += ' ORDER BY created_at DESC LIMIT $' + (params.length + 1) + ' OFFSET $' + (params.length + 2);
@@ -120,28 +172,27 @@ export async function getBookings({ status = 'all', search = '', year = '', mont
     );
   }
 
-  if (year && year !== 'all' && month && month !== 'all') {
-    const ym = `${year}-${month.padStart(2, '0')}`;
+  if (year && year !== 'all') {
+    const yStr = String(year);
     list = list.filter(b => {
-      const bDate = b.date || '';
-      const bCreated = b.createdAt ? String(b.createdAt) : '';
-      return bDate.startsWith(ym) || bCreated.startsWith(ym);
+      const parts = parseBookingDateParts(b.date) || parseBookingDateParts(b.createdAt);
+      return parts && parts.year === yStr;
     });
-  } else if (year && year !== 'all') {
-    const y = String(year);
+  }
+
+  if (month && month !== 'all') {
+    const mStr = String(month).padStart(2, '0');
     list = list.filter(b => {
-      const bDate = b.date || '';
-      const bCreated = b.createdAt ? String(b.createdAt) : '';
-      return bDate.startsWith(y) || bCreated.startsWith(y);
+      const parts = parseBookingDateParts(b.date) || parseBookingDateParts(b.createdAt);
+      return parts && parts.month === mStr;
     });
-  } else if (month && month !== 'all') {
-    const m = month.padStart(2, '0');
+  }
+
+  if (day && day !== 'all') {
+    const dStr = String(day).padStart(2, '0');
     list = list.filter(b => {
-      const bDate = b.date || '';
-      const bCreated = b.createdAt ? String(b.createdAt) : '';
-      const dateParts = bDate.split('-');
-      const createdParts = bCreated.slice(0, 10).split('-');
-      return (dateParts.length >= 2 && dateParts[1] === m) || (createdParts.length >= 2 && createdParts[1] === m);
+      const parts = parseBookingDateParts(b.date) || parseBookingDateParts(b.createdAt);
+      return parts && parts.day === dStr;
     });
   }
 
@@ -217,9 +268,14 @@ export async function deleteBooking(bookingId) {
 /**
  * Calculates high-level booking KPIs & metrics
  */
-export async function getBookingStats() {
-  const { bookings, total } = await getBookings({ limit: 10000 });
-  const todayStr = new Date().toISOString().slice(0, 10);
+export async function getBookingStats({ day = '', month = '', year = '' } = {}) {
+  const { bookings, total } = await getBookings({ day, month, year, limit: 10000 });
+  const todayStr = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Australia/Perth',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
 
   let pending = 0;
   let confirmed = 0;
@@ -227,21 +283,60 @@ export async function getBookingStats() {
   let cancelled = 0;
   let todayCount = 0;
 
+  let totalRevenue = 0;
+  let completedRevenue = 0;
+  let confirmedRevenue = 0;
+  let pendingRevenue = 0;
+  let todayRevenue = 0;
+  let totalGuests = 0;
+
   bookings.forEach(b => {
     const s = (b.status || 'pending').toLowerCase();
-    if (s === 'pending') pending++;
-    else if (s === 'confirmed') confirmed++;
-    else if (s === 'completed') completed++;
-    else if (s === 'cancelled') cancelled++;
+    const guests = parseInt(b.guests, 10) || 1;
 
-    const createdDateStr = b.createdAt instanceof Date
-      ? b.createdAt.toISOString()
-      : (b.createdAt ? String(b.createdAt) : '');
+    let price = b.price != null && !isNaN(parseFloat(b.price)) ? parseFloat(b.price) : 0;
+    if (price === 0 && b.service) {
+      const found = defaultServices.find(ds =>
+        ds.id === b.serviceId ||
+        (ds.name && ds.name.toLowerCase() === b.service.toLowerCase()) ||
+        (ds.name_en && ds.name_en.toLowerCase() === b.service.toLowerCase())
+      );
+      if (found && found.price) {
+        price = parseFloat(found.price) * guests;
+      }
+    }
 
-    if (b.date === todayStr || (createdDateStr && createdDateStr.startsWith(todayStr))) {
+    if (s !== 'cancelled') {
+      totalGuests += guests;
+    }
+
+    if (s === 'pending') {
+      pending++;
+      pendingRevenue += price;
+      totalRevenue += price;
+    } else if (s === 'confirmed') {
+      confirmed++;
+      confirmedRevenue += price;
+      totalRevenue += price;
+    } else if (s === 'completed') {
+      completed++;
+      completedRevenue += price;
+      totalRevenue += price;
+    } else if (s === 'cancelled') {
+      cancelled++;
+    }
+
+    // Today's appointment is strictly based on appointment date (b.date)
+    if (b.date === todayStr) {
       todayCount++;
+      if (s !== 'cancelled') {
+        todayRevenue += price;
+      }
     }
   });
+
+  const activeBookingsCount = pending + confirmed + completed;
+  const avgBookingValue = activeBookingsCount > 0 ? Math.round((totalRevenue / activeBookingsCount) * 100) / 100 : 0;
 
   return {
     total,
@@ -249,7 +344,16 @@ export async function getBookingStats() {
     confirmed,
     completed,
     cancelled,
-    today: todayCount
+    today: todayCount,
+    totalGuests,
+    revenue: {
+      total: Math.round(totalRevenue * 100) / 100,
+      completed: Math.round(completedRevenue * 100) / 100,
+      confirmed: Math.round(confirmedRevenue * 100) / 100,
+      pending: Math.round(pendingRevenue * 100) / 100,
+      today: Math.round(todayRevenue * 100) / 100,
+      average: avgBookingValue
+    }
   };
 }
 
@@ -257,6 +361,8 @@ export async function getBookingStats() {
  * Normalizes PostgreSQL row to match frontend camelCase format
  */
 function mapPostgresBooking(row) {
+  const category = resolveCategoryName(row.category, row.service);
+
   return {
     id: row.id,
     bookingId: row.booking_id,
@@ -264,11 +370,48 @@ function mapPostgresBooking(row) {
     phone: row.phone,
     email: row.email,
     service: row.service,
+    category,
     date: row.date,
     time: row.time,
     message: row.message,
     voucher: row.voucher,
     status: row.status,
+    guests: row.guests != null ? parseInt(row.guests, 10) : 1,
+    price: row.price != null ? (Number(row.price) % 1 === 0 ? Math.round(Number(row.price)) : parseFloat(row.price)) : null,
+    originalPrice: row.original_price != null ? (Number(row.original_price) % 1 === 0 ? Math.round(Number(row.original_price)) : parseFloat(row.original_price)) : null,
     createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : (row.created_at || null)
   };
+}
+
+/**
+ * Robustly parses a date string or timestamp into year, month, and day parts
+ */
+export function parseBookingDateParts(dateStr) {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+  const trimmed = dateStr.trim();
+  const ymdMatch = trimmed.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+  if (ymdMatch) {
+    return {
+      year: ymdMatch[1],
+      month: ymdMatch[2].padStart(2, '0'),
+      day: ymdMatch[3].padStart(2, '0')
+    };
+  }
+  const dmyMatch = trimmed.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+  if (dmyMatch) {
+    return {
+      year: dmyMatch[3],
+      month: dmyMatch[2].padStart(2, '0'),
+      day: dmyMatch[1].padStart(2, '0')
+    };
+  }
+  const d = new Date(trimmed);
+  if (!isNaN(d.getTime())) {
+    return {
+      year: String(d.getFullYear()),
+      month: String(d.getMonth() + 1).padStart(2, '0'),
+      day: String(d.getDate()).padStart(2, '0')
+    };
+  }
+  return null;
 }

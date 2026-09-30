@@ -1,4 +1,5 @@
 import {
+  getActivePromotions as fetchActivePromotions,
   getActivePromotion as fetchActivePromotion,
   getAllPromotions,
   createPromotion as insertPromotion,
@@ -8,15 +9,18 @@ import {
 } from '../services/promotionService.js';
 
 /**
- * Public endpoint: Retrieves active promotion for the landing page popup
+ * Public endpoint: Retrieves all active promotions for the landing page popup
  */
 export async function getActivePromotion(req, res, next) {
   try {
-    const promotion = await fetchActivePromotion();
+    const promotions = await fetchActivePromotions();
+    const primary = promotions.length > 0 ? promotions[0] : null;
     return res.status(200).json({
       success: true,
-      hasActivePromotion: Boolean(promotion),
-      promotion
+      hasActivePromotion: promotions.length > 0,
+      promotion: primary,
+      promotions: promotions,
+      count: promotions.length
     });
   } catch (err) {
     next(err);
@@ -55,12 +59,12 @@ export async function createPromotion(req, res, next) {
     if (!image_url) {
       return res.status(400).json({
         success: false,
-        message: 'Vui lòng tải lên hình ảnh poster / banner khuyến mãi (Image file is required)'
+        message: 'Promotional image/poster is required'
       });
     }
 
     const created = await insertPromotion({
-      title: title?.trim() || 'Ưu Đãi Lễ Hội / Holiday Celebration',
+      title: title?.trim() || 'Holiday Celebration Promotion',
       subtitle: subtitle || '',
       badge: badge || '',
       image_url,
@@ -73,7 +77,7 @@ export async function createPromotion(req, res, next) {
 
     return res.status(201).json({
       success: true,
-      message: 'Hình ảnh khuyến mãi đã được tải lên thành công',
+      message: 'Promotion banner uploaded successfully',
       promotion: created
     });
   } catch (err) {

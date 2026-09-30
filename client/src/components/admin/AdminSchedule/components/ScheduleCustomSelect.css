@@ -1,0 +1,385 @@
+/* Custom Select Component for Admin Schedule */
+.admin-schedule-custom-select-wrap {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.admin-schedule-custom-select-wrap.is-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Trigger Button */
+.admin-schedule-custom-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  height: 38px;
+  padding: 0 10px;
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  box-sizing: border-box;
+  text-align: left;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-schedule-custom-select-btn:hover:not(:disabled) {
+  border-color: #94a3b8;
+  background-color: #f8fafc;
+}
+
+.admin-schedule-custom-select-btn:focus-visible,
+.admin-schedule-custom-select-btn.is-active {
+  border-color: #ea580c;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  background-color: #ffffff;
+}
+
+/* Display text inside button */
+.admin-schedule-custom-select-display-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+}
+
+/* Arrow indicator */
+.admin-schedule-custom-select-chevron {
+  color: #64748b;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.admin-schedule-custom-select-chevron.is-rotated {
+  transform: rotate(180deg);
+  color: #ea580c;
+}
+
+/* Floating Dropdown */
+.admin-schedule-custom-select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  z-index: 1050;
+  min-width: 100%;
+  max-width: min(440px, calc(100vw - 24px));
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  animation: adminCustomSelectMenuFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes adminCustomSelectMenuFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-schedule-custom-select-dropdown--left {
+  left: 0;
+  right: auto;
+}
+
+.admin-schedule-custom-select-dropdown--right {
+  right: 0;
+  left: auto;
+}
+
+/* Scrollable container */
+.admin-schedule-custom-select-dropdown-inner {
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  box-sizing: border-box;
+}
+
+.admin-schedule-custom-select-dropdown-inner::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-schedule-custom-select-dropdown-inner::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Option Button */
+.admin-schedule-custom-select-option {
+  width: 100%;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  text-align: left;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-schedule-custom-select-option:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.admin-schedule-custom-select-option.is-selected {
+  background-color: #fff7ed;
+  color: #ea580c;
+  font-weight: 700;
+}
+
+.admin-schedule-custom-select-option.is-selected:hover {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+.admin-schedule-custom-select-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.admin-schedule-custom-select-option-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-schedule-custom-select-option-sub {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.admin-schedule-custom-select-check {
+  color: #ea580c;
+  flex-shrink: 0;
+}
+
+/* Hour select specific styling */
+.admin-schedule-select--hour .admin-schedule-custom-select-btn,
+.admin-schedule-select--minute .admin-schedule-custom-select-btn {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  padding: 0 8px;
+}
+
+/* Reason select specific styling (accent border) */
+.admin-schedule-select--reason .admin-schedule-custom-select-btn {
+  border-color: #fca5a5;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-schedule-select--reason .admin-schedule-custom-select-btn:hover {
+  border-color: #f87171;
+}
+
+.admin-schedule-select--reason .admin-schedule-custom-select-btn:focus-visible,
+.admin-schedule-select--reason .admin-schedule-custom-select-btn.is-active {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+/* Duration select specific styling */
+.admin-schedule-select--duration .admin-schedule-custom-select-btn {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Page size select specific styling for pagination */
+.admin-schedule-pagesize-custom-select.admin-schedule-custom-select-wrap {
+  width: 72px;
+  min-width: 72px;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-btn {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 8px 0 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0284c7;
+  gap: 4px;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-btn:hover:not(:disabled) {
+  border-color: #0284c7;
+  background-color: #f0f9ff;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-btn:focus-visible,
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-btn.is-active {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2.5px rgba(2, 132, 199, 0.18);
+  background-color: #ffffff;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-chevron {
+  color: #0284c7;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-chevron.is-rotated {
+  color: #0284c7;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-dropdown {
+  min-width: 72px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 8px 20px -3px rgba(15, 23, 42, 0.14), 0 3px 6px -2px rgba(15, 23, 42, 0.06);
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-dropdown-inner {
+  padding: 3px;
+  max-height: 180px;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-option {
+  padding: 5px 8px;
+  min-height: 28px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  color: #334155;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-option:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-option.is-selected {
+  background-color: #f0f9ff;
+  color: #0284c7;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-option.is-selected:hover {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.admin-schedule-pagesize-custom-select .admin-schedule-custom-select-check {
+  color: #0284c7;
+}
+
+/* Time Slot Filter Select */
+.admin-schedule-timeslot-custom-select.admin-schedule-custom-select-wrap {
+  width: 100%;
+  min-width: 190px;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-btn {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 10px 0 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-btn:hover:not(:disabled) {
+  border-color: #0284c7;
+  background-color: #f0f9ff;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-btn:focus-visible,
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-btn.is-active {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2.5px rgba(2, 132, 199, 0.18);
+  background-color: #ffffff;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-chevron {
+  color: #64748b;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-chevron.is-rotated {
+  color: #0284c7;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-dropdown {
+  min-width: 100%;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 28px));
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.16), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-dropdown-inner {
+  max-height: 240px;
+  padding: 4px;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-option {
+  padding: 8px 12px;
+  font-size: 13px;
+  min-height: 36px;
+  font-weight: 600;
+  border-radius: 6px;
+  color: #334155;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-option:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-option.is-selected {
+  background-color: #f0f9ff;
+  color: #0284c7;
+  font-weight: 700;
+}
+
+.admin-schedule-timeslot-custom-select .admin-schedule-custom-select-check {
+  color: #0284c7;
+}
+
+

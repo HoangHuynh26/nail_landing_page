@@ -42,3 +42,25 @@ export const uploadPromotionImage = multer({
     fileSize: 10 * 1024 * 1024 // 10MB
   }
 });
+
+// Multer disk storage for gallery showcases
+const galleryStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, UPLOAD_DIR);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const cleanBase = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e4)}`;
+    cb(null, `gallery-${cleanBase}-${uniqueSuffix}${ext}`);
+  }
+});
+
+export const uploadGalleryImage = multer({
+  storage: galleryStorage,
+  fileFilter,
+  limits: {
+    fileSize: 15 * 1024 * 1024 // 15MB
+  }
+});
+

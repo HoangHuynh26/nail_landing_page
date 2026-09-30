@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Step 6: Confirmation Screen Styles
+   ========================================================================== */
+
+.booking-step--confirmation {
+  text-align: center;
+  padding: var(--space-4, 16px) 0;
+}
+
+.booking-confirm-badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-success-bg, #f0fdf4);
+  color: var(--color-success, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4, 16px) auto;
+}
+
+.booking-confirm__title {
+  font-size: var(--text-h2, 1.75rem);
+  font-weight: 700;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-confirm__subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary, #64748b);
+  margin-top: var(--space-2, 8px);
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.booking-confirm-card {
+  margin: var(--space-6, 24px) 0;
+  background: var(--color-canvas, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 16px);
+  padding: var(--space-6, 24px);
+  text-align: left;
+}
+
+.booking-confirm-card__ref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-3, 12px);
+  border-bottom: 1px dashed var(--color-border, #cbd5e1);
+}
+
+.booking-confirm-card__ref-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.booking-confirm-card__ref-value {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.35rem;
+  color: var(--color-gold-dark, #b45309);
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.booking-confirm-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+  margin-top: var(--space-4, 16px);
+  font-size: 0.875rem;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-confirm-card-details-gap {
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.booking-confirm-customer-box {
+  padding: 12px 14px;
+  background: var(--color-surface, #f8fafc);
+  border-radius: 10px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.booking-confirm-section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #64748b);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.booking-confirm-user-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--color-text-primary, #0f172a);
+  font-size: 14px;
+}
+
+.booking-confirm-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary, #475569);
+}
+
+.booking-confirm-detail-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+}
+
+.booking-confirm-detail-row--top {
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.booking-confirm-gold-icon {
+  color: var(--color-gold, #d4af37);
+  flex-shrink: 0;
+}
+
+.booking-confirm-gold-icon--top {
+  color: var(--color-gold, #d4af37);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.booking-confirm-content-col {
+  width: 100%;
+}
+
+.booking-confirm-value-bold {
+  font-weight: 700;
+  color: var(--color-text-primary, #0f172a);
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.booking-confirm-standard-price {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-confirm-location-text {
+  font-size: 12.5px;
+  color: var(--color-text-secondary, #475569);
+}
+
+.booking-confirm-calendar-actions {
+  display: flex;
+  gap: var(--space-3, 12px);
+  margin-top: var(--space-6, 24px);
+  padding-top: var(--space-4, 16px);
+  border-top: 1px solid var(--color-border, #e2e8f0);
+  flex-wrap: wrap;
+}
+
+.booking-confirm__nav {
+  margin-top: var(--space-4, 16px);
+}

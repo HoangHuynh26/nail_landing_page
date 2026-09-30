@@ -66,6 +66,8 @@ export async function sendToMakeWebhook(bookingPayload) {
     service: bookingPayload.service || bookingPayload.serviceName || '',
     date: bookingPayload.date || '',
     time: formatTimeTo24h(bookingPayload.time),
+    guests: bookingPayload.guests || 1,
+    price: bookingPayload.price != null ? bookingPayload.price : '',
     message: bookingPayload.message !== undefined ? bookingPayload.message : (bookingPayload.notes || ''),
     voucher: bookingPayload.voucher || ''
   };

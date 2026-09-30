@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from './context/LanguageContext';
-import { Navbar } from './components/layout/Navbar';
-import { Hero } from './components/sections/Hero';
+import { Navbar } from './components/layout/Navbar/Navbar';
+import { Hero } from './components/sections/Hero/Hero';
 import { LazySection } from './components/common/LazySection';
-import { MobileStickyCTA } from './components/layout/MobileStickyCTA';
-import { BackToHero } from './components/layout/BackToHero';
-import { QuickChatbot } from './components/chat/QuickChatbot';
-import { BookingModal } from './components/booking/BookingModal';
-import { SeasonalPromoModal } from './components/common/SeasonalPromoModal';
-import { AdminPage } from './components/admin/AdminPage';
+import { MobileStickyCTA } from './components/layout/MobileStickyCTA/MobileStickyCTA';
+import { BackToHero } from './components/layout/BackToHero/BackToHero';
+import { QuickChatbot } from './components/chat/QuickChatbot/QuickChatbot';
+import { BookingModal } from './components/booking/BookingModal/BookingModal';
+import { SeasonalPromoModal } from './components/common/SeasonalPromoModal/SeasonalPromoModal';
+import { AdminPage } from './components/admin/AdminPage/AdminPage';
 
 // Direct imports for smooth, lag-free scroll reveal
-import TrustBar from './components/sections/TrustBar';
-import SalonStorytelling from './components/sections/SalonStorytelling';
-import Services from './components/sections/Services';
-import WhyChooseUs from './components/sections/WhyChooseUs';
-import About from './components/sections/About';
-import Gallery from './components/sections/Gallery';
-import Testimonials from './components/sections/Testimonials';
-import FAQ from './components/sections/FAQ';
-import Location from './components/sections/Location';
-import FinalCTA from './components/sections/FinalCTA';
-import Footer from './components/layout/Footer';
+import TrustBar from './components/sections/TrustBar/TrustBar';
+import SalonStorytelling from './components/sections/SalonStorytelling/SalonStorytelling';
+import Services from './components/sections/Services/Services';
+import WhyChooseUs from './components/sections/WhyChooseUs/WhyChooseUs';
+import About from './components/sections/About/About';
+import Gallery from './components/sections/Gallery/Gallery';
+import Testimonials from './components/sections/Testimonials/Testimonials';
+import FAQ from './components/sections/FAQ/FAQ';
+import Location from './components/sections/Location/Location';
+import FinalCTA from './components/sections/FinalCTA/FinalCTA';
+import Footer from './components/layout/Footer/Footer';
 
 export function App() {
   const { language } = useLanguage();
@@ -77,10 +77,6 @@ export function App() {
   // Otherwise render Luxury Landing Page
   return (
     <div className="atelier-app lang-en">
-      {/* Accessibility: Skip to Main Content */}
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
 
       {/* Top Navbar */}
       <Navbar />
@@ -160,3 +156,4 @@ export function App() {
 }
 
 export default App;
+ 

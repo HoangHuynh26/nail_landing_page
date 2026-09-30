@@ -309,13 +309,13 @@ export default function RoundCarousel({
                   cursor: "pointer",
                 }}
               >
-                {/* Front face with clean, ultra-luxury gold border */}
+                {/* Front face with clean, ultra-luxury gold border and subtle soft shadow */}
                 <div
                   style={{
                     ...faceBase,
                     backgroundColor: src ? "transparent" : "#1a1a1a",
                     backgroundImage: src ? `url(${src})` : undefined,
-                    boxShadow: "0 14px 40px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(212, 175, 55, 0.35)",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.07), 0 0 0 1.5px rgba(212, 175, 55, 0.35)",
                   }}
                 />
 
@@ -327,7 +327,7 @@ export default function RoundCarousel({
                     backgroundColor: src ? "transparent" : "#111",
                     backgroundImage: src ? `url(${src})` : undefined,
                     filter: `brightness(${innerDim / 10})`,
-                    boxShadow: "0 10px 24px rgba(0,0,0,0.5)",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
                   }}
                 />
               </div>

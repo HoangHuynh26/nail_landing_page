@@ -1,0 +1,216 @@
+/* ==========================================================================
+   Step 2: Date Selection Styles
+   ========================================================================== */
+
+.booking-step--date {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Date Grid */
+.booking-date-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: var(--space-2, 8px);
+  margin-bottom: var(--space-5, 20px);
+}
+
+.booking-date-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2, 8px) var(--space-1, 4px);
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-canvas, #ffffff);
+  cursor: pointer;
+  transition: all var(--duration-fast, 0.15s) ease;
+  min-height: 84px;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.booking-date-card:hover:not(:disabled):not(.is-selected) {
+  border-color: var(--color-gold, #c69255);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.booking-date-card.is-today {
+  border-color: rgba(198, 161, 91, 0.6);
+  background: linear-gradient(180deg, rgba(232, 216, 181, 0.18) 0%, var(--color-canvas, #ffffff) 100%);
+}
+
+.booking-date-card__badge-today {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-gold-dark, #b45309);
+  color: #ffffff !important;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: var(--radius-full, 9999px);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.booking-date-card.is-selected {
+  border-color: var(--color-gold, #c69255);
+  background: var(--color-gold, #c69255) !important;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.35);
+}
+
+.booking-date-card.is-selected span {
+  color: #ffffff !important;
+}
+
+.booking-date-card.is-selected .booking-date-card__badge-today {
+  background: #ffffff !important;
+  color: var(--color-gold-dark, #b45309) !important;
+}
+
+.booking-date-card.is-disabled,
+.booking-date-card.is-locked,
+.booking-date-card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed !important;
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.booking-date-card.is-locked .booking-date-card__weekday,
+.booking-date-card.is-locked .booking-date-card__month {
+  color: #94a3b8 !important;
+}
+
+.booking-date-card.is-locked .booking-date-card__day {
+  color: #94a3b8 !important;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.booking-date-card__weekday {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #64748b);
+  margin-top: 6px;
+}
+
+.booking-date-card__day {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #0f172a);
+  line-height: 1.1;
+  margin: 1px 0;
+}
+
+.booking-date-card__month {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.booking-date-card__hours-hint {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--color-gold-dark, #b45309);
+  margin-top: 1px;
+}
+
+.booking-date-card__hours-hint--late {
+  color: #0284c7;
+}
+
+.booking-date-card__hours-hint--locked {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #e11d48 !important;
+  font-weight: 700 !important;
+  font-size: 0.58rem !important;
+  background: #ffe4e6;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-top: 2px;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Custom Date Picker Wrap & Warning Banner */
+.booking-date-custom-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.booking-date-locked-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  color: #be123c;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.booking-date-locked-banner__icon {
+  flex-shrink: 0;
+  color: #e11d48;
+}
+
+.booking-date-custom__input.is-locked-input {
+  border-color: #f87171 !important;
+  background-color: #fff5f5 !important;
+  color: #b91c1c !important;
+}
+
+/* Custom Date Picker */
+.booking-date-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  background: var(--color-canvas, #ffffff);
+  border: 1px dashed var(--color-border, #cbd5e1);
+  border-radius: var(--radius-md, 12px);
+}
+
+.booking-date-custom__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.booking-date-custom__input {
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: var(--radius-sm, 8px);
+  background: #ffffff;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.booking-date-custom__input:focus {
+  border-color: var(--color-gold, #c69255);
+}

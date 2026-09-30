@@ -55,9 +55,10 @@ export async function getService(req, res, next) {
  */
 export async function createService(req, res, next) {
   try {
-    const { name_vi, name_en, category, price, duration, description_vi, description_en, price_prefix, featured, active, sort_order } = req.body;
+    const { name, name_en, category, price, duration, description, description_en, price_prefix, featured, active, sort_order } = req.body;
+    const serviceName = name || name_en;
 
-    if (!name_vi && !name_en) {
+    if (!serviceName) {
       return res.status(400).json({
         success: false,
         message: 'Service name is required'
@@ -72,13 +73,13 @@ export async function createService(req, res, next) {
     }
 
     const created = await insertService({
-      name_vi,
-      name_en,
+      name: serviceName,
+      name_en: serviceName,
       category: category || 'extra',
       price: parseFloat(price),
       duration: duration ? parseInt(duration, 10) : 45,
-      description_vi,
-      description_en,
+      description: description || description_en || '',
+      description_en: description_en || description || '',
       price_prefix,
       featured: Boolean(featured),
       active: active !== undefined ? Boolean(active) : true,

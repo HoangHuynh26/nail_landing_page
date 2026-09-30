@@ -1,0 +1,222 @@
+/* Admin Date Filter Pill Styles - Seamless Typography & Luxury Theme */
+
+.admin-date-pill-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.admin-date-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  height: 38px;
+  padding: 0 12px !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.admin-date-pill-btn:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
+}
+
+.admin-date-pill-btn.is-active {
+  background: #f8fafc !important;
+  border-color: #64748b !important;
+  box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.12) !important;
+}
+
+/* Label tag: DAY:, MONTH:, YEAR: */
+.admin-date-pill-tag {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Selected Value: All Days, All Months, etc. */
+.admin-date-pill-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a !important;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Arrow indicator */
+.admin-date-pill-arrow {
+  color: #64748b;
+  transition: transform 0.2s ease;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+
+.admin-date-pill-arrow.is-open {
+  transform: rotate(180deg);
+  color: #0f172a;
+}
+
+/* Floating Dropdown Menu */
+.admin-date-pill-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 9999;
+  min-width: 160px;
+  max-width: 240px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  animation: adminPillMenuFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes adminPillMenuFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-date-pill-menu-inner {
+  max-height: 230px;
+  overflow-y: auto;
+  padding: 5px;
+}
+
+/* Custom sleek scrollbar for menu */
+.admin-date-pill-menu-inner::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-date-pill-menu-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-date-pill-menu-inner::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.admin-date-pill-menu-inner::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Menu Option */
+.admin-date-pill-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.admin-date-pill-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.admin-date-pill-item.is-selected {
+  background: #f8fafc;
+  color: #d97706;
+  font-weight: 700;
+}
+
+.admin-date-pill-item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-date-pill-item-check {
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+/* Right-aligned menu for Year or pills near the right screen edge */
+.admin-date-pill-menu--right {
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* Native select overlay on touch / mobile devices */
+.admin-date-pill-native-select {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .admin-date-pill-wrapper {
+    width: 100%;
+    min-width: 0;
+    position: relative;
+  }
+
+  /* Seamless invisible native select over the pill button */
+  .admin-date-pill-native-select {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 10;
+    cursor: pointer;
+    -webkit-appearance: menulist-button;
+  }
+
+  .admin-date-pill-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 8px !important;
+    justify-content: space-between;
+  }
+
+  .admin-date-pill-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  .admin-date-pill-tag {
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .admin-date-pill-menu {
+    min-width: 140px;
+    max-width: 200px;
+  }
+}

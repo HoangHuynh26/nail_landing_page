@@ -1,0 +1,79 @@
+/* ---------------------------------------------------
+   17. FINAL CTA
+   --------------------------------------------------- */
+.final-cta-section {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.final-cta-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, rgba(212, 130, 120, 0.08), transparent 70%),
+    var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-16) var(--space-8);
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.final-cta-card__badge {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.final-cta-card__title {
+  font-family: var(--font-display, var(--font-serif));
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin-top: var(--space-2);
+  letter-spacing: -0.015em;
+  cursor: default;
+}
+
+.final-cta-card__subtitle {
+  font-size: var(--text-body-lg);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.final-cta-card__action {
+  margin-top: var(--space-8);
+}
+
+.final-cta-glow-btn {
+  box-shadow: 0 4px 14px rgba(212, 130, 120, 0.35);
+  transition: all 0.3s var(--ease-apple);
+}
+
+.final-cta-glow-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(212, 130, 120, 0.45);
+}
+
+.final-cta-card__perks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  flex-wrap: wrap;
+}
+
+.final-cta__trust-icon {
+  display: inline;
+  margin-right: 4px;
+  vertical-align: -1px;
+}

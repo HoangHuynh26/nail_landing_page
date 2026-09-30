@@ -1,0 +1,952 @@
+/* Promotion Card Grid */
+.admin-promos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.admin-promo-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.admin-promo-card.is-active {
+  border-color: #d97706;
+  box-shadow: 0 4px 18px rgba(217, 119, 6, 0.12);
+}
+
+.admin-promo-card__thumb {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #f1f5f9;
+}
+
+.admin-promo-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-promo-card__body {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-promo-card__footer {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Toast */
+.admin-promo-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99999;
+  padding: 12px 18px;
+  border-radius: 10px;
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 13.5px;
+  animation: fadeIn 0.25s ease;
+  max-width: 420px;
+}
+
+.admin-promo-toast--success {
+  background: #065f46;
+  border: 1px solid #10b981;
+}
+
+.admin-promo-toast--error {
+  background: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+.admin-promo-toast-icon {
+  flex-shrink: 0;
+}
+
+.admin-promo-toast-icon--success {
+  color: #34d399;
+}
+
+.admin-promo-toast-icon--error {
+  color: #f87171;
+}
+
+.admin-promo-toast-msg {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.admin-promo-toast-close {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  opacity: 0.8;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+/* Header & Banner */
+.admin-promotions-header-desc {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.admin-promo-status-banner {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.admin-promo-status-banner--active {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.admin-promo-status-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-promo-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.admin-promo-status-dot--active {
+  background: #10b981;
+}
+
+.admin-promo-status-text {
+  color: #94a3b8;
+}
+
+.admin-promo-status-text--active {
+  color: #34d399;
+}
+
+.admin-promo-status-total {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Empty & Loading */
+.admin-promo-loading {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+.admin-promo-empty {
+  text-align: center;
+  padding: 56px 20px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  color: #64748b;
+}
+
+.admin-promo-empty-icon {
+  margin: 0 auto 12px;
+  opacity: 0.5;
+}
+
+.admin-promo-empty-title {
+  font-size: 16px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.admin-promo-empty-desc {
+  font-size: 13px;
+  margin: 6px auto 18px;
+  max-width: 420px;
+}
+
+/* Promo Card Elements */
+.admin-promo-card__thumb {
+  height: 230px !important;
+  background: #f1f5f9;
+  cursor: pointer;
+  position: relative;
+}
+
+.admin-promo-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-promo-card__thumb-preview-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-promo-card__status-pill {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.admin-promo-card__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-block;
+  box-shadow: 0 0 4px #ffffff;
+  animation: adminPromoPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes adminPromoPulse {
+  0% { transform: scale(0.85); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0.8; }
+}
+
+.admin-promo-card__status-pill[data-status="inactive"] {
+  background: #475569;
+  color: #ffffff;
+  border: 1px solid #334155;
+}
+
+.admin-promo-card__status-pill[data-status="expired"] {
+  background: #dc2626;
+  color: #ffffff;
+  border: 1px solid #b91c1c;
+}
+
+.admin-promo-card__status-pill[data-status="scheduled"] {
+  background: #d97706;
+  color: #ffffff;
+  border: 1px solid #b45309;
+}
+
+.admin-promo-card__status-pill[data-status="live"] {
+  background: #059669;
+  color: #ffffff;
+  border: 1px solid #10b981;
+}
+
+.admin-promo-card__title {
+  margin: 0;
+  font-size: 15px;
+  color: #0f172a;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-promo-card__dates-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #334155;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.admin-promo-card__dates-icon {
+  color: #d4af37;
+  flex-shrink: 0;
+}
+
+.admin-promo-card__dates-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-promo-card__date-label {
+  color: #94a3b8;
+}
+
+.admin-promo-card__date-arrow {
+  color: #64748b;
+  margin: 0 5px;
+}
+
+.admin-promo-card__upload-date {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.admin-promo-card__toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.admin-promo-card__toggle-label--active {
+  color: #15803d;
+}
+
+.admin-promo-card__footer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Modals & Dropzone */
+.admin-promo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-promo-modal-title {
+  margin: 0;
+  font-size: 18px;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.admin-promo-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-promo-dropzone:hover {
+  border-color: #d4af37;
+}
+
+.admin-promo-dropzone-preview-img {
+  max-height: 220px;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.admin-promo-dropzone-change-text {
+  font-size: 13px;
+  color: #b45309;
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+.admin-promo-dropzone-icon {
+  color: #d97706;
+  margin: 0 auto 10px;
+}
+
+.admin-promo-dropzone-prompt {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 15px;
+}
+
+.admin-promo-dropzone-subtext {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.admin-promo-hidden-input {
+  display: none;
+}
+
+.admin-promo-date-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.admin-promo-date-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-promo-date-help {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.admin-promo-presets-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.admin-promo-presets-label {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.admin-promo-preset-btn {
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+}
+
+.admin-promo-schedule-note {
+  padding: 12px;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: 10px;
+  fontSize: 12px;
+  color: #92400e;
+  line-height: 1.5;
+}
+
+.admin-promo-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* ==========================================================
+   Promotion Toolbar & Filter Styles
+   ========================================================== */
+.admin-promo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-promo-search-wrap {
+  position: relative;
+  flex: 1 1 260px;
+  max-width: 360px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.admin-promo-search-icon,
+.admin-promo-search-wrap svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.admin-promo-search-input,
+.admin-promo-search-wrap .admin-search-input {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 36px 0 40px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: #0f172a !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+.admin-promo-search-input:hover,
+.admin-promo-search-wrap .admin-search-input:hover {
+  border-color: #94a3b8 !important;
+}
+
+.admin-promo-search-input:focus,
+.admin-promo-search-wrap .admin-search-input:focus {
+  background: #ffffff !important;
+  border-color: #d97706 !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15), 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+}
+
+.admin-promo-search-clear,
+.admin-promo-search-wrap .admin-gallery-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.admin-promo-search-clear:hover,
+.admin-promo-search-wrap .admin-gallery-search-clear:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+/* Desktop vs Mobile Toggle */
+.admin-promo-desktop-filter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-promo-mobile-only {
+  display: none;
+}
+
+/* Status Button variations inside segmented control */
+.admin-segmented-btn--live.is-active {
+  background: #059669;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.admin-segmented-btn--scheduled.is-active {
+  background: #d97706;
+  border-color: #d97706;
+  color: #ffffff;
+}
+
+.admin-segmented-btn--inactive.is-active {
+  background: #475569;
+  border-color: #475569;
+  color: #ffffff;
+}
+
+.admin-segmented-btn--expired.is-active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+/* Custom Select Component for Admin Promotions */
+.admin-promo-custom-select-wrap {
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.admin-promo-custom-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-sizing: border-box;
+  text-align: left;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-promo-custom-select-btn:hover {
+  border-color: #94a3b8;
+  background-color: #f8fafc;
+}
+
+.admin-promo-custom-select-btn:focus-visible,
+.admin-promo-custom-select-btn.is-active {
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+  background-color: #ffffff;
+}
+
+.admin-promo-custom-select-btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.admin-promo-custom-select-display-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: inherit;
+  font-weight: inherit;
+  color: #0f172a;
+}
+
+.admin-promo-custom-select-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.admin-promo-custom-select-chevron {
+  color: #64748b;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.admin-promo-custom-select-chevron.is-rotated {
+  transform: rotate(180deg);
+  color: #d97706;
+}
+
+/* Floating Dropdown Menu */
+.admin-promo-custom-select-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 120;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.14), 0 4px 10px -2px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  animation: adminPromoSelectFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes adminPromoSelectFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-promo-custom-select-dropdown-inner {
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.admin-promo-custom-select-option {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  text-align: left;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-promo-custom-select-option:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.admin-promo-custom-select-option.is-selected {
+  background-color: #fffbeb;
+  color: #b45309;
+  font-weight: 700;
+}
+
+.admin-promo-custom-select-option.is-selected:hover {
+  background-color: #fef3c7;
+}
+
+.admin-promo-custom-select-option-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-promo-custom-select-check {
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+/* Status dots */
+.admin-promo-opt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.admin-promo-opt-dot--green {
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.admin-promo-opt-dot--amber {
+  background-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+.admin-promo-opt-dot--gray {
+  background-color: #64748b;
+}
+
+.admin-promo-opt-dot--red {
+  background-color: #ef4444;
+}
+
+/* Select Box & Dropdown Filters (Legacy Native Support) */
+.admin-promo-select-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-promo-filter-dropdown,
+.admin-promo-sort-dropdown {
+  height: 42px;
+  padding: 0 34px 0 12px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  width: 100%;
+}
+
+.admin-promo-filter-dropdown:focus,
+.admin-promo-sort-dropdown:focus {
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.admin-promo-select-chevron {
+  position: absolute;
+  right: 12px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+/* Sort dropdown */
+.admin-promo-sort-box {
+  position: relative;
+}
+
+.admin-promo-sort-icon {
+  position: absolute;
+  left: 12px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.admin-promo-sort-dropdown {
+  padding-left: 32px;
+}
+
+.admin-promo-filter-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Empty State with filter active */
+.admin-promo-filter-empty {
+  padding: 48px 20px;
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 14px;
+}
+
+/* ==========================================================
+   Responsive & Mobile Adaptations (<= 768px)
+   ========================================================== */
+@media (max-width: 768px) {
+  /* 1. Header */
+  .admin-promotions-container .admin-card__header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  .admin-promotions-container .admin-card__header .admin-primary-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 42px !important;
+    font-size: 14px !important;
+  }
+
+  /* 2. Switch from Desktop to Mobile filters */
+  .admin-promo-desktop-filter {
+    display: none !important;
+  }
+
+  .admin-promo-mobile-only {
+    display: block !important;
+  }
+
+  .admin-promo-toolbar {
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-promo-search-wrap,
+  .admin-promo-toolbar .admin-search-input-wrap {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    height: 44px !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-promo-search-input,
+  .admin-promo-toolbar .admin-search-input {
+    width: 100% !important;
+    height: 100% !important;
+    font-size: 14px !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-promo-mobile-filter-wrap {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-promo-sort-wrap {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-promo-custom-select-btn {
+    height: 44px !important;
+    font-size: 14px !important;
+  }
+
+  .admin-promo-filter-dropdown,
+  .admin-promo-sort-dropdown {
+    width: 100% !important;
+    height: 44px !important;
+    font-size: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 3. Promo Cards Grid on Mobile */
+  .admin-promos-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* 4. Date Picker Modal Grid on Mobile */
+  .admin-promo-date-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+

@@ -1,0 +1,428 @@
+/* ==========================================================================
+   Step 4: Contact Details, Guests & Voucher Form Styles
+   ========================================================================== */
+
+.booking-step--details {
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.booking-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+}
+
+.booking-field__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-field__label abbr {
+  color: var(--color-error, #ef4444);
+  text-decoration: none;
+}
+
+.booking-field__input,
+.booking-field__textarea {
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-canvas, #ffffff);
+  font-size: 0.9375rem;
+  color: var(--color-text-primary, #0f172a);
+  transition: border-color var(--duration-fast, 0.15s), background var(--duration-fast, 0.15s);
+  min-height: 48px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.booking-field__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.booking-field__input:focus,
+.booking-field__textarea:focus {
+  background: #ffffff;
+  border-color: var(--color-gold-dark, #b45309);
+  box-shadow: 0 0 0 3px rgba(198, 146, 85, 0.15);
+}
+
+.booking-field.has-error .booking-field__input {
+  border-color: var(--color-error, #ef4444);
+  background: var(--color-error-bg, #fef2f2);
+}
+
+.booking-field__error {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--color-error, #ef4444);
+  margin-top: 2px;
+}
+
+/* Number of Guests / Party Size Selector Pills */
+.booking-guests-selector {
+  display: flex;
+  gap: var(--space-2, 8px);
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.booking-guest-pill {
+  flex: 1;
+  min-width: 70px;
+  padding: 10px 8px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1.5px solid var(--color-border, #e2e8f0);
+  background: var(--color-canvas, #ffffff);
+  color: var(--color-text-primary, #0f172a);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--duration-fast, 0.15s);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.booking-guest-pill:hover:not(.is-selected) {
+  border-color: var(--color-gold, #c69255);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.booking-guest-pill.is-selected {
+  border-color: var(--color-gold-dark, #b45309) !important;
+  background: linear-gradient(135deg, #f3baa8 0%, #d48278 50%, #bd6d64 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(212, 130, 120, 0.35) !important;
+  font-weight: 700 !important;
+  transform: scale(1.02);
+}
+
+/* Custom Guests Box for 5+ Group */
+.booking-custom-guests-box {
+  margin-top: 10px;
+  background: #fff9f7;
+  border: 1.5px solid #f3baa8;
+  border-radius: var(--radius-sm, 8px);
+  padding: 12px 14px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.booking-custom-guests-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.booking-custom-guests-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #7b3e36;
+}
+
+.booking-custom-guests-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #bd6d64;
+  background: #ffebe6;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid #f3baa8;
+}
+
+.booking-custom-guests-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 220px;
+}
+
+.booking-custom-guests-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm, 8px);
+  border: 1.5px solid #d48278;
+  background: #ffffff;
+  color: #7b3e36;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.booking-custom-guests-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f3baa8 0%, #d48278 100%);
+  color: #ffffff;
+  border-color: #bd6d64;
+  transform: translateY(-1px);
+}
+
+.booking-custom-guests-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  background: #f8fafc;
+}
+
+.booking-custom-guests-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.booking-custom-guests-input {
+  width: 100%;
+  height: 38px;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #334155;
+  background: #ffffff;
+  border: 1.5px solid #d48278;
+  border-radius: var(--radius-sm, 8px);
+  padding: 0 42px 0 12px;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s ease;
+  -moz-appearance: textfield;
+}
+
+.booking-custom-guests-input::-webkit-outer-spin-button,
+.booking-custom-guests-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.booking-custom-guests-input:focus {
+  border-color: #bd6d64;
+  box-shadow: 0 0 0 3px rgba(212, 130, 120, 0.2);
+}
+
+.booking-custom-guests-unit {
+  position: absolute;
+  right: 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #8c473e;
+  pointer-events: none;
+}
+
+.booking-custom-guests-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.77rem;
+  color: #8c473e;
+  line-height: 1.35;
+}
+
+.booking-custom-guests-hint-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #bd6d64;
+}
+
+/* Voucher / Promo Code Field */
+.booking-field--voucher {
+  margin-top: 2px;
+}
+
+.booking-voucher-input-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.booking-voucher-input {
+  flex: 1;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  font-family: inherit;
+}
+
+.booking-voucher-apply-btn {
+  padding: 0 22px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--duration-fast, 0.15s) ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+}
+
+.booking-voucher-apply-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.booking-voucher-apply-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Applied Voucher Card */
+.booking-voucher-success-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius-md, 12px);
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  animation: voucherFadeIn 0.25s ease;
+  gap: 12px;
+}
+
+@keyframes voucherFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.booking-voucher-success-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.booking-voucher-code-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #065f46;
+}
+
+.booking-voucher-code-badge .text-emerald {
+  color: #10b981;
+}
+
+.booking-voucher-discount-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.booking-voucher-desc-text {
+  font-size: 0.8rem;
+  color: #047857;
+}
+
+.booking-voucher-saving-highlight {
+  font-weight: 700;
+  color: #065f46;
+  margin-left: 4px;
+}
+
+.booking-voucher-remove-action {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.booking-voucher-remove-action:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* 10% Community Discount Selection Card */
+.booking-discount-selector {
+  background: var(--color-surface-soft, #faf7f2);
+  border: 1px dashed var(--color-gold, #c69255);
+  border-radius: var(--radius-md, 12px);
+  padding: 10px 14px;
+  margin-top: var(--space-4, 16px);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3, 12px);
+  cursor: pointer;
+  transition: all var(--duration-fast, 0.15s) ease;
+}
+
+.booking-discount-selector:hover {
+  background: var(--color-gold-subtle, #fcf7ee);
+}
+
+.booking-discount-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-gold, #c69255);
+  margin-top: 2px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.booking-discount-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-primary, #0f172a);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.booking-discount-badge {
+  background: var(--gradient-gold, linear-gradient(135deg, #c69255 0%, #b45309 100%));
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full, 9999px);
+}
+
+.booking-discount-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary, #64748b);
+  margin-top: 2px;
+}

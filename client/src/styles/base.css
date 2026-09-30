@@ -145,7 +145,7 @@ svg {
 /* -------------------------------------------------
    ACCESSIBILITY & FOCUS VISIBILITY (WCAG 2.1 AA)
    ------------------------------------------------- */
-:focus-visible {
+:focus-visible:not(.atelier-admin-root *):not(select):not(.admin-date-select):not(.admin-filter-select):not(.admin-filter-box):not(.admin-date-select-pill) {
   outline: 2px solid var(--color-gold) !important;
   outline-offset: 3px !important;
 }

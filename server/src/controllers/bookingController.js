@@ -5,7 +5,9 @@ import {
   deleteBooking as removeBooking,
   getBookingStats
 } from '../services/bookingService.js';
-import { sendToMakeWebhook } from '../services/makeWebhook.js';
+import { isDateOrSlotLocked } from '../services/scheduleService.js';
+import { recordVoucherUsage } from '../services/voucherService.js';
+import { sendBookingEmails } from '../services/emailService.js';
 import { broadcastNewBooking, broadcastBookingStatusUpdate } from '../socket.js';
 
 /**
@@ -22,6 +24,19 @@ function generateBookingCode() {
 export async function createBooking(req, res, next) {
   try {
     const rawData = req.sanitizedBooking;
+
+    // Check if date or slot is locked by Salon Admin
+    const isLocked = await isDateOrSlotLocked(rawData.date, rawData.time);
+    if (isLocked) {
+      const isVi = rawData.language === 'vi';
+      return res.status(400).json({
+        success: false,
+        message: isVi
+          ? `The selected time slot (${rawData.time}) on ${rawData.date} is fully booked or locked. Please choose another time.`
+          : `The requested time slot (${rawData.time}) on ${rawData.date} is currently locked or unavailable. Please choose another slot.`
+      });
+    }
+
     const bookingId = generateBookingCode();
     const createdAt = new Date().toISOString();
 
@@ -34,13 +49,28 @@ export async function createBooking(req, res, next) {
       source: 'website'
     };
 
-    // 1. Save to Database (Neon PostgreSQL) & 2. Dispatch to Make.com webhook concurrently to send email
-    const [saved, makeResult] = await Promise.all([
-      persistBooking(newBooking),
-      sendToMakeWebhook(newBooking)
-    ]);
+    // 1. Save to Database (Neon PostgreSQL)
+    const saved = await persistBooking(newBooking);
 
-    console.info(`[Booking] ${bookingId} processed -> DB: ${saved ? 'SAVED' : 'FAIL'}, Make.com Webhook: ${makeResult?.sent ? 'SENT' : 'SKIPPED/ERROR'}`);
+    // 2. Dispatch confirmation emails via Resend (Customer thank-you & Owner alert concurrently)
+    sendBookingEmails(newBooking)
+      .then(emailResult => {
+        console.info(`[Resend Email] Async concurrent email dispatch for ${bookingId}:`, emailResult);
+      })
+      .catch(err => {
+        console.warn(`[Resend Email] Async email error for ${bookingId}:`, err.message);
+      });
+
+    // Record voucher usage if a voucher was applied
+    if (newBooking.voucher && !newBooking.voucher.includes('Community Discount') && !newBooking.voucher.includes('10% Discount')) {
+      try {
+        await recordVoucherUsage(newBooking.voucher);
+      } catch (err) {
+        console.warn(`[Booking] Could not increment voucher usage for ${newBooking.voucher}:`, err.message);
+      }
+    }
+
+    console.info(`[Booking] ${bookingId} saved to DB: ${saved ? 'SUCCESS' : 'FAIL'}`);
 
     // 3. Broadcast real-time event to all connected admin clients
     broadcastNewBooking({
@@ -49,10 +79,10 @@ export async function createBooking(req, res, next) {
       isNew: true
     });
 
-    const isEn = rawData.language === 'en';
-    const message = isEn
-      ? 'Appointment request received successfully! We will confirm via SMS shortly.'
-      : 'Yêu cầu đặt lịch đã được tiếp nhận thành công! Chúng tôi sẽ gửi tin nhắn xác nhận sớm nhất.';
+    const isVi = rawData.language === 'vi';
+    const message = isVi
+      ? 'Your appointment booking has been received successfully! A confirmation has been scheduled.'
+      : 'Appointment request received successfully! We will confirm via SMS shortly.';
 
     return res.status(201).json({
       success: true,
@@ -68,6 +98,9 @@ export async function createBooking(req, res, next) {
         time: newBooking.time,
         message: newBooking.message,
         voucher: newBooking.voucher,
+        guests: newBooking.guests,
+        price: newBooking.price,
+        originalPrice: newBooking.originalPrice,
         createdAt
       }
     });
@@ -81,18 +114,19 @@ export async function createBooking(req, res, next) {
  */
 export async function listBookings(req, res, next) {
   try {
-    const { status, search, year, month, limit = 100, offset = 0 } = req.query;
+    const { status, search, year, month, day, limit = 100, offset = 0 } = req.query;
 
     const result = await getBookings({
       status: status || 'all',
       search: search || '',
       year: year || '',
       month: month || '',
+      day: day || '',
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10)
     });
 
-    const stats = await getBookingStats();
+    const stats = await getBookingStats({ year, month, day });
 
     return res.status(200).json({
       success: true,
@@ -157,7 +191,8 @@ export async function deleteBooking(req, res) {
  */
 export async function getStats(req, res, next) {
   try {
-    const stats = await getBookingStats();
+    const { year, month, day } = req.query;
+    const stats = await getBookingStats({ year, month, day });
     return res.status(200).json({
       success: true,
       stats

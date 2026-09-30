@@ -9,7 +9,12 @@ import { initSocket } from './socket.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import promotionRoutes from './routes/promotionRoutes.js';
+import galleryRoutes from './routes/galleryRoutes.js';
+import scheduleRoutes from './routes/scheduleRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import voucherRoutes from './routes/voucherRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import { startVoucherCron } from './cron/voucherCron.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -58,7 +63,11 @@ app.get('/api/health', async (req, res) => {
 app.use('/api', bookingRoutes);
 app.use('/api', serviceRoutes);
 app.use('/api', promotionRoutes);
+app.use('/api', galleryRoutes);
+app.use('/api', scheduleRoutes);
 app.use('/api', adminRoutes);
+app.use('/api', voucherRoutes);
+app.use('/api', categoryRoutes);
 
 // 404 Handler
 app.use((req, res) => {
@@ -88,6 +97,9 @@ async function startServer() {
     console.log(`🔗 Health Check: http://localhost:${config.port}/api/health`);
     console.log(`⚡ WebSocket / Socket.io active on port ${config.port}`);
     console.log(`📁 Uploads served at: http://localhost:${config.port}/uploads/`);
+
+    // Start background cron jobs (e.g. auto-expire vouchers)
+    startVoucherCron();
   });
 }
 

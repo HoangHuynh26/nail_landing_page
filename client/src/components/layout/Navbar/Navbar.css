@@ -1,0 +1,666 @@
+/* ---------------------------------------------------
+   3. APPLE-INSPIRED SEGMENTED LANGUAGE SWITCH [ VI | EN ]
+   --------------------------------------------------- */
+.segmented-lang-switch {
+  position: relative;
+  display: inline-flex;
+  background: #EBE5DB;
+  padding: 3px;
+  border-radius: var(--radius-full);
+  user-select: none;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.segmented-lang-switch__btn {
+  position: relative;
+  z-index: 2;
+  width: 38px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-full);
+  transition: color var(--duration-fast) var(--ease-apple);
+}
+
+.segmented-lang-switch__btn.is-active {
+  color: var(--color-text-primary);
+}
+
+.segmented-lang-switch__indicator {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 38px;
+  height: 28px;
+  background: #FFFFFF;
+  border-radius: var(--radius-full);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.06);
+  transition: transform var(--duration-normal) var(--ease-apple);
+  z-index: 1;
+}
+
+
+/* ---------------------------------------------------
+/* ---------------------------------------------------
+   5. NAVBAR (Apple Liquid Glass Floating Island Navbar)
+   --------------------------------------------------- */
+.apple-island-navbar-container {
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky, 100);
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-island-navbar-container.is-transparent {
+  top: 22px;
+}
+
+.apple-island-navbar-container.is-scrolled {
+  top: 14px;
+}
+
+.apple-island-navbar-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  max-width: 1240px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Brand Logo on Left */
+.apple-glass-brand-logo {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.apple-island-navbar-container.is-transparent .apple-glass-brand-logo {
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.apple-island-navbar-container.is-scrolled .apple-glass-brand-logo {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(212, 130, 120, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04), inset 0 1px 1px #FFFFFF;
+}
+
+.apple-glass-brand-logo:hover {
+  transform: scale(1.03);
+}
+
+/* 2. Center Floating Pill Toolbar (Apple Liquid Glass) */
+.apple-liquid-glass-pill {
+  pointer-events: auto;
+  height: 48px;
+  padding: 3px 6px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Transparent at Top - Seamlessly blends with the hero background */
+.apple-island-navbar-container.is-transparent .apple-liquid-glass-pill {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+/* Luminous Authentic Apple Liquid Glass when Scrolled */
+.apple-island-navbar-container.is-scrolled .apple-liquid-glass-pill {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(28px) saturate(190%) contrast(102%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) contrast(102%);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  box-shadow: 
+    0 12px 36px -4px rgba(0, 0, 0, 0.08),
+    0 4px 14px -2px rgba(212, 130, 120, 0.12),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.02);
+}
+
+/* Inner Icon Button (Sidebar & Search) */
+.apple-glass-inner-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary, #7C5D58);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-apple);
+  flex-shrink: 0;
+}
+
+.apple-glass-inner-icon-btn:hover {
+  color: var(--color-gold-dark, #BD6D64);
+  background: rgba(212, 130, 120, 0.1);
+  transform: scale(1.06);
+}
+
+/* Segmented Tabs List */
+.apple-glass-tabs-list {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Fluid Sliding Liquid Glass Indicator with Apple Spring Physics (No nested blur for silky 60/120fps GPU performance) */
+.apple-liquid-glass-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.98);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 3px 14px rgba(212, 130, 120, 0.16),
+    inset 0 1px 1.5px #FFFFFF;
+  z-index: 1;
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform, width, opacity;
+  transition: transform 0.42s cubic-bezier(0.25, 1, 0.5, 1),
+    width 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.25s ease;
+}
+
+.apple-island-navbar-container.is-transparent .apple-liquid-glass-indicator {
+  opacity: 0 !important;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.apple-island-navbar-container.is-transparent .apple-glass-tab-item:hover {
+  background: rgba(212, 130, 120, 0.08);
+}
+
+.apple-glass-tab-item {
+  position: relative;
+  z-index: 2;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.24s var(--ease-apple), transform 0.2s var(--ease-apple);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.apple-glass-tab-text {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #7C5D58);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: color 0.24s var(--ease-apple), font-weight 0.24s var(--ease-apple);
+}
+
+.apple-glass-tab-item:hover .apple-glass-tab-text {
+  color: #E87A90;
+  text-shadow: 0 0 8px rgba(232, 122, 144, 0.3);
+}
+
+.apple-glass-tab-item.is-active .apple-glass-tab-text {
+  color: #E87A90;
+  background: linear-gradient(135deg, #FF8DA1 0%, #E87A90 40%, #D48278 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  filter: drop-shadow(0 1px 4px rgba(232, 122, 144, 0.35));
+}
+
+/* 3. Right Action Buttons */
+.apple-glass-right-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.apple-glass-action-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Text Booking CTA Button with High-Contrast Luxury Espresso & Gold Trim */
+.apple-glass-book-cta-btn {
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #281714 0%, #150B08 100%);
+  border: 1.5px solid #E5C170;
+  color: #FFFFFF;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 18px rgba(21, 11, 8, 0.45), 0 0 14px rgba(229, 193, 112, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: navCtaPulseGlow 3.5s ease-in-out infinite;
+  flex-shrink: 0;
+  white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.apple-glass-book-cta-btn * {
+  pointer-events: none;
+}
+
+.apple-glass-book-cta-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(135deg, #3A211B 0%, #1E100C 100%);
+  border-color: #F8D98C;
+  box-shadow: 0 8px 28px rgba(21, 11, 8, 0.55), 0 0 20px rgba(248, 217, 140, 0.5), inset 0 1px 2px #FFFFFF;
+}
+
+.apple-glass-book-cta-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.nav-book-icon {
+  flex-shrink: 0;
+  color: #F8D786;
+  transition: transform 0.25s var(--ease-apple);
+}
+
+.apple-glass-book-cta-btn:hover .nav-book-icon {
+  transform: rotate(-10deg) scale(1.15);
+  color: #FFE6A3;
+}
+
+.nav-book-label {
+  position: relative;
+  z-index: 2;
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.nav-book-sparkle-icon {
+  flex-shrink: 0;
+  color: #F8D786;
+  animation: navSparkleTwinkle 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(248, 215, 134, 0.8));
+}
+
+.apple-glass-book-cta-btn:hover .nav-book-sparkle-icon {
+  transform: rotate(45deg) scale(1.3);
+  color: #FFFFFF;
+}
+
+@keyframes navCtaPulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 4px 18px rgba(21, 11, 8, 0.42), 0 0 12px rgba(229, 193, 112, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 6px 24px rgba(21, 11, 8, 0.6), 0 0 18px rgba(248, 217, 140, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.55);
+  }
+}
+
+@keyframes navSparkleTwinkle {
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: scale(1.3) rotate(25deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #FFFFFF);
+  }
+}
+
+/* Mobile Toggle Button */
+.apple-glass-circle-btn {
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text, #2B1E1A);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.apple-island-navbar-container.is-transparent .apple-glass-circle-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.apple-island-navbar-container.is-scrolled .apple-glass-circle-btn {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(212, 130, 120, 0.12), inset 0 1px 1px #FFFFFF;
+}
+
+.apple-glass-circle-btn--mobile {
+  display: none;
+}
+
+/* Light theme enforcement */
+[data-theme="noir"] .apple-island-navbar-container.is-scrolled .apple-liquid-glass-pill,
+[data-theme="noir"] .apple-island-navbar-container.is-scrolled .apple-glass-brand-logo,
+[data-theme="noir"] .apple-island-navbar-container.is-scrolled .apple-glass-circle-btn {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18), inset 0 1px 1px #FFFFFF;
+}
+
+[data-theme="noir"] .apple-island-navbar-container .apple-glass-tab-text {
+  color: #2B1E1A;
+}
+
+[data-theme="noir"] .apple-island-navbar-container .apple-glass-inner-icon-btn {
+  color: #5C3531;
+}
+
+[data-theme="noir"] .story-capsule-track {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22), inset 0 1px 1px #FFFFFF;
+}
+
+[data-theme="noir"] .story-capsule-btn {
+  color: #5C3531;
+}
+
+[data-theme="noir"] .story-capsule-btn:hover,
+[data-theme="noir"] .story-capsule-btn.is-active {
+  color: #2B1E1A;
+}
+
+/* Responsive Rules */
+@media (max-width: 990px) {
+  .apple-glass-tab-item {
+    padding: 6px 11px;
+  }
+
+  .apple-glass-tab-text {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .apple-island-navbar-container {
+    top: 10px;
+    padding: 0 12px;
+  }
+
+  .apple-island-navbar-container.is-scrolled {
+    top: 8px;
+  }
+
+  .apple-island-navbar-row {
+    width: 100%;
+    max-width: 100%;
+    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Center tabs pill is hidden on mobile */
+  .apple-liquid-glass-pill {
+    display: none;
+  }
+
+  /* Brand Logo is compact on mobile */
+  .apple-glass-brand-logo {
+    padding: 4px 10px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .apple-glass-brand-logo .brand-text-lockup .brand-title {
+    font-size: 1.05rem !important;
+  }
+
+  /* Always keep logo and mobile menu button legible with liquid pearl glass capsules */
+  .apple-island-navbar-container.is-transparent .apple-glass-brand-logo,
+  .apple-island-navbar-container.is-transparent .apple-glass-circle-btn--mobile {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 14px rgba(212, 130, 120, 0.12), inset 0 1px 1px #FFFFFF;
+  }
+
+  .apple-island-navbar-container.is-scrolled .apple-glass-brand-logo,
+  .apple-island-navbar-container.is-scrolled .apple-glass-circle-btn--mobile {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 6px 20px rgba(212, 130, 120, 0.14), inset 0 1px 1px #FFFFFF;
+  }
+
+  /* Right action cluster on mobile */
+  .apple-glass-right-actions {
+    gap: 8px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  /* Language toggle visible & sleek in top bar on mobile */
+  .apple-glass-action-item--lang {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .apple-glass-action-item--lang .lang-toggle-switch {
+    width: 66px;
+    height: 30px;
+    padding: 2px;
+  }
+
+  .apple-glass-action-item--lang .lang-toggle-thumb {
+    width: 29px;
+    height: 24px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .apple-glass-action-item--lang .lang-toggle-switch.is-en .lang-toggle-thumb {
+    transform: translateX(31px);
+  }
+
+  .apple-glass-action-item--lang .lang-toggle-label {
+    font-size: 0.72rem;
+    line-height: 24px;
+  }
+
+  /* Mobile Booking CTA button */
+  .apple-glass-book-cta-btn {
+    padding: 7px 14px;
+    min-height: 38px;
+    font-size: 0.82rem;
+    gap: 6px;
+    border-radius: 9999px;
+  }
+
+  .apple-glass-circle-btn--mobile {
+    display: flex;
+    width: 38px;
+    height: 38px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+
+/* 1. Theme Switcher (Apple HIG Segmented & Tactile) */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-apple);
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--color-gold);
+  color: var(--color-text-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-subtle);
+}
+
+.theme-toggle-btn svg {
+  color: var(--color-gold);
+}
+
+
+/* ===================================================
+   APPLE-STYLE TACTILE LANGUAGE TOGGLE SWITCH (HIGH CONTRAST)
+   =================================================== */
+.lang-toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 76px;
+  height: 32px;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(198, 161, 91, 0.5);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--duration-fast) var(--ease-apple);
+  box-shadow: 0 2px 8px rgba(43, 33, 33, 0.08), inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.lang-toggle-switch:hover {
+  border-color: var(--color-gold);
+  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.28);
+  transform: translateY(-1px);
+}
+
+.lang-toggle-globe-icon {
+  display: none;
+}
+
+.lang-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 33px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #2A1713 0%, #150B08 100%);
+  border: 1px solid rgba(229, 193, 112, 0.45);
+  box-shadow: 0 2px 6px rgba(21, 11, 8, 0.35);
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.lang-toggle-switch.is-en .lang-toggle-thumb {
+  transform: translateX(37px);
+}
+
+.lang-toggle-label {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #6E534E;
+  z-index: 2;
+  transition: color 0.22s var(--ease-apple);
+  line-height: 26px;
+}
+
+.lang-toggle-label.is-active {
+  color: #FFFFFF;
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Fluid Scroll Animations */
+@keyframes fadeUpSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUpSmooth 0.55s var(--ease-apple) both;
+}

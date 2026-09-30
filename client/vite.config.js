@@ -9,7 +9,7 @@ export default defineConfig({
     host: true,
 
     allowedHosts: [
-      'physical-sox-gave-copyrighted.trycloudflare.com'
+      'fans-kerry-sagem-convention.trycloudflare.com'
     ],
 
     proxy: {

@@ -1,0 +1,58 @@
+/* ---------------------------------------------------
+   9. TRUST BAR (4 Standards Cards)
+   --------------------------------------------------- */
+.trust-bar {
+  padding: var(--space-10) 0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trust-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+.trust-bar__card {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.trust-bar__icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--color-gold-subtle);
+  border: 1px solid rgba(198, 161, 91, 0.2);
+  color: var(--color-gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trust-bar__title {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.trust-bar__desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .trust-bar__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .trust-bar__grid {
+    grid-template-columns: 1fr;
+  }
+}

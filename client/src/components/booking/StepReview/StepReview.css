@@ -1,0 +1,240 @@
+/* ==========================================================================
+   Step 5: Review & Confirmation Summary Styles
+   ========================================================================== */
+
+.booking-step--review {
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-summary-card {
+  background: var(--color-canvas, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 16px);
+  padding: var(--space-6, 24px);
+}
+
+.booking-summary-card__header {
+  padding-bottom: var(--space-4, 16px);
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+}
+
+.booking-summary-card__badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold-dark, #b45309);
+}
+
+.booking-summary-card__title {
+  font-size: 1.35rem;
+  margin-top: 2px;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-summary-card__category-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-ink-muted, #64748b);
+  background: rgba(200, 91, 74, 0.08);
+  border: 1px solid rgba(200, 91, 74, 0.2);
+  padding: 3px 10px;
+  border-radius: var(--radius-full, 9999px);
+  width: fit-content;
+}
+
+.booking-summary-card__category-sub strong {
+  color: var(--color-ink, #0f172a);
+  font-weight: 600;
+}
+
+.booking-summary-card__category-icon {
+  color: var(--color-gold-dark, #b45309);
+  flex-shrink: 0;
+}
+
+.booking-summary-card__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4, 16px);
+  margin-top: var(--space-4, 16px);
+}
+
+@media (max-width: 600px) {
+  .booking-summary-card__grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.booking-summary-item {
+  display: flex;
+  gap: var(--space-3, 12px);
+  font-size: 0.875rem;
+}
+
+.booking-summary-item__icon {
+  color: var(--color-gold, #c69255);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.booking-summary-item__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-summary-item__label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.booking-summary-item__price {
+  font-size: 1.15rem;
+  color: var(--color-gold-dark, #b45309);
+}
+
+.booking-summary-full-col {
+  grid-column: 1 / -1;
+}
+
+.booking-summary-full-width {
+  width: 100%;
+}
+
+.booking-summary-standard-price-wrap {
+  margin-top: 2px;
+}
+
+.booking-summary-email-text {
+  word-break: break-all;
+}
+
+.booking-summary-notes {
+  margin-top: var(--space-4, 16px);
+  padding-top: var(--space-3, 12px);
+  border-top: 1px solid var(--color-border-subtle, #f1f5f9);
+  font-size: 0.8125rem;
+}
+
+.booking-summary-notes__label {
+  font-weight: 600;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.booking-summary-notes__text {
+  font-style: italic;
+  margin-top: 2px;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-summary-policy {
+  margin-top: var(--space-4, 16px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  background: var(--color-surface, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 12px);
+  display: flex;
+  gap: var(--space-3, 12px);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary, #64748b);
+  line-height: 1.45;
+}
+
+.booking-summary-policy__icon {
+  color: var(--color-gold-dark, #b45309);
+  flex-shrink: 0;
+}
+
+/* StepReview Voucher Box */
+.booking-voucher-box {
+  margin-top: 6px;
+  padding: 10px 14px;
+  background: var(--color-surface, #f8fafc);
+  border: 1.5px solid #86efac;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.booking-voucher-box--success {
+  background: #f0fdf4;
+}
+
+.booking-voucher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #166534;
+  font-weight: 700;
+}
+
+.booking-voucher-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.booking-voucher-icon {
+  color: #16a34a;
+}
+
+.booking-voucher-badge {
+  background: #16a34a;
+  color: #ffffff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.booking-voucher-badge--sm {
+  font-size: 10.5px;
+  padding: 1px 6px;
+}
+
+.booking-voucher-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #bbf7d0;
+  font-size: 13px;
+}
+
+.booking-voucher-row--compact {
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.booking-voucher-orig-text {
+  color: #166534;
+}
+
+.booking-voucher-orig-strike {
+  text-decoration: line-through;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.booking-voucher-final-total {
+  font-weight: 800;
+  color: #14532d;
+  font-size: 15px;
+}
+
+.booking-error-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  background: var(--color-error-bg, #fef2f2);
+  border: 1px solid var(--color-error, #ef4444);
+  color: var(--color-error, #ef4444);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  border-radius: var(--radius-md, 12px);
+  margin-top: var(--space-4, 16px);
+  font-size: 0.875rem;
+}
