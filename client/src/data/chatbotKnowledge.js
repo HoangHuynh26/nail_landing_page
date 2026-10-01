@@ -25,7 +25,7 @@ export const INITIAL_MESSAGES = {
     {
       id: 'init-2',
       sender: 'bot',
-      text: 'We offer 26 certified treatments (Signature BIAB, Gel X, Acrylics, Shellac, 3D Nail Art...). How may we assist you with pricing, nail care, or bookings today?',
+      text: 'We offer 29 certified treatments (Signature BIAB, Gel X, Acrylics, Shellac, 3D Nail Art...). How may we assist you with pricing, nail care, or bookings today?',
       time: 'Just now',
       showChips: true
     }
@@ -38,7 +38,7 @@ export const FAQ_RESPONSES = [
     keywords: ['biab', 'gel x', 'gelx', 'weak nails', 'brittle', 'builder gel', 'difference'],
     responseEn: `✨ **Expert Recommendation:**
 • **BIAB (Builder Gel - $60+):** Best for **protecting & strengthening natural nails**. Creates a flexible apex, prevents breakage, and lasts 3–4 weeks without nail damage.
-• **Gel X ($75+):** Full-cover soft gel extensions for instant elegant length. Super lightweight and natural compared to traditional acrylic.
+• **Gel X ($80+):** Full-cover soft gel extensions for instant elegant length. Super lightweight and natural compared to traditional acrylic.
 
 💡 If your nails are thin or brittle, our technicians highly recommend starting with **BIAB**!`,
     action: { type: 'book', serviceId: 'biab-natural', labelEn: '📅 Book BIAB Treatment ($60)' }
@@ -47,23 +47,24 @@ export const FAQ_RESPONSES = [
     id: 'pricing_discount',
     keywords: ['price', 'pricing', 'cost', 'discount', 'voucher', 'student', 'senior', 'staff', 'menu'],
     responseEn: `💰 **Transparent Price Menu at Fashion Nails:**
-• **Shellac Gel / Cut Buff Shape:** from **$35**
+• **Shellac Hands / Toes:** from **$35**
 • **BIAB Natural Nails Overlay:** **$60** (Full set $80, Refill $65)
-• **Acrylic Full Set:** from **$65** (incl. gel polish)
-• **Gel X Extensions:** **$75** (incl. gel polish)
-• **Deluxe Spa Pedicure:** **$45** (with Shellac $60)
-• **Bespoke Nail Art (French, Chrome, Cat Eye, 3D):** from **$5 – $25+**
+• **Acrylic Full Set with Shellac:** **$70** (Refill $55)
+• **Gel X Extensions:** **$80** (Refill $65)
+• **Spa Pedicure:** from **$45** (with Shellac $49)
+• **Spa Pedicure & Manicure Combos:** from **$80 – $119**
 
 🎁 **EXCLUSIVE OFFER:** Enjoy **10% OFF** for Seniors, Students & Morley Galleria Staff! Gift Vouchers available.`,
-    action: { type: 'pricing', labelEn: '📖 View Full 26 Treatment Menu' }
+    action: { type: 'pricing', labelEn: '📖 View Full 29 Treatment Menu' }
   },
   {
     id: 'opening_walkin',
     keywords: ['hours', 'open', 'close', 'opening', 'walk in', 'walk-in', 'walkin', 'appointment', 'thursday', 'sunday'],
     responseEn: `⏰ **Opening Hours (Open 7 Days a Week):**
-• **Monday – Saturday:** 9:30 AM – 5:30 PM
-• **Thursday (Late Night Shopping):** 9:30 AM – **7:00 PM**
-• **Sunday:** 11:00 AM – 4:30 PM
+• **Mon – Wed, Fri:** 9:00 AM – 5:30 PM
+• **Thursday (Late Night Shopping):** 9:00 AM – **9:00 PM**
+• **Saturday:** 9:00 AM – 5:00 PM
+• **Sunday:** 11:00 AM – 5:00 PM
 
 🚶‍♀️ **Walk-ins Welcome:** We gladly welcome walk-in clients! During busy afternoon hours or weekends, booking online is recommended to guarantee zero waiting time.`,
     action: { type: 'book', labelEn: '📅 Reserve Priority Appointment' }

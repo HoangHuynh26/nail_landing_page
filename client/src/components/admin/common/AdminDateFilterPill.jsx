@@ -2,9 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import './AdminDateFilterPill.css';
 
-export function AdminDateFilterPill({ label, value, onChange, options = [], title, alignRight = false }) {
+export function AdminDateFilterPill({
+  label,
+  value,
+  onChange,
+  options = [],
+  title,
+  align = 'left',
+  alignRight = false
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
+  const activeItemRef = useRef(null);
+
+  const effectiveAlign = alignRight ? 'right' : align;
 
   // Close when clicking/touching outside or pressing Escape
   useEffect(() => {
@@ -29,6 +40,13 @@ export function AdminDateFilterPill({ label, value, onChange, options = [], titl
     };
   }, [isOpen]);
 
+  // Scroll active item into view when opening dropdown
+  useEffect(() => {
+    if (isOpen && activeItemRef.current) {
+      activeItemRef.current.scrollIntoView({ block: 'nearest' });
+    }
+  }, [isOpen]);
+
   const selectedOption = options.find((opt) => String(opt.value) === String(value)) || options[0];
   const rawLabel = selectedOption ? selectedOption.label : value;
 
@@ -39,22 +57,17 @@ export function AdminDateFilterPill({ label, value, onChange, options = [], titl
     return String(rawLabel).replace(/\s*\([^)]*\)/, '');
   }, [rawLabel, value]);
 
-  return (
-    <div className="admin-date-pill-wrapper" ref={containerRef} title={title}>
-      {/* Invisible native select on mobile devices for smooth native picker */}
-      <select
-        className="admin-date-pill-native-select"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={title || label}
-      >
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+  const handleSelect = (optVal) => {
+    onChange(optVal);
+    setIsOpen(false);
+  };
 
+  return (
+    <div
+      className={`admin-date-pill-wrapper ${isOpen ? 'is-open' : ''}`}
+      ref={containerRef}
+      title={title}
+    >
       <button
         type="button"
         className={`admin-date-pill-btn ${isOpen ? 'is-active' : ''}`}
@@ -68,24 +81,26 @@ export function AdminDateFilterPill({ label, value, onChange, options = [], titl
       </button>
 
       {isOpen && (
-        <div className={`admin-date-pill-menu ${alignRight ? 'admin-date-pill-menu--right' : ''}`} role="listbox">
+        <div
+          className={`admin-date-pill-menu admin-date-pill-menu--${effectiveAlign}`}
+          role="listbox"
+        >
           <div className="admin-date-pill-menu-inner">
             {options.map((opt) => {
               const isSelected = String(opt.value) === String(value);
               return (
-                <div
+                <button
                   key={opt.value}
+                  ref={isSelected ? activeItemRef : null}
+                  type="button"
                   role="option"
                   aria-selected={isSelected}
                   className={`admin-date-pill-item ${isSelected ? 'is-selected' : ''}`}
-                  onClick={() => {
-                    onChange(opt.value);
-                    setIsOpen(false);
-                  }}
+                  onClick={() => handleSelect(opt.value)}
                 >
                   <span className="admin-date-pill-item-label">{opt.label}</span>
                   {isSelected && <Check size={14} className="admin-date-pill-item-check" />}
-                </div>
+                </button>
               );
             })}
           </div>

@@ -242,17 +242,14 @@
 }
 
 .apple-glass-tab-item:hover .apple-glass-tab-text {
-  color: #E87A90;
-  text-shadow: 0 0 8px rgba(232, 122, 144, 0.3);
+  color: var(--color-gold);
+  text-shadow: 0 0 8px rgba(212, 130, 120, 0.25);
 }
 
 .apple-glass-tab-item.is-active .apple-glass-tab-text {
-  color: #E87A90;
-  background: linear-gradient(135deg, #FF8DA1 0%, #E87A90 40%, #D48278 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-gold);
   font-weight: 700;
-  filter: drop-shadow(0 1px 4px rgba(232, 122, 144, 0.35));
+  filter: drop-shadow(0 1px 3px rgba(212, 130, 120, 0.25));
 }
 
 /* 3. Right Action Buttons */
@@ -535,13 +532,9 @@
     line-height: 24px;
   }
 
-  /* Mobile Booking CTA button */
+  /* Hide navbar Book CTA button on mobile */
   .apple-glass-book-cta-btn {
-    padding: 7px 14px;
-    min-height: 38px;
-    font-size: 0.82rem;
-    gap: 6px;
-    border-radius: 9999px;
+    display: none !important;
   }
 
   .apple-glass-circle-btn--mobile {

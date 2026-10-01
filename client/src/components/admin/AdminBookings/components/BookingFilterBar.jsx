@@ -114,6 +114,7 @@ export function BookingFilterBar({
             onChange={setSelectedDay}
             options={dayOptions}
             title="Filter by Day"
+            align="left"
           />
 
           <AdminDateFilterPill
@@ -122,6 +123,7 @@ export function BookingFilterBar({
             onChange={setSelectedMonth}
             options={monthOptions}
             title="Filter by Month"
+            align="center"
           />
 
           <AdminDateFilterPill
@@ -130,6 +132,7 @@ export function BookingFilterBar({
             onChange={setSelectedYear}
             options={yearOptions}
             title="Filter by Year"
+            align="right"
           />
 
           {/* Reset Date Button */}

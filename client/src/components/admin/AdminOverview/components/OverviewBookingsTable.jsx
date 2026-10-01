@@ -187,7 +187,7 @@ export function OverviewBookingsTable({
                     <td className="cell-nowrap">
                       <div className="admin-overview-price-wrap">
                         <span className="admin-overview-price-val">
-                          {displayPrice != null ? `AU$${formatPrice(displayPrice)}` : '—'}
+                          {displayPrice != null ? `$${formatPrice(displayPrice)}` : '—'}
                         </span>
                         {guests > 1 && unitPrice != null && (
                           <span className="admin-overview-price-sub">
@@ -311,7 +311,7 @@ export function OverviewBookingsTable({
                       <span>{guests > 1 ? `${guests} Guests` : '1 Person'}</span>
                     </span>
                     <span className="admin-overview-price-val">
-                      {displayPrice != null ? `AU$${formatPrice(displayPrice)}` : '—'}
+                      {displayPrice != null ? `$${formatPrice(displayPrice)}` : '—'}
                     </span>
                   </div>
                   <div className="admin-overview-card-meta-date">

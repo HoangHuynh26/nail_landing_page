@@ -31,28 +31,26 @@ export function PricingTable() {
 
   const categories = [
     { key: 'all', label: t('services.tabAll') },
-    { key: 'acrylic', label: 'Acrylic Nails' },
-    { key: 'shellac', label: 'Shellac' },
     { key: 'biab', label: 'Builder Gel - BIAB' },
+    { key: 'acrylic', label: 'Acrylic Nails' },
     { key: 'gelx', label: 'Gel X Extensions' },
-    { key: 'polish', label: 'Nail Polish' },
-    { key: 'sns', label: 'SNS Dipping' },
-    { key: 'extra', label: 'Extra Services' }
+    { key: 'shellac', label: 'Shellac & Manicure' },
+    { key: 'pedicure', label: 'Spa Pedicure & Combos' },
+    { key: 'extra', label: 'Take Off & Repair' }
   ];
 
   const categoryTitles = {
-    acrylic: 'ACRYLIC NAILS',
-    shellac: 'SHELLAC',
     biab: 'BUILDER GEL - BIAB',
+    acrylic: 'ACRYLIC NAILS',
     gelx: 'GEL X EXTENSIONS',
-    polish: 'NAIL POLISH',
-    sns: 'SNS (DIPPING POWDER)',
-    extra: 'EXTRA SERVICES'
+    shellac: 'SHELLAC & MANICURE',
+    pedicure: 'SPA PEDICURE & COMBOS',
+    extra: 'TAKE OFF & REPAIR'
   };
 
-  // 2-Column layout matching the exact physical salon menu photo
-  const columnLeftCats = ['acrylic', 'shellac', 'biab', 'gelx'];
-  const columnRightCats = ['polish', 'sns', 'extra'];
+  // 2-Column balanced layout
+  const columnLeftCats = ['biab', 'acrylic', 'gelx'];
+  const columnRightCats = ['shellac', 'pedicure', 'extra'];
 
   const getItemsForCat = (catKey) => liveServices.filter(s => s.category === catKey);
 

@@ -39,8 +39,8 @@ export function BookingDetailModal({
 
   const partyText = guests > 1 ? ` (${guests} guests)` : '';
   const waText = hasVoucher && totalOriginalPrice > 0
-    ? `Hi ${selectedBooking.name}, confirming your appointment for ${selectedBooking.service}${partyText} on ${selectedBooking.date} at ${selectedBooking.time}. Voucher ${voucherInfo.code} (${voucherInfo.badgeText}) applied! Discounted Total: AU$${formatPrice(totalFinalPrice)} (Original: AU$${formatPrice(totalOriginalPrice)}). See you soon at Fashion Nails Morley Galleria!`
-    : `Hi ${selectedBooking.name}, confirming your appointment for ${selectedBooking.service}${partyText} on ${selectedBooking.date} at ${selectedBooking.time}${totalFinalPrice > 0 ? ` (Total: AU$${formatPrice(totalFinalPrice)})` : ''}. See you soon at Fashion Nails Morley Galleria!`;
+    ? `Hi ${selectedBooking.name}, confirming your appointment for ${selectedBooking.service}${partyText} on ${selectedBooking.date} at ${selectedBooking.time}. Voucher ${voucherInfo.code} (${voucherInfo.badgeText}) applied! Discounted Total: $${formatPrice(totalFinalPrice)} (Original: $${formatPrice(totalOriginalPrice)}). See you soon at Fashion Nails Morley Galleria!`
+    : `Hi ${selectedBooking.name}, confirming your appointment for ${selectedBooking.service}${partyText} on ${selectedBooking.date} at ${selectedBooking.time}${totalFinalPrice > 0 ? ` (Total: $${formatPrice(totalFinalPrice)})` : ''}. See you soon at Fashion Nails Morley Galleria!`;
 
   return (
     <div className="admin-modal-overlay" onClick={onClose}>
@@ -125,7 +125,7 @@ export function BookingDetailModal({
                 <div className="admin-booking-calc-item">
                   <span className="admin-booking-calc-label">UNIT PRICE</span>
                   <div className="admin-booking-calc-value">
-                    {unitPrice > 0 ? `AU$${formatPrice(unitPrice)}` : 'Custom'}
+                    {unitPrice > 0 ? `$${formatPrice(unitPrice)}` : 'Custom'}
                     <span className="admin-booking-calc-sub">/ person</span>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export function BookingDetailModal({
                 <div className="admin-booking-calc-item is-subtotal">
                   <span className="admin-booking-calc-label">SUBTOTAL</span>
                   <div className="admin-booking-calc-value admin-booking-calc-subtotal">
-                    AU${formatPrice(totalOriginalPrice)}
+                    ${formatPrice(totalOriginalPrice)}
                   </div>
                 </div>
               </div>
@@ -159,7 +159,7 @@ export function BookingDetailModal({
                     )}
                   </div>
                   <div className="admin-booking-calc-voucher-discount">
-                    - AU${formatPrice(discountAmount)}
+                    - ${formatPrice(discountAmount)}
                   </div>
                 </div>
               ) : (
@@ -170,7 +170,7 @@ export function BookingDetailModal({
                     <span className="admin-booking-voucher-none-badge">None</span>
                   </div>
                   <div className="admin-booking-calc-voucher-none-amt">
-                    AU$0
+                    $0
                   </div>
                 </div>
               )}
@@ -182,9 +182,9 @@ export function BookingDetailModal({
                 </div>
                 <div className="admin-booking-calc-total-amount">
                   {hasVoucher && discountAmount > 0 && (
-                    <span className="admin-booking-calc-strike">AU${formatPrice(totalOriginalPrice)}</span>
+                    <span className="admin-booking-calc-strike">${formatPrice(totalOriginalPrice)}</span>
                   )}
-                  <span className="admin-booking-calc-final">AU${formatPrice(totalFinalPrice)}</span>
+                  <span className="admin-booking-calc-final">${formatPrice(totalFinalPrice)}</span>
                 </div>
               </div>
             </div>
@@ -222,7 +222,7 @@ export function BookingDetailModal({
                     {voucherInfo.discountType === 'percentage'
                       ? `Percentage: -${voucherInfo.discountValue}%`
                       : voucherInfo.discountType === 'fixed'
-                      ? `Fixed Amount: -AU$${voucherInfo.discountValue}`
+                      ? `Fixed Amount: -$${voucherInfo.discountValue}`
                       : voucherInfo.typeLabel}
                   </span>
                 </div>
@@ -239,10 +239,10 @@ export function BookingDetailModal({
                 {(voucherInfo.minSpend > 0 || voucherInfo.maxDiscount > 0) && (
                   <div className="admin-booking-voucher-limits">
                     {voucherInfo.minSpend > 0 && (
-                      <span>Min spend: <strong>AU${voucherInfo.minSpend}</strong></span>
+                      <span>Min spend: <strong>${voucherInfo.minSpend}</strong></span>
                     )}
                     {voucherInfo.maxDiscount > 0 && (
-                      <span>Max discount: <strong>AU${voucherInfo.maxDiscount}</strong></span>
+                      <span>Max discount: <strong>${voucherInfo.maxDiscount}</strong></span>
                     )}
                   </div>
                 )}

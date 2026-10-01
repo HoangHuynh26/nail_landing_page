@@ -104,7 +104,7 @@ export function VoucherTable({
                         </div>
                         {/* Mobile Discount Tag */}
                         <span className="admin-vouchers-mobile-discount">
-                          {v.discountType === 'percentage' ? `${v.discountValue}% OFF` : `AU$${v.discountValue} OFF`}
+                          {v.discountType === 'percentage' ? `${v.discountValue}% OFF` : `$${v.discountValue} OFF`}
                         </span>
                       </div>
                       {v.minSpend > 0 && (
@@ -122,7 +122,7 @@ export function VoucherTable({
                     {/* Discount (Desktop Only) */}
                     <td className="admin-vouchers-td admin-vouchers-td--discount admin-vouchers-desktop-only">
                       <div className="admin-vouchers-discount-val">
-                        {v.discountType === 'percentage' ? `${v.discountValue}%` : `AU$${v.discountValue}`}
+                        {v.discountType === 'percentage' ? `${v.discountValue}%` : `$${v.discountValue}`}
                       </div>
                       {v.discountType === 'percentage' && v.maxDiscount && (
                         <div className="admin-vouchers-min-spend">

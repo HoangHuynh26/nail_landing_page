@@ -9,21 +9,10 @@ export const servicesData = [
   {
     id: "biab-natural",
     category: "biab",
-    name_en: "Natural nails",
+    name_en: "Builder Gel - BIAB (natural nails)",
     description_en: "Reinforced BIAB apex overlay on natural nails to protect and encourage healthy natural nail growth.",
-    duration: 50,
+    duration: 30,
     price: 60,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "biab-fullset",
-    category: "biab",
-    name_en: "FULL SET",
-    description_en: "Complete new set of Builder in a Bottle gel sculpting with immaculate architecture and apex detailing.",
-    duration: 70,
-    price: 80,
     pricePrefix: "",
     featured: false,
     active: true
@@ -31,326 +20,349 @@ export const servicesData = [
   {
     id: "biab-refill",
     category: "biab",
-    name_en: "Refill",
+    name_en: "Builder Gel - BIAB (refill)",
     description_en: "Maintenance rebalance, cuticle care, and BIAB gel infill for enduring flawless wear.",
-    duration: 55,
+    duration: 45,
     price: 65,
     pricePrefix: "",
     featured: false,
     active: true
   },
+  {
+    id: "biab-fullset",
+    category: "biab",
+    name_en: "Builder Gel - BIAB (fullset)",
+    description_en: "Complete new set of Builder in a Bottle gel sculpting with immaculate architecture and apex detailing.",
+    duration: 60,
+    price: 80,
+    pricePrefix: "",
+    featured: true,
+    active: true
+  },
+  {
+    id: "biab-refill-french",
+    category: "biab",
+    name_en: "Builder Gel - BIAB (refill) + French design",
+    description_en: "BIAB infill rebalance combined with timeless, delicate hand-painted French smile lines.",
+    duration: 45,
+    price: 85,
+    pricePrefix: "",
+    featured: false,
+    active: true
+  },
+  {
+    id: "biab-design",
+    category: "biab",
+    name_en: "Builder Gel - BIAB + design",
+    description_en: "BIAB structured manicure paired with bespoke nail art, chrome glazed finish, or custom detailing.",
+    duration: 50,
+    price: 95,
+    pricePrefix: "From ",
+    featured: false,
+    active: true
+  },
 
   // ==========================================
-  // 2. SHELLAC
+  // 2. ACRYLIC NAILS
   // ==========================================
   {
-    id: "shellac-cut-buff-shape",
-    category: "shellac",
-    name_en: "Cut buff shape shellac",
-    description_en: "Essential nail trimming, shaping, buffing, and long-wear Shellac gel polish finish.",
-    duration: 35,
-    price: 35,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "shellac-manicure",
-    category: "shellac",
-    name_en: "Manicure shellac",
-    description_en: "Full manicure cuticle treatment, nail plate preparation, hydrating massage, and durable Shellac gel.",
+    id: "acrylic-fullset-shellac",
+    category: "acrylic",
+    name_en: "Full set acrylic shallec gel",
+    description_en: "Full set durable acrylic extensions sculpted to desired length, finished with high-gloss Shellac gel.",
     duration: 45,
-    price: 50,
+    price: 70,
     pricePrefix: "",
-    featured: false,
+    featured: true,
     active: true
   },
   {
-    id: "shellac-pedicure",
-    category: "shellac",
-    name_en: "Pedicure shellac",
-    description_en: "Relaxing foot soak, heel buffing, meticulous toenail grooming, and instant-dry Shellac gel.",
-    duration: 50,
+    id: "acrylic-refill-shellac",
+    category: "acrylic",
+    name_en: "Refill acrylic shallec gel",
+    description_en: "Acrylic regrowth infill rebalance, cuticle maintenance, and fresh Shellac gel application.",
+    duration: 45,
     price: 55,
     pricePrefix: "",
     featured: false,
     active: true
   },
   {
-    id: "shellac-mani-pedi",
-    category: "shellac",
-    name_en: "Manicure & pedicure shellac combo",
-    description_en: "Complete luxury care package for both hands and feet with long-wear Shellac gel polish.",
-    duration: 85,
-    price: 100,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-
-  // ==========================================
-  // 3. ACRYLIC NAILS
-  // ==========================================
-  {
-    id: "acrylic-fullset-shellac",
+    id: "acrylic-fullset-french",
     category: "acrylic",
-    name_en: "FULL SET acrylic with shellac",
-    description_en: "Full set acrylic extensions sculpted to your desired length and shape, finished with high-gloss Shellac gel.",
-    duration: 65,
-    price: 70,
+    name_en: "Fullset acrylic + French design",
+    description_en: "Full set acrylic extensions crafted with pristine, hand-painted classic French tips.",
+    duration: 45,
+    price: 90,
     pricePrefix: "",
     featured: false,
     active: true
   },
   {
-    id: "acrylic-fullset-toes-shellac",
+    id: "acrylic-fullset-ombre",
     category: "acrylic",
-    name_en: "FULL SET Toes with shellac",
-    description_en: "Full set acrylic toe enhancement for uniform, flawless toenails finished with durable Shellac.",
-    duration: 60,
+    name_en: "Fullset acrylic + ombre",
+    description_en: "Full set acrylics featuring a flawless gradient baby boomer or color ombre transition.",
+    duration: 45,
+    price: 90,
+    pricePrefix: "",
+    featured: true,
+    active: true
+  },
+  {
+    id: "acrylic-refill-french",
+    category: "acrylic",
+    name_en: "Refill acrylic + French design",
+    description_en: "Acrylic infill maintenance finished with crisp, elegant artisan French smile lines.",
+    duration: 45,
     price: 75,
     pricePrefix: "",
     featured: false,
     active: true
   },
   {
-    id: "acrylic-permanent-french",
+    id: "acrylic-refill-design",
     category: "acrylic",
-    name_en: "FULL SET Permanent French (white tips)",
-    description_en: "Classic pink and permanent white powder sculpted French tips with enduring elegance.",
-    duration: 65,
-    price: 65,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "acrylic-overlay-shellac",
-    category: "acrylic",
-    name_en: "Overlay on natural nails with shellac",
-    description_en: "Thin strengthening acrylic overlay applied directly over natural nails, completed with Shellac gel.",
-    duration: 50,
-    price: 60,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "acrylic-refill-shellac",
-    category: "acrylic",
-    name_en: "Refill acrylic with shellac",
-    description_en: "Acrylic regrowth rebalance and infill, cuticle maintenance, and fresh Shellac gel application.",
-    duration: 50,
-    price: 55,
+    name_en: "Refill acrylic + design",
+    description_en: "Full acrylic infill combined with custom hand-painted nail artistry or trend design.",
+    duration: 60,
+    price: 95,
     pricePrefix: "",
     featured: false,
     active: true
   },
 
   // ==========================================
-  // 4. GEL X EXTENSIONS
+  // 3. GEL X EXTENSIONS
   // ==========================================
   {
-    id: "gelx-natural",
+    id: "gelx-extension",
     category: "gelx",
-    name_en: "Natural nails",
-    description_en: "Soft gel full-cover tip extensions crafted with 100% gel for a featherlight, natural feel.",
-    duration: 65,
+    name_en: "Gel X extension",
+    description_en: "100% soft gel full-cover tip extensions for an ultra-lightweight, natural feel without nail damage.",
+    duration: 40,
     price: 80,
     pricePrefix: "",
-    featured: false,
+    featured: true,
     active: true
   },
   {
     id: "gelx-refill",
     category: "gelx",
-    name_en: "Refill",
-    description_en: "Maintenance rebalance and infill for Gel X extensions with cuticle care.",
-    duration: 55,
-    price: 70,
+    name_en: "Refill gel X",
+    description_en: "Maintenance rebalance and infill for Gel X extensions with complete cuticle grooming.",
+    duration: 40,
+    price: 65,
     pricePrefix: "",
     featured: false,
     active: true
   },
 
   // ==========================================
-  // 5. SNS (DIPPING POWDER)
+  // 4. SHELLAC & MANICURE
   // ==========================================
   {
-    id: "sns-natural",
-    category: "sns",
-    name_en: "SNS on natural nails",
-    description_en: "Nutrient-rich dipping powder fortified with vitamins and calcium on natural nails. No UV light required.",
-    duration: 45,
-    price: 55,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "sns-fullset",
-    category: "sns",
-    name_en: "FULL SET SNS",
-    description_en: "Full set extensions with organic SNS dipping powder for durable, lightweight, long-lasting beauty.",
-    duration: 60,
-    price: 70,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-
-  // ==========================================
-  // 6. NAIL POLISH
-  // ==========================================
-  {
-    id: "polish-cut-buff-shape",
-    category: "polish",
-    name_en: "Cut buff shape nail polish",
-    description_en: "Basic quick grooming: nail trimming, shaping, buffing, and traditional nail polish.",
+    id: "shellac-hand",
+    category: "shellac",
+    name_en: "Shallec hand",
+    description_en: "Essential nail trimming, shaping, buffing, and long-wear Shellac gel polish finish on hands.",
     duration: 25,
-    price: 25,
+    price: 35,
     pricePrefix: "",
     featured: false,
     active: true
   },
   {
-    id: "polish-manicure",
-    category: "polish",
-    name_en: "Manicure with nail polish",
-    description_en: "Traditional full manicure with cuticle treatment, hand massage, and professional lacquer.",
-    duration: 35,
+    id: "shellac-hand-takeoff",
+    category: "shellac",
+    name_en: "Shallec hand + take off",
+    description_en: "Safe, gentle removal of existing gel polish followed by fresh Shellac gel application.",
+    duration: 25,
+    price: 40,
+    pricePrefix: "From ",
+    featured: false,
+    active: true
+  },
+  {
+    id: "shellac-toes",
+    category: "shellac",
+    name_en: "Shallec toes",
+    description_en: "Toenail shaping, buffing, cuticle tidy, and instant-dry high-gloss Shellac gel polish.",
+    duration: 20,
+    price: 35,
+    pricePrefix: "",
+    featured: false,
+    active: true
+  },
+  {
+    id: "shellac-hand-french",
+    category: "shellac",
+    name_en: "Shallec hand + French",
+    description_en: "Shellac gel manicure on hands finished with clean, sophisticated French tip smile lines.",
+    duration: 30,
+    price: 50,
+    pricePrefix: "",
+    featured: false,
+    active: true
+  },
+  {
+    id: "shellac-toes-french",
+    category: "shellac",
+    name_en: "Shallec toes + French",
+    description_en: "Long-lasting Shellac gel polish on toes completed with delicate white French tips.",
+    duration: 30,
+    price: 50,
+    pricePrefix: "",
+    featured: false,
+    active: true
+  },
+  {
+    id: "manicure-shellac",
+    category: "shellac",
+    name_en: "Manicure shallec",
+    description_en: "Full manicure cuticle grooming, hydrating hand treatment, and durable Shellac gel polish.",
+    duration: 30,
+    price: 50,
+    pricePrefix: "",
+    featured: false,
+    active: true
+  },
+  {
+    id: "manicure-normal-polish",
+    category: "shellac",
+    name_en: "Manicure normal nails polish",
+    description_en: "Traditional manicure with meticulous nail plate prep, soothing lotion, and classic polish.",
+    duration: 30,
     price: 40,
     pricePrefix: "",
     featured: false,
     active: true
   },
+
+  // ==========================================
+  // 5. SPA PEDICURE & COMBOS
+  // ==========================================
   {
-    id: "polish-pedicure",
-    category: "polish",
-    name_en: "Pedicure with nail polish",
-    description_en: "Warm foot bath, exfoliating scrub, toenail detailing, and classic polish.",
-    duration: 45,
+    id: "pedicure-shellac",
+    category: "pedicure",
+    name_en: "Spa pedicure shallec",
+    description_en: "Relaxing foot soak, heel buffing, toenail care, and instant-dry high-shine Shellac gel.",
+    duration: 30,
+    price: 49,
+    pricePrefix: "",
+    featured: true,
+    active: true
+  },
+  {
+    id: "pedicure-normal-polish",
+    category: "pedicure",
+    name_en: "Spa pedicure normal polish",
+    description_en: "Revitalizing whirlpool foot bath, exfoliating scrub, nail detailing, and classic nail polish.",
+    duration: 30,
     price: 45,
     pricePrefix: "",
     featured: false,
     active: true
   },
   {
-    id: "polish-spa-mani-pedi",
-    category: "polish",
-    name_en: "Spa pedicure & manicure with nail polish",
-    description_en: "Comprehensive relaxing spa session for hands and feet with invigorating scrub and classic polish.",
-    duration: 75,
+    id: "combo-spa-pedi-mani-shellac",
+    category: "pedicure",
+    name_en: "Spa pedicure shallec + manicure shallec",
+    description_en: "Ultimate head-to-toe pampering with long-wear Shellac gel on both hands and feet.",
+    duration: 60,
+    price: 99,
+    pricePrefix: "",
+    featured: true,
+    active: true
+  },
+  {
+    id: "combo-spa-pedi-mani-normal",
+    category: "pedicure",
+    name_en: "Spa pedicure normal nails polish + manicure normal nails polish",
+    description_en: "Classic full salon experience for hands and feet with professional traditional lacquer.",
+    duration: 60,
     price: 80,
     pricePrefix: "",
     featured: false,
     active: true
   },
+  {
+    id: "combo-pedi-shellac-fullset-acrylic",
+    category: "pedicure",
+    name_en: "Spa pedicure shallec + fullset acrylic Shallec",
+    description_en: "Spa pedicure with shellac combined with a full set of acrylic extensions with shellac.",
+    duration: 80,
+    price: 119,
+    pricePrefix: "",
+    featured: true,
+    active: true
+  },
+  {
+    id: "combo-pedi-shellac-refill-acrylic",
+    category: "pedicure",
+    name_en: "Spa pedicure shallec + refill acrylic Shallec",
+    description_en: "Spa pedicure with shellac paired with an acrylic infill maintenance service.",
+    duration: 70,
+    price: 104,
+    pricePrefix: "",
+    featured: false,
+    active: true
+  },
+  {
+    id: "combo-pedi-shellac-biab-natural",
+    category: "pedicure",
+    name_en: "Spa pedicure shallec + BIAB natural nails",
+    description_en: "Luxury spa pedicure with shellac plus strengthening BIAB overlay on natural nails.",
+    duration: 70,
+    price: 109,
+    pricePrefix: "",
+    featured: true,
+    active: true
+  },
 
   // ==========================================
-  // 7. EXTRA SERVICES & NAIL ART
+  // 6. TAKE OFF & REPAIR
   // ==========================================
   {
-    id: "extra-cat-eyes",
+    id: "extra-takeoff-strengthening",
     category: "extra",
-    name_en: "Cat eyes gel effect",
-    description_en: "Magnetic cat-eye gel shimmer reflecting velvety depth and light movement.",
-    duration: 20,
-    price: 20,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "extra-chrome-colours",
-    category: "extra",
-    name_en: "Chrome colours (Glazed / Mirror finish)",
-    description_en: "High-fashion chrome glazed donut or metallic mirror finish over your gel base.",
-    duration: 20,
-    price: 20,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "extra-airbrush-ombre",
-    category: "extra",
-    name_en: "Air brush ombre",
-    description_en: "Flawlessly blended airbrushed gradient ombre transition across the nails.",
+    name_en: "Take off + shape strengthening",
+    description_en: "Safe, non-damaging removal of acrylic/gel, nail re-shaping, and fortifying treatment.",
     duration: 25,
     price: 25,
-    pricePrefix: "",
+    pricePrefix: "From ",
     featured: false,
     active: true
   },
   {
-    id: "extra-take-off-strengthen",
+    id: "extra-nail-repair",
     category: "extra",
-    name_en: "Take off & shape strengthen",
-    description_en: "Gentle professional removal of acrylic/gel, nail re-shaping, and strengthening treatment.",
-    duration: 30,
-    price: 25,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "extra-single-repair",
-    category: "extra",
-    name_en: "Single nails repair",
-    description_en: "Fast repair or re-sculpting for an individual damaged or chipped nail.",
-    duration: 15,
+    name_en: "Nails repair",
+    description_en: "Single cracked, chipped or broken nail repair, strengthening, and re-sculpting.",
+    duration: 20,
     price: 10,
-    pricePrefix: "",
-    featured: false,
-    active: true
-  },
-  {
-    id: "extra-french-hand",
-    category: "extra",
-    name_en: "French style by hand",
-    description_en: "Artisan hand-painted French smile lines customized to your nail length and curvature.",
-    duration: 25,
-    price: 20,
     pricePrefix: "From ",
-    featured: false,
-    active: true
-  },
-  {
-    id: "extra-nail-art-design",
-    category: "extra",
-    name_en: "Nail art & bespoke design",
-    description_en: "Bespoke custom nail art, marble textures, Swarovski crystals, foils, or trend designs.",
-    duration: 35,
-    price: 25,
-    pricePrefix: "From ",
-    featured: false,
-    active: true
-  },
-  {
-    id: "extra-express-manicure",
-    category: "extra",
-    name_en: "Express manicure (Add-on)",
-    description_en: "Quick cuticle tidy and clean-up add-on service alongside any enhancement.",
-    duration: 15,
-    price: 15,
-    pricePrefix: "Extra ",
     featured: false,
     active: true
   }
 ];
 
 export const availableTimeSlots = [
+  "09:00 AM",
   "09:30 AM",
-  "10:15 AM",
+  "10:00 AM",
+  "10:30 AM",
   "11:00 AM",
-  "11:45 AM",
+  "11:30 AM",
+  "12:00 PM",
+  "12:30 PM",
   "01:00 PM",
-  "01:45 PM",
+  "01:30 PM",
+  "02:00 PM",
   "02:30 PM",
-  "03:15 PM",
+  "03:00 PM",
+  "03:30 PM",
   "04:00 PM",
-  "04:45 PM",
-  "05:30 PM",
-  "06:15 PM"
+  "04:30 PM",
+  "05:00 PM"
 ];

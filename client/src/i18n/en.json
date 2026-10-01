@@ -18,11 +18,18 @@
     "bookCta": "Book Appointment",
     "menu": "Menu"
   },
+  "about": {
+    "badge": "About Fashion Nails",
+    "title": "Your Premier Nail Destination at Morley Galleria",
+    "p1": "Conveniently situated inside Morley Galleria Shopping Centre, Fashion Nails is proud to be recognized as Galleria's Retailer of the Month. We provide exceptional nail care in a tranquil, pristine setting—from long-lasting Builder Gel (BIAB) and sharp acrylic sculpting to bespoke nail artistry and luxurious pedicures.",
+    "quote": "Recognised by Galleria Shopping Centre for outstanding customer service, dedication to our clients, and setting the standard for salon excellence.",
+    "author": "THE FASHION NAILS PROMISE"
+  },
   "hero": {
     "badge": "Fashion Nails • Morley Galleria",
     "titleLine1": "Beautiful nails.",
     "titleLine2": "Beautifully yours.",
-    "subtitle": "Your premier nail destination at Morley Galleria. Specializing in Acrylic Nails, Shellac, Builder Gel (BIAB), Gel X Extensions, SNS Dipping, and bespoke nail artistry.",
+    "subtitle": "Discover our signature nail services, specialising in Builder Gel (BIAB), Gel Nail Art, Acrylic Nail Art and relaxing Pedicures. From strong, long-lasting natural nail enhancements to beautifully handcrafted designs, our experienced nail artists create every set with care, precision and attention to detail.",
     "primaryCta": "Book an Appointment",
     "secondaryCta": "View Price List",
     "ratingScore": "4.9 / 5.0",
@@ -53,12 +60,11 @@
     "subtitle": "Explore our full range of services from Builder Gel (BIAB) and Acrylics to Gel X, Shellac, and trending Nail Art.",
     "tabAll": "All Services",
     "tabBiab": "Builder Gel - BIAB",
-    "tabShellac": "Shellac",
     "tabAcrylic": "Acrylic Nails",
     "tabGelX": "Gel X Extensions",
-    "tabSns": "SNS Dipping",
-    "tabPolish": "Nail Polish",
-    "tabExtra": "Extra Services & Art",
+    "tabShellac": "Shellac & Manicure",
+    "tabPedicure": "Spa Pedicure & Combos",
+    "tabExtra": "Take Off & Repair",
     "durationUnit": "mins",
     "priceFrom": "From",
     "bookService": "Book This Service",
@@ -103,7 +109,6 @@
     "badge": "About Fashion Nails",
     "title": "Your Dedicated Nail Studio at Morley Galleria",
     "p1": "Conveniently located in Morley Galleria Shopping Centre, Fashion Nails has long been the favorite choice for local residents seeking high quality, long-lasting, and fashionable nail enhancements.",
-    "p2": "From quick cut-buff-shape sessions and nourishing pedicures to intricate full-set acrylics, BIAB, and Gel X, our team takes pride in every stroke. We listen to your preferences to give you nails you'll love showing off every day.",
     "quote": "“Quality craftsmanship, friendly service, and nails that turn heads.”",
     "author": "The Fashion Nails Morley Galleria Team"
   },
@@ -220,7 +225,7 @@
   "footer": {
     "desc": "Fashion Nails - Full-service nail salon located inside Morley Galleria. Professional Acrylic Nails, BIAB, Gel X, Shellac, SNS Dipping, and trending Nail Art.",
     "hoursTitle": "Salon Hours",
-    "hours": "Monday – Saturday: 9:30 AM – 5:30 PM (Thurs open till 7:00 PM)\nSunday: 11:00 AM – 4:30 PM",
+    "hours": "Mon – Wed, Fri: 9:00 AM – 5:30 PM\nThursday (Late Night): 9:00 AM – 9:00 PM\nSaturday: 9:00 AM – 5:00 PM\nSunday: 11:00 AM – 5:00 PM",
     "contactTitle": "Location & Contact",
     "address": "Shop SP094 (Opposite Kmart), Morley Galleria Shopping Centre, Morley WA 6062, Australia",
     "phone": "+61 8 9375 2888",
@@ -259,7 +264,7 @@
       "tag": "CHAPTER 03 • MASTER NAIL ARTISTRY",
       "headline": "Natural nail vitality first. Fortification without structural damage.",
       "lead": "Specializing in Japanese Builder Gel (BIAB) that empowers weak nails to grow resiliently, ultra-lightweight Gel-X extensions, and bespoke hand-painted French, chrome glazing, and cat-eye ombre precision.",
-      "stat1Num": "26+",
+      "stat1Num": "29+",
       "stat1Label": "Official Menu Services",
       "stat2Num": "4+ Wks",
       "stat2Label": "High-Gloss BIAB Durability",
@@ -277,7 +282,7 @@
       "stat3Num": "7 Days",
       "stat3Label": "Open Full Week For You"
     },
-    "ctaExplore": "Explore 26 Treatments & Prices",
+    "ctaExplore": "Explore 29 Treatments & Prices",
     "ctaBook": "Book an Appointment"
   },
   "location": {

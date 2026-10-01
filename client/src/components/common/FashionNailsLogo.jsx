@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function FashionNailsLogo({ className = '', size = 'md', showSub = true, mode = 'lockup' }) {
+export default function FashionNailsLogo({ className = '', size = 'md', showSub = true, mode = 'lockup', textColor }) {
   // Size dimensions
   const dimensions = {
     sm: { height: 34, fontSize: '1.2rem', subSize: '0.62rem', gap: '10px' },
@@ -45,7 +45,14 @@ export default function FashionNailsLogo({ className = '', size = 'md', showSub 
         loading="eager"
       />
 
-      <div className="brand-text-lockup" style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+      <div
+        className="brand-text-lockup"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          lineHeight: 1.1,
+        }}
+      >
         <span
           className="brand-title"
           style={{
@@ -54,14 +61,12 @@ export default function FashionNailsLogo({ className = '', size = 'md', showSub 
             fontWeight: 700,
             fontSize: dimensions.fontSize,
             letterSpacing: '0.02em',
-            background: 'linear-gradient(135deg, #BD6D64 0%, #D48278 40%, #E8A296 70%, #9F463D 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            textShadow: '0 2px 10px rgba(212, 130, 120, 0.2)',
+            color: textColor || '#000000',
           }}
         >
           fashion nails
         </span>
+
         {showSub && (
           <span
             className="brand-location"
@@ -71,7 +76,7 @@ export default function FashionNailsLogo({ className = '', size = 'md', showSub 
               fontWeight: 600,
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'var(--color-text-secondary)',
+              color: textColor || '#444444',
               marginTop: '2px',
             }}
           >

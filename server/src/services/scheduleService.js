@@ -32,20 +32,24 @@ export function parseTimeToMinutes(timeStr) {
 
 /**
  * Returns standard operating hours for Perth by day of week:
- * - Sunday: 11:00 AM - 04:30 PM
- * - Thursday: 09:00 AM - 07:00 PM (Late night shopping)
- * - Mon, Tue, Wed, Fri, Sat: 09:00 AM - 05:30 PM
+ * - Sunday: 11:00 AM - 05:00 PM
+ * - Thursday: 09:00 AM - 09:00 PM (Late night shopping)
+ * - Saturday: 09:00 AM - 05:00 PM
+ * - Mon, Tue, Wed, Fri: 09:00 AM - 05:30 PM
  */
 export function getStandardOperatingHours(dateStr) {
   if (!dateStr) return { openTime: '09:00 AM', closeTime: '05:30 PM' };
   const [y, m, d] = dateStr.split('-').map(Number);
   const dateObj = new Date(Date.UTC(y, m - 1, d));
-  const dayOfWeek = dateObj.getUTCDay(); // 0 = Sun, 4 = Thu
+  const dayOfWeek = dateObj.getUTCDay(); // 0 = Sun, 4 = Thu, 6 = Sat
   if (dayOfWeek === 0) {
-    return { openTime: '11:00 AM', closeTime: '04:30 PM' };
+    return { openTime: '11:00 AM', closeTime: '05:00 PM' };
   }
   if (dayOfWeek === 4) {
-    return { openTime: '09:00 AM', closeTime: '07:00 PM' };
+    return { openTime: '09:00 AM', closeTime: '09:00 PM' };
+  }
+  if (dayOfWeek === 6) {
+    return { openTime: '09:00 AM', closeTime: '05:00 PM' };
   }
   return { openTime: '09:00 AM', closeTime: '05:30 PM' };
 }

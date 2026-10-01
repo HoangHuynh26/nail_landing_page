@@ -98,13 +98,13 @@ export function VoucherModal({
                 className="admin-vouchers-select"
               >
                 <option value="percentage">Percentage (%)</option>
-                <option value="fixed">Fixed Amount (AU$)</option>
+                <option value="fixed">Fixed Amount ($)</option>
               </select>
             </div>
 
             <div>
               <label className="admin-vouchers-label">
-                Discount Value ({formData.discountType === 'percentage' ? '%' : 'AU$'}) <abbr title="Required" className="admin-vouchers-req-star">*</abbr>
+                Discount Value ({formData.discountType === 'percentage' ? '%' : '$'}) <abbr title="Required" className="admin-vouchers-req-star">*</abbr>
               </label>
               <input
                 type="number"

@@ -46,11 +46,10 @@ export function BookingProvider({ children }) {
   const DEFAULT_CATEGORIES = [
     { id: 'biab', key: 'biab', label: 'Builder Gel - BIAB', name_en: 'Builder Gel - BIAB' },
     { id: 'acrylic', key: 'acrylic', label: 'Acrylic Nails', name_en: 'Acrylic Nails' },
-    { id: 'shellac', key: 'shellac', label: 'Shellac Nails', name_en: 'Shellac Nails' },
     { id: 'gelx', key: 'gelx', label: 'Gel X Extensions', name_en: 'Gel X Extensions' },
-    { id: 'sns', key: 'sns', label: 'SNS Dipping', name_en: 'SNS Dipping' },
-    { id: 'polish', key: 'polish', label: 'Nail Polish', name_en: 'Nail Polish' },
-    { id: 'extra', key: 'extra', label: 'Extra Services', name_en: 'Extra Services' }
+    { id: 'shellac', key: 'shellac', label: 'Shellac & Manicure', name_en: 'Shellac & Manicure' },
+    { id: 'pedicure', key: 'pedicure', label: 'Spa Pedicure & Combos', name_en: 'Spa Pedicure & Combos' },
+    { id: 'extra', key: 'extra', label: 'Take Off & Repair', name_en: 'Take Off & Repair' }
   ];
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [categoriesLoading, setCategoriesLoading] = useState(true);

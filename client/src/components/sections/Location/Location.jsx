@@ -30,7 +30,7 @@ export const LOCATION_CONFIG = {
   // Brand & Mall info
   salonName: 'Fashion Nails',
   mallName: 'Morley Galleria Shopping Centre',
-  unitLocation: 'Opposite Kmart, Galleria shopping Centre, corner Collier Rd &, Walter Rd W, Morley Western Australia',
+  unitLocation: 'Premium Nail Care at Morley Galleria Shopping Centre Opposite Kmart',
   street: 'Collier Road & Russell Street',
   suburb: 'Morley',
   state: 'WA',
@@ -47,14 +47,15 @@ export const LOCATION_CONFIG = {
   // Contact details
   phoneDisplay: '(08) 9375 2888',
   phoneTel: '+61893752888',
-  email: 'nataliepham1993@gmail.com',
+  email: 'fashionnailsmorley@gmail.com',
 
   // Weekly opening hours
   hours: [
     { dayGroup: 'Monday – Wednesday', hours: '9:00 AM – 5:30 PM', isLate: false },
-    { dayGroup: 'Thursday (Late Night)', hours: '9:00 AM – 7:00 PM', isLate: true, badge: 'Late Night' },
-    { dayGroup: 'Friday – Saturday', hours: '9:00 AM – 5:30 PM', isLate: false },
-    { dayGroup: 'Sunday', hours: '11:00 AM – 4:30 PM', isLate: false }
+    { dayGroup: 'Thursday (Late Night)', hours: '9:00 AM – 9:00 PM', isLate: true, badge: 'Late Night' },
+    { dayGroup: 'Friday', hours: '9:00 AM – 5:30 PM', isLate: false },
+    { dayGroup: 'Saturday', hours: '9:00 AM – 5:00 PM', isLate: false },
+    { dayGroup: 'Sunday', hours: '11:00 AM – 5:00 PM', isLate: false }
   ],
 
   // Google Maps interactive embed & direct navigation directions
@@ -89,23 +90,27 @@ export function Location() {
       const currentMin = perth.totalMinutes;
 
       let openMin = 9 * 60; // 9:00 AM
-      let closeMin = 17 * 60 + 30; // 5:30 PM
+      let closeMin = 17 * 60 + 30; // 5:30 PM (Mon, Tue, Wed, Fri)
 
       if (dayOfWeek === 4) {
-        // Thursday late night: 9:00 AM - 7:00 PM
-        closeMin = 19 * 60;
+        // Thursday late night: 9:00 AM - 9:00 PM
+        closeMin = 21 * 60;
+      } else if (dayOfWeek === 6) {
+        // Saturday: 9:00 AM - 5:00 PM
+        closeMin = 17 * 60;
       } else if (dayOfWeek === 0) {
-        // Sunday: 11:00 AM - 4:30 PM
+        // Sunday: 11:00 AM - 5:00 PM
         openMin = 11 * 60;
-        closeMin = 16 * 60 + 30;
+        closeMin = 17 * 60;
       }
 
       const isOpen = currentMin >= openMin && currentMin < closeMin;
+      const closingTimeStr = dayOfWeek === 4 ? '9:00 PM' : (dayOfWeek === 0 || dayOfWeek === 6) ? '5:00 PM' : '5:30 PM';
       return {
         isOpen,
         label: isOpen ? 'Open Now' : 'Closed Now',
         subtext: isOpen
-          ? `Welcoming walk-ins & appointments until ${dayOfWeek === 4 ? '7:00 PM' : dayOfWeek === 0 ? '4:30 PM' : '5:30 PM'}`
+          ? `Welcoming walk-ins & appointments until ${closingTimeStr}`
           : `Opens ${dayOfWeek === 0 ? '11:00 AM' : '9:00 AM'} AWST`
       };
     } catch {

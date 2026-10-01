@@ -25,10 +25,9 @@ export function Services() {
   const defaultCategories = [
     { key: 'biab', label: t('services.tabBiab') },
     { key: 'acrylic', label: t('services.tabAcrylic') },
-    { key: 'shellac', label: t('services.tabShellac') },
     { key: 'gelx', label: t('services.tabGelX') },
-    { key: 'sns', label: t('services.tabSns') },
-    { key: 'polish', label: t('services.tabPolish') },
+    { key: 'shellac', label: t('services.tabShellac') },
+    { key: 'pedicure', label: t('services.tabPedicure') },
     { key: 'extra', label: t('services.tabExtra') }
   ];
 

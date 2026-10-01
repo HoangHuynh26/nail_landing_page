@@ -153,9 +153,10 @@ export function formatMinutesToTime(minutes) {
 
 /**
  * Standard operating hours in Perth by day of week:
- * - Sunday (0): 11:00 AM – 04:30 PM
- * - Thursday (4): 09:00 AM – 07:00 PM (Late Night Shopping)
- * - Mon, Tue, Wed, Fri, Sat: 09:00 AM – 05:30 PM
+ * - Sunday (0): 11:00 AM – 05:00 PM
+ * - Thursday (4): 09:00 AM – 09:00 PM (Late Night Shopping)
+ * - Saturday (6): 09:00 AM – 05:00 PM
+ * - Mon, Tue, Wed, Fri: 09:00 AM – 05:30 PM
  */
 export function getStandardHoursForDate(isoDate) {
   if (!isoDate) {
@@ -166,10 +167,13 @@ export function getStandardHoursForDate(isoDate) {
   const dayOfWeek = dateObj.getUTCDay();
 
   if (dayOfWeek === 0) {
-    return { openTime: '11:00 AM', closeTime: '04:30 PM', label: 'Sunday Hours' };
+    return { openTime: '11:00 AM', closeTime: '05:00 PM', label: 'Sunday Hours' };
   }
   if (dayOfWeek === 4) {
-    return { openTime: '09:00 AM', closeTime: '07:00 PM', label: 'Thursday Late Night' };
+    return { openTime: '09:00 AM', closeTime: '09:00 PM', label: 'Thursday Late Night' };
+  }
+  if (dayOfWeek === 6) {
+    return { openTime: '09:00 AM', closeTime: '05:00 PM', label: 'Saturday Hours' };
   }
   return { openTime: '09:00 AM', closeTime: '05:30 PM', label: 'Standard Hours' };
 }

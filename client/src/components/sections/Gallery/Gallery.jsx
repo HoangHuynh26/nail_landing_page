@@ -1,17 +1,11 @@
 import './Gallery.css';
 import React, { useState, useMemo, useEffect } from 'react';
 import {
-  Sparkles,
   Calendar,
   CheckCircle2,
   ArrowRight,
   Clock,
-  DollarSign,
-  X,
-  Layers,
-  ChevronLeft,
-  ChevronRight,
-  ZoomIn
+  X
 } from 'lucide-react';
 import RoundCarousel from '../../common/RoundCarousel';
 import { caseStudiesData } from '../../../data/caseStudies';
@@ -192,10 +186,10 @@ export function Gallery() {
               imageWidth={360}
               imageHeight={360}
               spacing={2.4}
-              speed={0.3}
+              speed={1.0}
               direction="right"
               drag={true}
-              sensitivity={1.2}
+              sensitivity={1.3}
               tilt={-6}
               perspective={2600}
               cornerRadius={22}
@@ -222,10 +216,6 @@ export function Gallery() {
                     loading="lazy"
                     decoding="async"
                   />
-                  <div className="case-spotlight-zoom-hint">
-                    <ZoomIn size={13} />
-                    <span>HD Preview</span>
-                  </div>
                 </div>
 
                 {/* Right: Technical Specs & Booking Action */}
@@ -234,11 +224,6 @@ export function Gallery() {
                     <span className="case-pill case-pill--category">
                       {currentCategory}
                     </span>
-                    {currentCase.shape_en && (
-                      <span className="case-pill case-pill--shape">
-                        {language === 'vi' ? (currentCase.shape_vi || currentCase.shape_en) : (currentCase.shape_en || currentCase.shape_vi)}
-                      </span>
-                    )}
                   </div>
 
                   <h3 className="case-spotlight-title">

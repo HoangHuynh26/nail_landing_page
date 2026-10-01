@@ -224,7 +224,7 @@ export function Hero() {
             </h1>
 
             <p className="hero-section__subtitle">
-              Immerse in royal nail artistry featuring 26 full treatments from Builder Gel BIAB, Gel X, Acrylic to bespoke hand-painted nail art. 100% autoclave sterilized instruments.
+              Immerse in royal nail artistry featuring 29 full treatments from Builder Gel BIAB, Gel X, Acrylic to bespoke hand-painted nail art. 100% autoclave sterilized instruments.
             </p>
           </div>
 

@@ -9,7 +9,7 @@ export default defineConfig({
     host: true,
 
     allowedHosts: [
-      'fans-kerry-sagem-convention.trycloudflare.com'
+      'problems-break-ons-peer.trycloudflare.com'
     ],
 
     proxy: {

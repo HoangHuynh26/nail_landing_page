@@ -406,7 +406,7 @@ export function AdminServices() {
           delete next[id];
           return next;
         });
-        showToast(`Price updated: "${sName}" is now AU$${newPrice}.`, 'success');
+        showToast(`Price updated: "${sName}" is now $${newPrice}.`, 'success');
       }
     } catch (err) {
       showToast('Failed to update price: ' + err.message, 'error');

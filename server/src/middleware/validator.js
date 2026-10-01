@@ -105,6 +105,10 @@ export function validateBooking(req, res, next) {
   const cleanPrice = (!isNaN(parsedPrice) && parsedPrice >= 0) ? Math.round(parsedPrice * 100) / 100 : null;
   const parsedOriginalPrice = parseFloat(req.body.originalPrice);
   const cleanOriginalPrice = (!isNaN(parsedOriginalPrice) && parsedOriginalPrice >= 0) ? Math.round(parsedOriginalPrice * 100) / 100 : cleanPrice;
+  const parsedUnitPrice = parseFloat(req.body.unitPrice);
+  const cleanUnitPrice = (!isNaN(parsedUnitPrice) && parsedUnitPrice >= 0)
+    ? Math.round(parsedUnitPrice * 100) / 100
+    : (cleanOriginalPrice != null && cleanGuests > 0 ? Math.round((cleanOriginalPrice / cleanGuests) * 100) / 100 : null);
 
   if (errors.length > 0) {
     return res.status(400).json({
@@ -138,6 +142,7 @@ export function validateBooking(req, res, next) {
     guests: cleanGuests,
     price: cleanPrice,
     originalPrice: cleanOriginalPrice,
+    unitPrice: cleanUnitPrice,
     language: language === 'en' ? 'en' : 'vi'
   };
 

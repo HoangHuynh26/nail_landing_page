@@ -46,6 +46,7 @@ export function OverviewFilterBar({
               onChange={setSelectedDay}
               options={dayOptions}
               title="Filter by Day"
+              align="left"
             />
 
             <AdminDateFilterPill
@@ -54,6 +55,7 @@ export function OverviewFilterBar({
               onChange={setSelectedMonth}
               options={monthOptions}
               title="Filter by Month"
+              align="center"
             />
 
             <AdminDateFilterPill
@@ -62,7 +64,7 @@ export function OverviewFilterBar({
               onChange={setSelectedYear}
               options={yearOptions}
               title="Filter by Year"
-              alignRight={true}
+              align="right"
             />
           </div>
 

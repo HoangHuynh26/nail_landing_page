@@ -46,10 +46,10 @@ export function Footer() {
           {/* Brand & Mission Column */}
           <div className="atelier-footer__col atelier-footer__col--brand">
             <div className="atelier-footer__logo-wrap">
-              <FashionNailsLogo size="sm" showSub={true} />
+              <FashionNailsLogo size="sm" showSub={true} textColor="#FFFFFF" />
             </div>
             <p className="atelier-footer__desc">
-              Premier luxury nail boutique at Morley Galleria Shopping Centre, Western Australia. 100% autoclave sterilized instruments with 26 master treatments.
+              Premier luxury nail boutique at Morley Galleria Shopping Centre, Western Australia. 100% autoclave sterilized instruments with 29 master treatments.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export function Footer() {
               </li>
               <li>
                 <button type="button" onClick={() => scrollTo('services')}>
-                  Acrylic Nails & Shellac
+                  Acrylic Nails
                 </button>
               </li>
               <li>
@@ -74,12 +74,17 @@ export function Footer() {
               </li>
               <li>
                 <button type="button" onClick={() => scrollTo('services')}>
-                  SNS Dipping Powder
+                  Shellac & Manicure
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollTo('services')}>
+                  Spa Pedicure & Combos
                 </button>
               </li>
               <li>
                 <button type="button" onClick={() => scrollTo('pricing')}>
-                  Official 26-Item Menu
+                  Official 29-Item Menu
                 </button>
               </li>
               <li>
@@ -96,14 +101,15 @@ export function Footer() {
           </div>
 
           {/* Salon Hours */}
-          <div className="atelier-footer__col">
+          <div className="atelier-footer__col atelier-footer__col--hours">
             <h3 className="atelier-footer__heading">{t('footer.hoursTitle')}</h3>
-            <div className="atelier-footer__info-item">
-              <Clock size={16} className="atelier-footer__icon" aria-hidden="true" />
+            <div className="atelier-footer__info-item atelier-footer__info-item--hours">
+              <Clock size={16} className="atelier-footer__icon atelier-footer__icon--white" aria-hidden="true" />
               <div className="atelier-footer__hours-text">
-                <p><strong>Mon – Wed, Fri – Sat:</strong> 9:00 AM – 5:30 PM</p>
-                <p><strong>Thursday (Late Night):</strong> 9:00 AM – 7:00 PM</p>
-                <p className="atelier-footer__muted"><strong>Sunday:</strong> 11:00 AM – 4:30 PM</p>
+                <p><strong>Mon – Wed, Fri:</strong> 9:00 AM – 5:30 PM</p>
+                <p><strong>Thursday (Late Night):</strong> 9:00 AM – 9:00 PM</p>
+                <p><strong>Saturday:</strong> 9:00 AM – 5:00 PM</p>
+                <p><strong>Sunday:</strong> 11:00 AM – 5:00 PM</p>
               </div>
             </div>
           </div>
@@ -114,7 +120,7 @@ export function Footer() {
             <div className="atelier-footer__info-item">
               <MapPin size={16} className="atelier-footer__icon" aria-hidden="true" />
               <address className="atelier-footer__address">
-                Shop SP094 (Opposite Kmart), Morley Galleria Shopping Centre, Cnr Collier Rd & Walter Rd W, Morley WA 6062
+                Premium Nail Care at Morley Galleria Shopping Centre Opposite Kmart
               </address>
             </div>
             <div className="atelier-footer__info-item">

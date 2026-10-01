@@ -69,17 +69,19 @@ function buildCustomerEmailHtml(booking) {
   const guests = Math.max(1, Number(booking.guests) || 1);
 
   // Financial calculations
-  const unitPrice = booking.unitPrice != null && Number(booking.unitPrice) > 0
-    ? Number(booking.unitPrice)
-    : (booking.price != null && Number(booking.price) > 0
-        ? Math.round((Number(booking.price) / guests) * 100) / 100
-        : null);
-
-  const totalOriginal = booking.originalPrice != null && Number(booking.originalPrice) > 0
+  const totalOriginal = (booking.originalPrice != null && Number(booking.originalPrice) > 0)
     ? Number(booking.originalPrice)
-    : (unitPrice ? Math.round(unitPrice * guests * 100) / 100 : null);
+    : (booking.price != null && Number(booking.price) > 0 ? Number(booking.price) : null);
 
-  const totalFinal = booking.price != null && Number(booking.price) >= 0
+  const unitPrice = (booking.unitPrice != null && Number(booking.unitPrice) > 0)
+    ? Number(booking.unitPrice)
+    : (totalOriginal != null && guests > 0
+        ? Math.round((totalOriginal / guests) * 100) / 100
+        : (booking.price != null && Number(booking.price) > 0
+            ? Math.round((Number(booking.price) / guests) * 100) / 100
+            : null));
+
+  const totalFinal = (booking.price != null && Number(booking.price) >= 0)
     ? Number(booking.price)
     : totalOriginal;
 
@@ -328,15 +330,49 @@ function buildCustomerEmailHtml(booking) {
 <body>
   <div class="wrapper">
     <div class="container">
-      <!-- Brand Header with Logo -->
+      <!-- Brand Header with Luxury Emblem -->
       <div class="header">
-        <img src="cid:salon-logo" alt="Fashion Nails Morley" class="logo-img" />
-        <div class="header-tagline">Luxury Nail Boutique &amp; Deluxe Spa • Morley Galleria</div>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto;">
+          <tr>
+            <td align="center">
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 12px auto;">
+                <tr>
+                  <td align="center" style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.15) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f6d376" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto;">
+                      <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v1H5z" fill="#d4af37" fill-opacity="0.3"></path>
+                      <circle cx="12" cy="4" r="1.5" fill="#fef08a"></circle>
+                      <circle cx="5" cy="4" r="1.5" fill="#fef08a"></circle>
+                      <circle cx="19" cy="4" r="1.5" fill="#fef08a"></circle>
+                    </svg>
+                  </td>
+                </tr>
+              </table>
+              <div style="font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 700; letter-spacing: 0.08em; color: #FAF7F2; text-transform: uppercase; margin: 0 0 4px 0;">
+                Fashion Nails
+              </div>
+              <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; color: #E5C170; text-transform: uppercase;">
+                Luxury Nail Boutique &amp; Deluxe Spa &bull; Morley Galleria
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <!-- Main Body -->
       <div class="content">
-        <div class="badge-confirmed">✓ Booking Confirmed</div>
+        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 14px;">
+          <tr>
+            <td style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 9999px; padding: 5px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #059669;">
+              <span style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span style="vertical-align: middle;">Booking Confirmed</span>
+            </td>
+          </tr>
+        </table>
+
         <h1 class="title">Thank You for Booking With Us!</h1>
         <p class="greeting">
           Dear <strong>${escapeHtml(booking.name)}</strong>,<br>
@@ -344,7 +380,24 @@ function buildCustomerEmailHtml(booking) {
         </p>
 
         <!-- Service & Appointment Details -->
-        <div class="section-heading">📅 APPOINTMENT DETAILS</div>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 22px 0 10px 0; width: 100%;">
+          <tr>
+            <td style="width: 26px; vertical-align: middle;">
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+            </td>
+            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
+              APPOINTMENT DETAILS
+            </td>
+          </tr>
+        </table>
+
         <table class="details-table" role="presentation">
           <tr>
             <td class="td-label">Booking Reference</td>
@@ -376,15 +429,30 @@ function buildCustomerEmailHtml(booking) {
           </tr>
         </table>
 
-        <!-- Price Breakdown (Matching Step Review) -->
-        <div class="section-heading">💰 PRICE BREAKDOWN</div>
+        <!-- Price Breakdown -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
+          <tr>
+            <td style="width: 26px; vertical-align: middle;">
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #ecfdf5; border: 1px solid #a7f3d0; text-align: center; line-height: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+              </div>
+            </td>
+            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
+              PRICE BREAKDOWN
+            </td>
+          </tr>
+        </table>
+
         <div class="price-box">
           <table class="price-grid-table" role="presentation">
             <tr>
               <td class="price-grid-item" style="width: 33.33%;">
                 <div class="price-grid-label">UNIT PRICE</div>
                 <div class="price-grid-val">
-                  ${unitPrice != null ? `AU$${unitPrice.toFixed(2)}` : 'Custom'}
+                  ${unitPrice != null ? `$${unitPrice.toFixed(2)}` : 'Custom'}
                   <span style="font-size: 10px; font-weight: 500; color: #64748b;">/ person</span>
                 </div>
               </td>
@@ -397,7 +465,7 @@ function buildCustomerEmailHtml(booking) {
               <td class="price-grid-item is-subtotal" style="width: 33.33%;">
                 <div class="price-grid-label is-subtotal">SUBTOTAL</div>
                 <div class="price-grid-val is-subtotal">
-                  ${totalOriginal != null ? `AU$${totalOriginal.toFixed(2)}` : 'Calculated'}
+                  ${totalOriginal != null ? `$${totalOriginal.toFixed(2)}` : 'Calculated'}
                 </div>
               </td>
             </tr>
@@ -408,11 +476,17 @@ function buildCustomerEmailHtml(booking) {
           <div class="voucher-row is-applied">
             <table style="width: 100%; border-collapse: collapse;" role="presentation">
               <tr>
-                <td style="font-weight: 700; color: #166534; font-size: 13px;">
-                  🏷️ Discount / Promo: <strong>${escapeHtml(booking.voucher || '10% Discount')}</strong>
+                <td style="font-weight: 700; color: #166534; font-size: 13px; vertical-align: middle;">
+                  <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                  </span>
+                  <span style="vertical-align: middle;">Discount / Promo: <strong>${escapeHtml(booking.voucher || '10% Discount')}</strong></span>
                 </td>
-                <td style="text-align: right; font-weight: 800; color: #15803d; font-size: 14px;">
-                  - AU$${discountAmount.toFixed(2)}
+                <td style="text-align: right; font-weight: 800; color: #15803d; font-size: 14px; vertical-align: middle;">
+                  - $${discountAmount.toFixed(2)}
                 </td>
               </tr>
             </table>
@@ -421,11 +495,17 @@ function buildCustomerEmailHtml(booking) {
           <div class="voucher-row is-none">
             <table style="width: 100%; border-collapse: collapse;" role="presentation">
               <tr>
-                <td style="font-size: 12.5px; color: #64748b;">
-                  🏷️ Discount / Promo Code: <strong style="color: #475569;">None</strong>
+                <td style="font-size: 12.5px; color: #64748b; vertical-align: middle;">
+                  <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                  </span>
+                  <span style="vertical-align: middle;">Discount / Promo Code: <strong style="color: #475569;">None</strong></span>
                 </td>
-                <td style="text-align: right; font-size: 13px; color: #94a3b8; font-weight: 600;">
-                  AU$0.00
+                <td style="text-align: right; font-size: 13px; color: #94a3b8; font-weight: 600; vertical-align: middle;">
+                  $0.00
                 </td>
               </tr>
             </table>
@@ -442,11 +522,11 @@ function buildCustomerEmailHtml(booking) {
                 <td style="text-align: right;">
                   ${hasDiscount && totalOriginal != null ? `
                     <span style="font-size: 13px; color: #94a3b8; text-decoration: line-through; margin-right: 6px;">
-                      AU$${totalOriginal.toFixed(2)}
+                      $${totalOriginal.toFixed(2)}
                     </span>
                   ` : ''}
                   <span style="font-size: 20px; font-weight: 900; color: #047857;">
-                    ${totalFinal != null ? `AU$${totalFinal.toFixed(2)}` : 'Calculated at salon'}
+                    ${totalFinal != null ? `$${totalFinal.toFixed(2)}` : 'Calculated at salon'}
                   </span>
                 </td>
               </tr>
@@ -455,7 +535,22 @@ function buildCustomerEmailHtml(booking) {
         </div>
 
         <!-- Contact & Notes Details -->
-        <div class="section-heading">👤 CONTACT &amp; SPECIAL REQUESTS</div>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
+          <tr>
+            <td style="width: 26px; vertical-align: middle;">
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </td>
+            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
+              CONTACT &amp; SPECIAL REQUESTS
+            </td>
+          </tr>
+        </table>
+
         <table class="details-table" role="presentation">
           <tr>
             <td class="td-label">Full Name</td>
@@ -479,20 +574,44 @@ function buildCustomerEmailHtml(booking) {
 
         <!-- Helpful Reminders -->
         <div class="info-box">
-          <strong>Important Arrival &amp; Payment Guidance:</strong><br>
-          • <strong>Arrival:</strong> Please arrive <strong>5 to 10 minutes early</strong> to select your preferred nail shades and relax.<br>
-          • <strong>Discount Verification:</strong> If claiming the 10% Community Discount, please bring your valid Student ID, Seniors Card, or Morley Galleria Staff pass to present at checkout.<br>
-          • <strong>Payment:</strong> Payment is settled directly at the salon after your treatment is completed.
+          <div style="font-weight: 700; color: #92400e; margin-bottom: 8px;">
+            <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </span>
+            <span style="vertical-align: middle;">Important Arrival &amp; Payment Guidance:</span>
+          </div>
+          <div style="line-height: 1.6;">
+            &bull; <strong>Arrival:</strong> Please arrive <strong>5 to 10 minutes early</strong> to select your preferred nail shades and relax.<br>
+            &bull; <strong>Discount Verification:</strong> If claiming the 10% Community Discount, please bring your valid Student ID, Seniors Card, or Morley Galleria Staff pass to present at checkout.<br>
+            &bull; <strong>Payment:</strong> Payment is settled directly at the salon after your treatment is completed.
+          </div>
         </div>
 
         <!-- Salon Address & Contact -->
         <div class="location-box">
-          <div class="location-title">📍 Salon Location &amp; Contact</div>
+          <div class="location-title">
+            <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </span>
+            <span style="vertical-align: middle;">Salon Location &amp; Contact</span>
+          </div>
           <div><strong>Fashion Nails Morley Galleria</strong></div>
           <div>Shop SP094 (Opposite Kmart), Morley Galleria Shopping Centre</div>
           <div>Cnr Collier Rd &amp; Walter Rd W, Morley WA 6062, Australia</div>
-          <div style="margin-top: 6px;">
-            📞 Phone: <a href="tel:+61893752888" style="color: #0284c7; text-decoration: none; font-weight: 700;">(08) 9375 2888</a>
+          <div style="margin-top: 8px;">
+            <span style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </span>
+            Phone: <a href="tel:+61893752888" style="color: #0284c7; text-decoration: none; font-weight: 700;">(08) 9375 2888</a>
           </div>
         </div>
 
@@ -526,17 +645,19 @@ function buildOwnerEmailHtml(booking) {
   const formattedDate = formatEnglishDate(booking.date);
   const guests = Math.max(1, Number(booking.guests) || 1);
 
-  const unitPrice = booking.unitPrice != null && Number(booking.unitPrice) > 0
-    ? Number(booking.unitPrice)
-    : (booking.price != null && Number(booking.price) > 0
-        ? Math.round((Number(booking.price) / guests) * 100) / 100
-        : null);
-
-  const totalOriginal = booking.originalPrice != null && Number(booking.originalPrice) > 0
+  const totalOriginal = (booking.originalPrice != null && Number(booking.originalPrice) > 0)
     ? Number(booking.originalPrice)
-    : (unitPrice ? Math.round(unitPrice * guests * 100) / 100 : null);
+    : (booking.price != null && Number(booking.price) > 0 ? Number(booking.price) : null);
 
-  const totalFinal = booking.price != null && Number(booking.price) >= 0
+  const unitPrice = (booking.unitPrice != null && Number(booking.unitPrice) > 0)
+    ? Number(booking.unitPrice)
+    : (totalOriginal != null && guests > 0
+        ? Math.round((totalOriginal / guests) * 100) / 100
+        : (booking.price != null && Number(booking.price) > 0
+            ? Math.round((Number(booking.price) / guests) * 100) / 100
+            : null));
+
+  const totalFinal = (booking.price != null && Number(booking.price) >= 0)
     ? Number(booking.price)
     : totalOriginal;
 
@@ -558,13 +679,18 @@ function buildOwnerEmailHtml(booking) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Booking Alert - Fashion Nails Morley</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       background-color: #f1f5f9;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .wrapper {
       width: 100%;
@@ -582,29 +708,12 @@ function buildOwnerEmailHtml(booking) {
     }
     .header {
       background: #0f172a;
-      padding: 26px 24px;
+      padding: 28px 24px;
       text-align: center;
       border-bottom: 3px solid #d97706;
     }
-    .logo-img {
-      max-width: 150px;
-      height: auto;
-      margin-bottom: 6px;
-    }
-    .header-badge {
-      display: inline-block;
-      background: #d97706;
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-top: 6px;
-    }
     .content {
-      padding: 28px 24px;
+      padding: 26px 24px;
     }
     .alert-banner {
       background-color: #eff6ff;
@@ -612,17 +721,6 @@ function buildOwnerEmailHtml(booking) {
       border-radius: 10px;
       padding: 14px 16px;
       margin-bottom: 22px;
-      font-size: 14px;
-      color: #1e40af;
-      line-height: 1.5;
-    }
-    .section-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #64748b;
-      margin: 20px 0 8px;
     }
     .table-info {
       width: 100%;
@@ -631,12 +729,13 @@ function buildOwnerEmailHtml(booking) {
       border: 1px solid #e2e8f0;
       border-radius: 10px;
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     .table-info td {
-      padding: 10px 14px;
-      font-size: 14px;
+      padding: 11px 16px;
+      font-size: 13.5px;
       border-bottom: 1px solid #e2e8f0;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     .table-info tr:last-child td {
       border-bottom: none;
@@ -652,14 +751,12 @@ function buildOwnerEmailHtml(booking) {
     }
     .btn-action {
       display: inline-block;
-      background-color: #d97706;
-      color: #ffffff !important;
       text-decoration: none;
-      padding: 11px 22px;
+      padding: 11px 20px;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 14px;
-      margin-top: 8px;
+      font-size: 13.5px;
+      text-align: center;
     }
     .footer {
       background-color: #f8fafc;
@@ -668,34 +765,106 @@ function buildOwnerEmailHtml(booking) {
       border-top: 1px solid #e2e8f0;
       font-size: 12px;
       color: #94a3b8;
+      line-height: 1.5;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <div class="container">
+      <!-- Luxury Brand Header -->
       <div class="header">
-        <img src="cid:salon-logo" alt="Fashion Nails Morley" class="logo-img" />
-        <div><span class="header-badge">🔔 NEW ONLINE BOOKING RECEIVED</span></div>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto;">
+          <tr>
+            <td align="center">
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 10px auto;">
+                <tr>
+                  <td align="center" style="width: 46px; height: 46px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.2) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f6d376" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto;">
+                      <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v1H5z" fill="#d4af37" fill-opacity="0.3"></path>
+                      <circle cx="12" cy="4" r="1.5" fill="#fef08a"></circle>
+                      <circle cx="5" cy="4" r="1.5" fill="#fef08a"></circle>
+                      <circle cx="19" cy="4" r="1.5" fill="#fef08a"></circle>
+                    </svg>
+                  </td>
+                </tr>
+              </table>
+              <div style="font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 21px; font-weight: 700; letter-spacing: 0.08em; color: #FAF7F2; text-transform: uppercase; margin: 0 0 8px 0;">
+                FASHION NAILS MORLEY
+              </div>
+              <div style="display: inline-block; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; box-shadow: 0 2px 6px rgba(180, 83, 9, 0.35);">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
+                  <tr>
+                    <td style="vertical-align: middle; padding-right: 6px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                      </svg>
+                    </td>
+                    <td style="vertical-align: middle; color: #ffffff; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                      NEW ONLINE BOOKING RECEIVED
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div class="content">
+        <!-- Alert Notification Card -->
         <div class="alert-banner">
-          <strong>A new appointment was just booked online.</strong><br>
-          Please review the client and schedule information below.
+          <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
+            <tr>
+              <td style="width: 28px; vertical-align: top; padding-top: 2px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </td>
+              <td style="vertical-align: top; font-size: 13.5px; color: #1e40af; line-height: 1.5; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <strong style="color: #1e3a8a;">A new appointment was just booked online.</strong><br>
+                Please review the client contact and schedule details below.
+              </td>
+            </tr>
+          </table>
         </div>
 
-        <div class="section-title">👤 Customer Contact</div>
+        <!-- Customer Contact Header -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0 10px 0; width: 100%;">
+          <tr>
+            <td style="width: 26px; vertical-align: middle;">
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </td>
+            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+              CUSTOMER CONTACT
+            </td>
+          </tr>
+        </table>
+
         <table class="table-info" role="presentation">
           <tr>
             <td class="td-k">Client Name</td>
-            <td class="td-v">${escapeHtml(booking.name)}</td>
+            <td class="td-v" style="color: #0f172a; font-size: 14.5px;">${escapeHtml(booking.name)}</td>
           </tr>
           <tr>
             <td class="td-k">Phone Number</td>
             <td class="td-v">
               <a href="tel:${escapeHtml(booking.phone)}" style="color: #0284c7; text-decoration: none;">
-                📞 ${escapeHtml(booking.phone)}
+                <span style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </span>
+                <span style="vertical-align: middle;">${escapeHtml(booking.phone)}</span>
               </a>
             </td>
           </tr>
@@ -703,29 +872,53 @@ function buildOwnerEmailHtml(booking) {
             <td class="td-k">Email Address</td>
             <td class="td-v">
               <a href="mailto:${escapeHtml(booking.email)}" style="color: #0284c7; text-decoration: none;">
-                ✉️ ${escapeHtml(booking.email)}
+                <span style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </span>
+                <span style="vertical-align: middle;">${escapeHtml(booking.email)}</span>
               </a>
             </td>
           </tr>
         </table>
 
-        <div class="section-title">📅 Appointment Specifics</div>
+        <!-- Appointment Specifics Header -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
+          <tr>
+            <td style="width: 26px; vertical-align: middle;">
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+            </td>
+            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+              APPOINTMENT SPECIFICS
+            </td>
+          </tr>
+        </table>
+
         <table class="table-info" role="presentation">
           <tr>
             <td class="td-k">Booking Reference</td>
-            <td class="td-v" style="font-family: monospace; color: #bd6d64;">#${escapeHtml(booking.bookingId || 'AURA')}</td>
+            <td class="td-v" style="font-family: monospace; color: #bd6d64; font-size: 14px;">#${escapeHtml(booking.bookingId || 'AURA')}</td>
           </tr>
           <tr>
             <td class="td-k">Date &amp; Time</td>
-            <td class="td-v" style="color: #b45309;">${escapeHtml(formattedDate)} at ${escapeHtml(booking.time)}</td>
+            <td class="td-v" style="color: #b45309; font-size: 14.5px;">${escapeHtml(formattedDate)} at ${escapeHtml(booking.time)}</td>
           </tr>
           <tr>
             <td class="td-k">Service Booked</td>
-            <td class="td-v">${escapeHtml(booking.service || 'Nail Treatment')}</td>
+            <td class="td-v" style="color: #0f172a;">${escapeHtml(booking.service || 'Nail Treatment')}</td>
           </tr>
           <tr>
             <td class="td-k">Category</td>
-            <td class="td-v">${escapeHtml(booking.category || 'Nail Care')}</td>
+            <td class="td-v" style="color: #475569;">${escapeHtml(booking.category || 'Nail Care')}</td>
           </tr>
           <tr>
             <td class="td-k">Party Size</td>
@@ -733,46 +926,71 @@ function buildOwnerEmailHtml(booking) {
           </tr>
           <tr>
             <td class="td-k">Unit Price</td>
-            <td class="td-v">${unitPrice != null ? `AU$${unitPrice.toFixed(2)} / person` : 'Custom'}</td>
+            <td class="td-v">${unitPrice != null ? `$${unitPrice.toFixed(2)} / person` : 'Custom'}</td>
           </tr>
           <tr>
             <td class="td-k">Subtotal</td>
-            <td class="td-v">${totalOriginal != null ? `AU$${totalOriginal.toFixed(2)}` : 'Calculated'}</td>
+            <td class="td-v">${totalOriginal != null ? `$${totalOriginal.toFixed(2)}` : 'Calculated'}</td>
           </tr>
           <tr>
             <td class="td-k">Voucher / Promo</td>
             <td class="td-v">
-              ${hasDiscount ? `<span style="color: #15803d; font-weight: 700;">${escapeHtml(booking.voucher || '10% Discount')} (-AU$${discountAmount.toFixed(2)})</span>` : 'None'}
+              ${hasDiscount ? `<span style="color: #15803d; font-weight: 700;">${escapeHtml(booking.voucher || '10% Discount')} (-$${discountAmount.toFixed(2)})</span>` : 'None'}
             </td>
           </tr>
           <tr>
             <td class="td-k">Total Payable</td>
-            <td class="td-v" style="color: #059669; font-size: 16px;">
-              ${totalFinal != null ? `AU$${totalFinal.toFixed(2)}` : 'Calculated at salon'}
+            <td class="td-v" style="color: #059669; font-size: 16px; font-weight: 800;">
+              ${totalFinal != null ? `$${totalFinal.toFixed(2)}` : 'Calculated at salon'}
             </td>
           </tr>
           <tr>
             <td class="td-k">Customer Note</td>
-            <td class="td-v" style="font-weight: 500; font-style: italic;">
+            <td class="td-v" style="font-weight: 500; font-style: italic; color: #475569;">
               ${cleanNote ? `"${escapeHtml(cleanNote)}"` : 'No special requests'}
-            </td>
-          </tr>
-          <tr>
-            <td class="td-k">Booking Timestamp</td>
-            <td class="td-v" style="font-size: 12px; color: #64748b;">
-              ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' })} (Perth AWST)
             </td>
           </tr>
         </table>
 
-        <div style="text-align: center; margin-top: 24px;">
-          <a href="tel:${escapeHtml(booking.phone)}" class="btn-action" style="background-color: #0284c7; margin-right: 8px;">
-            📞 Call Client
-          </a>
-          <a href="http://localhost:3000/admin" class="btn-action">
-            Open Admin Dashboard
-          </a>
-        </div>
+        <!-- Quick Action Buttons -->
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 24px auto 0 auto;">
+          <tr>
+            <td style="padding: 0 6px;">
+              <a href="tel:${escapeHtml(booking.phone)}" style="display: inline-block; background-color: #0284c7; color: #ffffff !important; text-decoration: none; padding: 11px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-align: center; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
+                  <tr>
+                    <td style="vertical-align: middle; padding-right: 6px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      </svg>
+                    </td>
+                    <td style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">
+                      Call Client
+                    </td>
+                  </tr>
+                </table>
+              </a>
+            </td>
+            <td style="padding: 0 6px;">
+              <a href="http://localhost:3000/admin" style="display: inline-block; background-color: #d97706; color: #ffffff !important; text-decoration: none; padding: 11px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-align: center; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
+                  <tr>
+                    <td style="vertical-align: middle; padding-right: 6px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                      </svg>
+                    </td>
+                    <td style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">
+                      Open Admin Dashboard
+                    </td>
+                  </tr>
+                </table>
+              </a>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div class="footer">
@@ -805,14 +1023,7 @@ export async function sendBookingEmails(booking) {
     };
   }
 
-  const logoBuffer = getLogoBuffer();
-  const attachments = logoBuffer ? [
-    {
-      filename: 'fashion-nails-logo.png',
-      content: logoBuffer,
-      cid: 'salon-logo'
-    }
-  ] : [];
+  const attachments = [];
 
   const senderEmail = config.emailFrom || 'Fashion Nails Morley <onboarding@resend.dev>';
   const ownerRecipient = (config.salonOwnerEmail || process.env.SALON_OWNER_EMAIL || process.env.OWNER_EMAIL || '').trim();
