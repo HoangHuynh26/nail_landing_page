@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 // Cache logo buffer for CID email attachments
 let cachedLogoBuffer = null;
-function getLogoBuffer() {
+export function getLogoBuffer() {
   if (cachedLogoBuffer) return cachedLogoBuffer;
   try {
     const primaryPath = path.resolve(__dirname, '../assets/logo-email.png');
@@ -64,7 +64,7 @@ function formatEnglishDate(dateStr) {
 /**
  * Builds HTML email for the customer confirmation & thank-you matching Step Review
  */
-function buildCustomerEmailHtml(booking) {
+export function buildCustomerEmailHtml(booking) {
   const formattedDate = formatEnglishDate(booking.date);
   const guests = Math.max(1, Number(booking.guests) || 1);
 
@@ -106,7 +106,7 @@ function buildCustomerEmailHtml(booking) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You for Booking - Fashion Nails Morley</title>
+  <title>✨ Thank You for Booking! Appointment Confirmed - Fashion Nails Morley</title>
   <style>
     body {
       margin: 0;
@@ -330,20 +330,20 @@ function buildCustomerEmailHtml(booking) {
 <body>
   <div class="wrapper">
     <div class="container">
-      <!-- Brand Header with Luxury Emblem -->
+      <!-- Brand Header with Official Salon Logo -->
       <div class="header">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto;">
           <tr>
             <td align="center">
               <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 12px auto;">
                 <tr>
-                  <td align="center" style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.15) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle; font-size: 22px; line-height: 48px;">
-                    👑
+                  <td align="center">
+                    <img src="cid:salon-logo" alt="Fashion Nail Morley Logo" width="130" style="display: block; margin: 0 auto; max-width: 130px; height: auto; border: 0; outline: none; text-decoration: none;" />
                   </td>
                 </tr>
               </table>
               <div style="font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 700; letter-spacing: 0.08em; color: #FAF7F2; text-transform: uppercase; margin: 0 0 4px 0;">
-                Fashion Nails
+                Fashion Nail Morley
               </div>
               <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; color: #E5C170; text-transform: uppercase;">
                 Luxury Nail Boutique &amp; Deluxe Spa &bull; Morley Galleria
@@ -355,23 +355,51 @@ function buildCustomerEmailHtml(booking) {
 
       <!-- Main Body -->
       <div class="content">
-        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 14px;">
+        <h1 class="title" style="font-size: 21px; font-weight: 800; color: #0f172a; margin: 0 0 14px 0; line-height: 1.35;">
+          ✨ Thank You for Booking! Appointment Confirmed - Fashion Nails Morley
+        </h1>
+        <p class="greeting" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0 0 20px 0;">
+          Dear <strong>${escapeHtml(booking.name)}</strong>,<br>
+          Thank you for choosing Fashion Nail Morley. Your appointment has been successfully received and scheduled. Below is your complete booking summary:
+        </p>
+
+        <!-- 1. Customer Information (Thông tin người đặt lên đầu) -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 18px 0 10px 0; width: 100%;">
           <tr>
-            <td style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 9999px; padding: 5px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #059669;">
-              <span style="display: inline-block; vertical-align: middle; margin-right: 5px; font-size: 13px; font-weight: 900; color: #059669;">✔</span>
-              <span style="vertical-align: middle;">Booking Confirmed</span>
+            <td style="width: 26px; vertical-align: middle;">
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px; font-size: 12px;">
+                👤
+              </div>
+            </td>
+            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
+              CUSTOMER INFORMATION
             </td>
           </tr>
         </table>
 
-        <h1 class="title">Thank You for Booking With Us!</h1>
-        <p class="greeting">
-          Dear <strong>${escapeHtml(booking.name)}</strong>,<br>
-          Thank you for choosing Fashion Nails Morley Galleria. Your appointment has been successfully received and scheduled. Below is your complete booking summary:
-        </p>
+        <table class="details-table" role="presentation">
+          <tr>
+            <td class="td-label">Full Name</td>
+            <td class="td-value" style="color: #0f172a; font-size: 14.5px;">${escapeHtml(booking.name)}</td>
+          </tr>
+          <tr>
+            <td class="td-label">Contact Phone</td>
+            <td class="td-value"><a href="tel:${escapeHtml(booking.phone)}" style="color: #0284c7; text-decoration: none;">${escapeHtml(booking.phone)}</a></td>
+          </tr>
+          <tr>
+            <td class="td-label">Email Address</td>
+            <td class="td-value"><a href="mailto:${escapeHtml(booking.email)}" style="color: #0284c7; text-decoration: none;">${escapeHtml(booking.email)}</a></td>
+          </tr>
+          <tr>
+            <td class="td-label">Special Notes</td>
+            <td class="td-value" style="font-weight: 500; font-style: italic; color: #475569;">
+              ${cleanNote ? `"${escapeHtml(cleanNote)}"` : 'None provided'}
+            </td>
+          </tr>
+        </table>
 
-        <!-- Service & Appointment Details -->
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 22px 0 10px 0; width: 100%;">
+        <!-- 2. Service & Appointment Details -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
               <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px; font-size: 12px;">
@@ -415,7 +443,7 @@ function buildCustomerEmailHtml(booking) {
           </tr>
         </table>
 
-        <!-- Price Breakdown -->
+        <!-- 3. Price Breakdown -->
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
@@ -507,41 +535,6 @@ function buildCustomerEmailHtml(booking) {
           </div>
         </div>
 
-        <!-- Contact & Notes Details -->
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
-          <tr>
-            <td style="width: 26px; vertical-align: middle;">
-              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px; font-size: 12px;">
-                👤
-              </div>
-            </td>
-            <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
-              CONTACT &amp; SPECIAL REQUESTS
-            </td>
-          </tr>
-        </table>
-
-        <table class="details-table" role="presentation">
-          <tr>
-            <td class="td-label">Full Name</td>
-            <td class="td-value">${escapeHtml(booking.name)}</td>
-          </tr>
-          <tr>
-            <td class="td-label">Contact Phone</td>
-            <td class="td-value"><a href="tel:${escapeHtml(booking.phone)}" style="color: #0284c7; text-decoration: none;">${escapeHtml(booking.phone)}</a></td>
-          </tr>
-          <tr>
-            <td class="td-label">Email Address</td>
-            <td class="td-value"><a href="mailto:${escapeHtml(booking.email)}" style="color: #0284c7; text-decoration: none;">${escapeHtml(booking.email)}</a></td>
-          </tr>
-          <tr>
-            <td class="td-label">Special Notes</td>
-            <td class="td-value" style="font-weight: 500; font-style: italic; color: #475569;">
-              ${cleanNote ? `"${escapeHtml(cleanNote)}"` : 'None provided'}
-            </td>
-          </tr>
-        </table>
-
         <!-- Helpful Reminders -->
         <div class="info-box">
           <div style="font-weight: 700; color: #92400e; margin-bottom: 8px;">
@@ -561,7 +554,7 @@ function buildCustomerEmailHtml(booking) {
             <span style="display: inline-block; vertical-align: middle; margin-right: 6px; font-size: 14px;">📍</span>
             <span style="vertical-align: middle;">Salon Location &amp; Contact</span>
           </div>
-          <div><strong>Fashion Nails Morley Galleria</strong></div>
+          <div><strong>Fashion Nail Morley</strong></div>
           <div>Shop SP094 (Opposite Kmart), Morley Galleria Shopping Centre</div>
           <div>Cnr Collier Rd &amp; Walter Rd W, Morley WA 6062, Australia</div>
           <div style="margin-top: 8px;">
@@ -579,12 +572,12 @@ function buildCustomerEmailHtml(booking) {
       <div class="footer">
         <div><strong>Trading Hours:</strong> Mon–Wed, Fri–Sat: 9:00 AM – 5:30 PM | Thu: 9:00 AM – 9:00 PM | Sun: 11:00 AM – 5:00 PM</div>
         <div style="margin-top: 8px;">
-          Fashion Nails Morley Galleria WA &bull;
+          Fashion Nail Morley &bull;
           <a href="https://www.instagram.com/fashion_nails_morley/">Instagram</a> &bull;
           <a href="https://www.facebook.com/FashionNailsMorley/">Facebook</a>
         </div>
         <div style="margin-top: 8px; font-size: 11px; color: #94a3b8;">
-          &copy; ${new Date().getFullYear()} Fashion Nails Morley Galleria. All rights reserved.
+          &copy; ${new Date().getFullYear()} Fashion Nail Morley. All rights reserved.
         </div>
       </div>
     </div>
@@ -596,7 +589,7 @@ function buildCustomerEmailHtml(booking) {
 /**
  * Builds HTML email for the salon owner notification
  */
-function buildOwnerEmailHtml(booking) {
+export function buildOwnerEmailHtml(booking) {
   const formattedDate = formatEnglishDate(booking.date);
   const guests = Math.max(1, Number(booking.guests) || 1);
 
@@ -735,13 +728,13 @@ function buildOwnerEmailHtml(booking) {
             <td align="center">
               <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 10px auto;">
                 <tr>
-                  <td align="center" style="width: 46px; height: 46px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.2) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle; font-size: 20px; line-height: 46px;">
-                    👑
+                  <td align="center">
+                    <img src="cid:salon-logo" alt="Fashion Nail Morley Logo" width="120" style="display: block; margin: 0 auto; max-width: 120px; height: auto; border: 0; outline: none; text-decoration: none;" />
                   </td>
                 </tr>
               </table>
               <div style="font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 21px; font-weight: 700; letter-spacing: 0.08em; color: #FAF7F2; text-transform: uppercase; margin: 0 0 8px 0;">
-                FASHION NAILS MORLEY
+                FASHION NAIL MORLEY
               </div>
               <div style="display: inline-block; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; box-shadow: 0 2px 6px rgba(180, 83, 9, 0.35);">
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
@@ -896,7 +889,7 @@ function buildOwnerEmailHtml(booking) {
       </div>
 
       <div class="footer">
-        Fashion Nails Morley Galleria &bull; Automated Booking Notification System
+        Fashion Nail Morley &bull; Automated Booking Notification System
       </div>
     </div>
   </div>
@@ -925,9 +918,19 @@ export async function sendBookingEmails(booking) {
     };
   }
 
-  const attachments = [];
+  const logoBuf = getLogoBuffer();
+  const attachments = logoBuf ? [
+    {
+      filename: 'fashion-nail-morley-logo.png',
+      content: logoBuf,
+      content_id: 'salon-logo',
+      contentId: 'salon-logo',
+      content_type: 'image/png',
+      contentType: 'image/png'
+    }
+  ] : [];
 
-  const senderEmail = config.emailFrom || 'Fashion Nails Morley <onboarding@resend.dev>';
+  const senderEmail = config.emailFrom || 'Fashion Nail Morley <onboarding@resend.dev>';
   const ownerRecipient = (config.salonOwnerEmail || process.env.SALON_OWNER_EMAIL || process.env.OWNER_EMAIL || '').trim();
 
   const results = {
@@ -951,7 +954,7 @@ export async function sendBookingEmails(booking) {
       const fallbackRes = await resend.emails.send({
         from: senderEmail,
         to: targetEmail,
-        subject: `[TEST SANDBOX: for ${booking.email}] ✨ Thank You for Booking! - Fashion Nails Morley [#${booking.bookingId || 'AURA'}]`,
+        subject: `[TEST SANDBOX: for ${booking.email}] ✨ Thank You for Booking! Appointment Confirmed - Fashion Nails Morley`,
         html: `
           <div style="background: #fef3c7; border: 1.5px solid #f59e0b; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13.5px; color: #92400e; line-height: 1.5;">
             <strong>⚠️ Resend Sandbox Mode Notice:</strong><br>
@@ -984,7 +987,7 @@ export async function sendBookingEmails(booking) {
         let res = await resend.emails.send({
           from: senderEmail,
           to: booking.email,
-          subject: `✨ Thank You for Booking! Appointment Confirmed - Fashion Nails Morley [#${booking.bookingId || 'AURA'}]`,
+          subject: '✨ Thank You for Booking! Appointment Confirmed - Fashion Nails Morley',
           html: customerHtml,
           attachments
         });
