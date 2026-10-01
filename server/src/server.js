@@ -22,6 +22,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Trust reverse proxy (Nginx) for rate-limiting and client IP
+app.set('trust proxy', 1);
+
 // Security & Parsing Middlewares
 app.use(cors({
   origin: true, // Allow frontend dev & tunnels
