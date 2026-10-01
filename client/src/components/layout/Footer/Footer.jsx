@@ -144,7 +144,7 @@ export function Footer() {
                   <InstagramIcon size={18} />
                 </a>
                 <a
-                  href="https://www.facebook.com/FashionNailsMorley/"
+                  href="https://www.facebook.com/profile.php?id=61556106694333"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook Fashion Nails Morley"
@@ -169,7 +169,7 @@ export function Footer() {
             <span>•</span>
             <span>Gift Vouchers Available</span>
             <span>•</span>
-            <a href="/admin" className="atelier-footer__staff-link">Staff Portal</a>
+            <a href="/admin/login" className="atelier-footer__staff-link">Staff Portal</a>
           </div>
         </div>
       </div>

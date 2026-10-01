@@ -219,7 +219,7 @@
       "nameRequired": "Please enter your full name.",
       "phoneRequired": "Please enter a valid phone number (e.g., 0412 345 678).",
       "emailRequired": "Please enter a valid email address.",
-      "general": "An error occurred. Please try again or call the salon directly."
+      "general": "System error; please try again."
     }
   },
   "footer": {

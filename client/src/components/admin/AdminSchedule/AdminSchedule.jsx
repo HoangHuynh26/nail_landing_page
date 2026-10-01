@@ -449,7 +449,7 @@ export default function AdminSchedule() {
       const openMin = parseSlotToMinutes('08:00 AM');
       const noonMin = parseSlotToMinutes('12:00 PM');
       const targetSlots = [];
-      for (let m = openMin; m <= noonMin; m += 1) {
+      for (let m = openMin; m < noonMin; m += 1) {
         targetSlots.push(formatMinutesToTime(m));
       }
       return targetSlots;
@@ -459,7 +459,7 @@ export default function AdminSchedule() {
       const noonMin = parseSlotToMinutes('12:00 PM');
       const closeMin = parseSlotToMinutes('06:00 PM');
       const targetSlots = [];
-      for (let m = noonMin; m <= closeMin; m += 1) {
+      for (let m = noonMin; m < closeMin; m += 1) {
         targetSlots.push(formatMinutesToTime(m));
       }
       return targetSlots;
@@ -468,7 +468,7 @@ export default function AdminSchedule() {
     const durationMinutes = parseInt(durationStr, 10) || 15;
     const targetSlots = [];
 
-    // Lock every minute from startMin to startMin + durationMinutes inclusive
+    // Lock every minute from startMin to startMin + durationMinutes (inclusive of endMin, e.g. 6:00 to 6:15)
     const endMin = startMin + durationMinutes;
     for (let curMin = startMin; curMin <= endMin; curMin += 1) {
       if (curMin < 24 * 60) {

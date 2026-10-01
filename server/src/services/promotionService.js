@@ -1,7 +1,5 @@
 import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.js';
-import { defaultPromotions } from '../data/defaultPromotions.js';
 
-/**
 /**
  * Retrieves all currently active promotions for visitor popup display
  */
@@ -26,7 +24,7 @@ export async function getActivePromotions() {
 
   // Fallback
   const store = await readFallbackStore();
-  const promos = store.promotions || defaultPromotions;
+  const promos = store.promotions || [];
   return promos.filter(p => {
     if (!p.active) return false;
     if (p.start_date && p.start_date > today) return false;
@@ -57,7 +55,7 @@ export async function getAllPromotions() {
   }
 
   const store = await readFallbackStore();
-  return store.promotions || defaultPromotions;
+  return store.promotions || [];
 }
 
 /**

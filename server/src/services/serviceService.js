@@ -1,5 +1,4 @@
 import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.js';
-import { defaultServices } from '../data/defaultServices.js';
 
 /**
  * Retrieves all services, optionally filtered by active status
@@ -23,7 +22,7 @@ export async function getAllServices({ activeOnly = false } = {}) {
 
   // Fallback
   const store = await readFallbackStore();
-  let services = store.services || defaultServices;
+  let services = store.services || [];
   if (activeOnly) {
     services = services.filter(s => s.active !== false);
   }
@@ -192,28 +191,7 @@ export async function deleteService(id) {
  * Resets services back to default catalog
  */
 export async function resetServicesToDefault() {
-  if (!dbState.usingFallback && pool) {
-    try {
-      await pool.query('DELETE FROM services');
-      for (const s of defaultServices) {
-        const name = s.name || s.name_en;
-        const desc = s.description || s.description_en || '';
-        await pool.query(
-          `INSERT INTO services (id, category, name, name_en, description, description_en, duration, price, price_prefix, featured, active, sort_order)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-          [s.id, s.category, name, name, desc, desc, s.duration, s.price, s.price_prefix || '', s.featured || false, s.active ?? true, s.sort_order || 0]
-        );
-      }
-      return defaultServices;
-    } catch (err) {
-      console.error('[DB] Failed to reset services in Neon:', err.message);
-    }
-  }
-
-  const store = await readFallbackStore();
-  store.services = [...defaultServices];
-  await writeFallbackStore(store);
-  return store.services;
+  return await getAllServices();
 }
 
 function mapPostgresService(row) {

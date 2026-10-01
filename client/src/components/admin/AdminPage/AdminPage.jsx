@@ -15,6 +15,7 @@ import AdminSchedule from '../AdminSchedule/AdminSchedule';
 import AdminVouchers from '../AdminVouchers/AdminVouchers';
 import { AdminSocketProvider, useAdminSocket } from '../../../context/AdminSocketContext';
 import { getPerthDateString } from '../../../utils/perthTime';
+import { getFriendlyErrorMessage } from '../../../utils/errorHandler';
 
 function AdminDashboardContent({ onBackToWebsite }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,13 +50,64 @@ function AdminDashboardContent({ onBackToWebsite }) {
     markAsViewed
   } = useAdminSocket();
 
-  // Check saved token on mount
+  // Verify JWT token with backend on mount
   useEffect(() => {
-    const savedToken = localStorage.getItem('atelier_admin_token');
-    if (savedToken) {
-      setIsAuthenticated(true);
-    }
-    setIsCheckingAuth(false);
+    let isMounted = true;
+
+    const verifyToken = async () => {
+      const savedToken = localStorage.getItem('atelier_admin_token');
+      if (!savedToken) {
+        if (isMounted) {
+          setIsAuthenticated(false);
+          setIsCheckingAuth(false);
+          // If at /admin or anything under /admin without a token, redirect to /admin/login
+          if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+            window.history.replaceState({}, '', '/admin/login');
+          }
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/verify', {
+          headers: { Authorization: `Bearer ${savedToken}` }
+        });
+        const data = await res.json();
+        if (isMounted) {
+          if (res.ok && data.success) {
+            setIsAuthenticated(true);
+            // If already verified and currently at /admin/login, forward to /admin
+            if (window.location.pathname === '/admin/login') {
+              window.history.replaceState({}, '', '/admin');
+            }
+          } else {
+            localStorage.removeItem('atelier_admin_token');
+            setIsAuthenticated(false);
+            if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+              window.history.replaceState({}, '', '/admin/login');
+            }
+          }
+        }
+      } catch {
+        if (isMounted) {
+          localStorage.removeItem('atelier_admin_token');
+          setIsAuthenticated(false);
+          if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+            window.history.replaceState({}, '', '/admin/login');
+          }
+        }
+      } finally {
+        if (isMounted) {
+          setIsCheckingAuth(false);
+        }
+      }
+    };
+
+    verifyToken();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleLoginSubmit = async (e) => {
@@ -70,28 +122,39 @@ function AdminDashboardContent({ onBackToWebsite }) {
     setIsSubmitting(true);
     try {
       const res = await fetch('/api/admin/login', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: username.trim(),
           password: password
         })
       });
-      const data = await res.json();
 
-      if (data.success) {
+      if (res.status >= 500) {
+        setLoginError('System error; please try again.');
+        return;
+      }
+
+      let data = null;
+      try {
+        const text = await res.text();
+        if (text && text.trim()) {
+          data = JSON.parse(text);
+        }
+      } catch {
+        data = null;
+      }
+
+      if (data && data.success) {
         localStorage.setItem('atelier_admin_token', data.token);
         setIsAuthenticated(true);
+        // Navigate from /admin/login to /admin
+        window.history.pushState({}, '', '/admin');
       } else {
-        setLoginError(data.message || 'Invalid username or password');
+        setLoginError(getFriendlyErrorMessage(data?.message || 'Invalid username or password'));
       }
     } catch {
-      // Offline fallback: check default 'admin' / 'Admin@123'
-      if (username.trim().toLowerCase() === 'admin' && password === 'Admin@123') {
-        localStorage.setItem('atelier_admin_token', 'local-token');
-        setIsAuthenticated(true);
-      } else {
-        setLoginError('Invalid username or password. Default is admin / Admin@123');
-      }
+      setLoginError('System error; please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -102,6 +165,7 @@ function AdminDashboardContent({ onBackToWebsite }) {
     setIsAuthenticated(false);
     setUsername('');
     setPassword('');
+    window.history.pushState({}, '', '/admin/login');
   };
 
   if (isCheckingAuth) {
@@ -200,10 +264,6 @@ function AdminDashboardContent({ onBackToWebsite }) {
             >
               <ArrowLeft size={13} /> Back to Website
             </button>
-
-            <span className="admin-auth-hint">
-              Default: <strong>admin</strong> / <strong>Admin@123</strong>
-            </span>
           </div>
         </div>
       </div>

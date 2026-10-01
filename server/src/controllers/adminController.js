@@ -1,4 +1,13 @@
-import { getDbStatus, initDatabase, dbState } from '../db/db.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import {
+  getDbStatus,
+  initDatabase,
+  findAdminByUsername,
+  updateAdminPassword,
+  createAdminUser,
+  getAdminAccounts
+} from '../db/db.js';
 import { config } from '../config/env.js';
 
 /**
@@ -22,46 +31,159 @@ export async function getSystemStatus(req, res, next) {
 }
 
 /**
- * Verifies admin credentials (Username & Password, with PIN backwards-compatibility)
+ * Verifies admin credentials using database lookup and bcrypt verification
  */
-export async function verifyAdminPin(req, res) {
-  const { username, password, pin } = req.body;
-  const configuredUsername = config.adminUsername || 'admin';
-  const configuredPassword = config.adminPassword || 'Admin@123';
+export async function verifyAdminPin(req, res, next) {
+  try {
+    const { username, password } = req.body;
 
-  // 1. Username & Password verification
-  if (username !== undefined || password !== undefined) {
-    const isUserValid = String(username || '').trim() === String(configuredUsername).trim();
-    const isPassValid = String(password || '').trim() === String(configuredPassword).trim();
+    const cleanUser = String(username || '').trim();
+    const rawPassword = String(password || '').trim();
 
-    if (!isUserValid || !isPassValid) {
+    if (!cleanUser || !rawPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both username and password are required'
+      });
+    }
+
+    // Query database for admin user
+    const admin = await findAdminByUsername(cleanUser);
+
+    if (!admin) {
       return res.status(401).json({
         success: false,
         message: 'Invalid username or password'
       });
     }
 
+    // Verify password with bcrypt
+    const storedHash = admin.password_hash || admin.passwordHash || '';
+    if (!storedHash || !storedHash.startsWith('$2')) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or password'
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(rawPassword, storedHash);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or password'
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: admin.id,
+        username: admin.username,
+        role: admin.role || 'admin',
+        fullName: admin.full_name || admin.fullName || 'Administrator'
+      },
+      config.jwtSecret,
+      { expiresIn: '24h' }
+    );
+
     return res.status(200).json({
       success: true,
       message: 'Authentication successful',
-      token: Buffer.from(`admin:${Date.now()}:${configuredUsername}`).toString('base64')
+      token,
+      user: {
+        id: admin.id,
+        username: admin.username,
+        fullName: admin.full_name || admin.fullName || 'Administrator',
+        role: admin.role || 'admin'
+      }
     });
-  }
-
-  // 2. Legacy PIN verification fallback
-  const configuredPin = config.adminPin || '8888';
-  if (!pin || String(pin).trim() !== String(configuredPin).trim()) {
-    return res.status(401).json({
+  } catch (err) {
+    console.error('[Admin Auth Error]', err);
+    return res.status(500).json({
       success: false,
-      message: 'Invalid credentials'
+      message: 'Internal server error during authentication'
     });
   }
+}
 
-  return res.status(200).json({
-    success: true,
-    message: 'Authentication successful',
-    token: Buffer.from(`admin:${Date.now()}:${configuredPin}`).toString('base64')
-  });
+/**
+ * Changes admin password in database with bcrypt hashing
+ */
+export async function changeAdminPassword(req, res, next) {
+  try {
+    const { username, currentPassword, newPassword } = req.body;
+
+    if (!username || !currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username, current password, and new password are required'
+      });
+    }
+
+    if (String(newPassword).trim().length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters long'
+      });
+    }
+
+    const admin = await findAdminByUsername(username);
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: 'Admin account not found'
+      });
+    }
+
+    // Verify current password with bcrypt
+    const storedHash = admin.password_hash || '';
+    let isCurrentValid = false;
+
+    if (storedHash.startsWith('$2')) {
+      isCurrentValid = await bcrypt.compare(String(currentPassword).trim(), storedHash);
+    } else {
+      isCurrentValid = String(currentPassword).trim() === storedHash;
+    }
+
+    if (!isCurrentValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect'
+      });
+    }
+
+    // Hash new password with bcrypt (10 rounds)
+    const newHash = await bcrypt.hash(String(newPassword).trim(), 10);
+    const updated = await updateAdminPassword(admin.id, newHash);
+
+    if (!updated) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to update password in database'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password updated successfully'
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Returns list of admin accounts (without password hashes)
+ */
+export async function getAdminsList(req, res, next) {
+  try {
+    const admins = await getAdminAccounts();
+    return res.status(200).json({
+      success: true,
+      data: admins
+    });
+  } catch (err) {
+    next(err);
+  }
 }
 
 /**
@@ -96,4 +218,14 @@ export async function updateDatabaseConnection(req, res, next) {
   } catch (err) {
     next(err);
   }
+}
+
+/**
+ * Verifies active session token from authMiddleware
+ */
+export async function verifyAdminSession(req, res) {
+  return res.status(200).json({
+    success: true,
+    user: req.admin
+  });
 }

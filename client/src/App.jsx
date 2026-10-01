@@ -45,13 +45,16 @@ export function App() {
     window.addEventListener('popstate', handleLocationChange);
     window.addEventListener('hashchange', handleLocationChange);
 
-    // Also intercept clicking on internal /admin links without full reload
+    // Also intercept clicking on internal /admin or /admin/login links without full reload
     const handleLinkClick = (e) => {
       const anchor = e.target.closest('a');
-      if (anchor && anchor.getAttribute('href') === '/admin') {
-        e.preventDefault();
-        window.history.pushState({}, '', '/admin');
-        setIsAdminView(true);
+      if (anchor) {
+        const href = anchor.getAttribute('href');
+        if (href === '/admin' || href === '/admin/login' || href?.startsWith('/admin')) {
+          e.preventDefault();
+          window.history.pushState({}, '', href);
+          setIsAdminView(true);
+        }
       }
     };
     document.addEventListener('click', handleLinkClick);

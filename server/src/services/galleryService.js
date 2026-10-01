@@ -1,5 +1,4 @@
 import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.js';
-import { defaultGallery } from '../data/defaultGallery.js';
 
 /**
  * Normalizes PostgreSQL row to Gallery Item schema matching client conventions
@@ -84,7 +83,7 @@ export async function getAllGalleryItems({ activeOnly = false, category = null }
 
   // Local fallback
   const store = await readFallbackStore();
-  let items = store.gallery && store.gallery.length > 0 ? store.gallery : defaultGallery;
+  let items = store.gallery && store.gallery.length > 0 ? store.gallery : [];
 
   if (activeOnly) {
     items = items.filter(item => item.active !== false);

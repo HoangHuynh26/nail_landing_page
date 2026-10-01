@@ -2,11 +2,7 @@ import pg from 'pg';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { defaultServices } from '../data/defaultServices.js';
-import { defaultCategories } from '../data/defaultCategories.js';
-import { defaultPromotions } from '../data/defaultPromotions.js';
-import { defaultGallery } from '../data/defaultGallery.js';
-import { defaultVouchers } from '../data/defaultVouchers.js';
+import bcrypt from 'bcryptjs';
 
 const { Pool } = pg;
 const __filename = fileURLToPath(import.meta.url);
@@ -37,15 +33,16 @@ async function initFallbackStore() {
       await fs.access(FALLBACK_FILE);
     } catch {
       const initialData = {
-        categories: defaultCategories,
+        categories: [],
         bookings: [],
-        services: defaultServices,
-        promotions: defaultPromotions,
-        gallery: defaultGallery,
+        services: [],
+        promotions: [],
+        gallery: [],
         schedule_locks: [],
         schedule_custom_slots: [],
         schedule_date_hours: [],
-        vouchers: defaultVouchers
+        vouchers: [],
+        admins: []
       };
       await fs.writeFile(FALLBACK_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
     }
@@ -62,36 +59,31 @@ export async function readFallbackStore() {
     await initFallbackStore();
     const raw = await fs.readFile(FALLBACK_FILE, 'utf-8');
     const parsed = JSON.parse(raw);
-    if (!parsed.categories || parsed.categories.length === 0) {
-      parsed.categories = defaultCategories;
-    }
-    if (!parsed.gallery || parsed.gallery.length === 0) {
-      parsed.gallery = defaultGallery;
-    }
-    if (!parsed.schedule_locks) {
-      parsed.schedule_locks = [];
-    }
-    if (!parsed.schedule_custom_slots) {
-      parsed.schedule_custom_slots = [];
-    }
-    if (!parsed.schedule_date_hours) {
-      parsed.schedule_date_hours = [];
-    }
-    if (!parsed.vouchers || parsed.vouchers.length === 0) {
-      parsed.vouchers = defaultVouchers;
-    }
-    return parsed;
+    return {
+      categories: parsed.categories || [],
+      bookings: parsed.bookings || [],
+      services: parsed.services || [],
+      promotions: parsed.promotions || [],
+      gallery: parsed.gallery || [],
+      schedule_locks: parsed.schedule_locks || [],
+      schedule_custom_slots: parsed.schedule_custom_slots || [],
+      schedule_date_hours: parsed.schedule_date_hours || [],
+      vouchers: parsed.vouchers || [],
+      admins: parsed.admins || []
+    };
   } catch (err) {
     console.error('[DB] Error reading fallback store:', err.message);
     return {
+      categories: [],
       bookings: [],
-      services: defaultServices,
-      promotions: defaultPromotions,
-      gallery: defaultGallery,
+      services: [],
+      promotions: [],
+      gallery: [],
       schedule_locks: [],
       schedule_custom_slots: [],
       schedule_date_hours: [],
-      vouchers: defaultVouchers
+      vouchers: [],
+      admins: []
     };
   }
 }
@@ -268,6 +260,19 @@ async function createTables(client) {
     CREATE UNIQUE INDEX IF NOT EXISTS idx_vouchers_code_upper ON vouchers(UPPER(code));
     CREATE INDEX IF NOT EXISTS idx_vouchers_active ON vouchers(is_active);
     CREATE INDEX IF NOT EXISTS idx_vouchers_end_date ON vouchers(end_date);
+
+    CREATE TABLE IF NOT EXISTS admins (
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(100) UNIQUE NOT NULL,
+      password_hash VARCHAR(255) NOT NULL,
+      full_name VARCHAR(255) DEFAULT 'Salon Administrator',
+      role VARCHAR(50) DEFAULT 'admin',
+      active BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_admins_username_lower ON admins(LOWER(username));
   `;
 
   await client.query(ddl);
@@ -278,25 +283,7 @@ async function createTables(client) {
  * Seeds initial services, promotions & gallery if empty in Neon Postgres
  */
 async function seedPostgresIfEmpty(client) {
-  // 1. Seed categories first so services can reference them
-  console.log('[DB] Ensuring default categories exist in Neon PostgreSQL...');
-  for (const c of defaultCategories) {
-    const catName = c.name || c.name_en;
-    const catDesc = c.description || c.description_en || '';
-    await client.query(
-      `INSERT INTO categories (id, name, name_en, description, description_en, sort_order, active)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (id) DO UPDATE SET
-         name = EXCLUDED.name,
-         name_en = EXCLUDED.name_en,
-         description = EXCLUDED.description,
-         description_en = EXCLUDED.description_en,
-         sort_order = EXCLUDED.sort_order;`,
-      [c.id, catName, catName, catDesc, catDesc, c.sort_order || 0, c.active !== false]
-    );
-  }
-
-  // 2. Add Foreign Key on services -> categories with ON DELETE CASCADE if not exists
+  // 1. Add Foreign Key on services -> categories with ON DELETE CASCADE if not exists
   await client.query(`
     DO $$
     BEGIN
@@ -311,7 +298,7 @@ async function seedPostgresIfEmpty(client) {
     END $$;
   `);
 
-  // 3. Backfill categories in bookings if blank
+  // 2. Backfill categories in bookings if blank
   await client.query(`
     UPDATE bookings b
     SET category = COALESCE(
@@ -327,87 +314,19 @@ async function seedPostgresIfEmpty(client) {
     WHERE b.category IS NULL OR b.category = '' OR b.category IN ('biab', 'acrylic', 'shellac', 'gelx', 'sns', 'polish', 'extra');
   `);
 
-  // 4. Check services
-  const servRes = await client.query('SELECT COUNT(*) FROM services');
-  if (parseInt(servRes.rows[0].count, 10) === 0) {
-    console.log('[DB] Seeding default services into Neon PostgreSQL...');
-    for (const s of defaultServices) {
-      const sName = s.name || s.name_en;
-      const sDesc = s.description || s.description_en || '';
-      await client.query(
-        `INSERT INTO services (id, category, name, name_en, description, description_en, duration, price, price_prefix, featured, active, sort_order)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-         ON CONFLICT (id) DO NOTHING`,
-        [s.id, s.category, s.name, s.name_en, sDesc, sDesc, s.duration, s.price, s.price_prefix || '', s.featured || false, s.active ?? true, s.sort_order || 0]
-      );
-    }
-  }
-
-  // Check promotions
-  const promoRes = await client.query('SELECT COUNT(*) FROM promotions');
-  if (parseInt(promoRes.rows[0].count, 10) === 0) {
-    console.log('[DB] Seeding default promotions into Neon PostgreSQL...');
-    for (const p of defaultPromotions) {
-      await client.query(
-        `INSERT INTO promotions (title, subtitle, badge, image_url, voucher_code, discount_text, active, start_date, end_date)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-        [p.title, p.subtitle, p.badge, p.image_url, p.voucher_code, p.discount_text, p.active, p.start_date, p.end_date]
-      );
-    }
-  }
-
-  // Check gallery
-  const galRes = await client.query('SELECT COUNT(*) FROM gallery');
-  if (parseInt(galRes.rows[0].count, 10) === 0) {
-    console.log('[DB] Seeding default gallery showcases into Neon PostgreSQL...');
-    for (const g of defaultGallery) {
-      const gTitle = g.title || g.title_en;
-      const gCat = g.category_name || g.category_en || '';
-      const gServ = g.service_name || g.service_name_en || '';
-      const gShape = g.shape || g.shape_en || '';
-      const gDur = g.duration || g.duration_en || '';
-      const gTech = g.technique || g.technique_en || '';
-      const gDesc = g.description || g.description_en || '';
-      const gHigh = JSON.stringify(g.highlights || g.highlights_en || []);
-
-      await client.query(
-        `INSERT INTO gallery (
-          id, src, category_key, title, title_en, category_name, category_en,
-          service_id, service_name, service_name_en, shape, shape_en,
-          duration, duration_en, price, technique, technique_en,
-          description, description_en, highlights, highlights_en, active, sort_order
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23
-        ) ON CONFLICT (id) DO NOTHING`,
-        [
-          g.id, g.src, g.categoryKey, gTitle, gTitle, gCat, gCat,
-          g.serviceId || '', gServ, gServ, gShape, gShape,
-          gDur, gDur, g.price || '$60', gTech, gTech,
-          gDesc, gDesc, gHigh, gHigh,
-          g.active ?? true, g.sort_order || 0
-        ]
-      );
-    }
-  }
-
-  // Check vouchers
-  const vouchRes = await client.query('SELECT COUNT(*) FROM vouchers');
-  if (parseInt(vouchRes.rows[0].count, 10) === 0) {
-    console.log('[DB] Seeding default vouchers into Neon PostgreSQL...');
-    for (const v of defaultVouchers) {
-      await client.query(
-        `INSERT INTO vouchers (
-          code, name, discount_type, discount_value, min_spend, max_discount,
-          usage_limit, used_count, start_date, end_date, is_active
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
-        ) ON CONFLICT (code) DO NOTHING`,
-        [
-          v.code, v.name, v.discountType, v.discountValue, v.minSpend, v.maxDiscount,
-          v.usageLimit, v.usedCount, v.startDate, v.endDate, v.isActive
-        ]
-      );
-    }
+  // 3. Ensure initial admin user exists in Neon PostgreSQL
+  const adminRes = await client.query('SELECT COUNT(*) FROM admins');
+  if (parseInt(adminRes.rows[0].count, 10) === 0) {
+    console.log('[DB] Initializing default admin user in Neon PostgreSQL...');
+    const defaultPassword = process.env.ADMIN_PASSWORD || 'Admin@123';
+    const passwordHash = await bcrypt.hash(defaultPassword, 10);
+    const username = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
+    await client.query(
+      `INSERT INTO admins (username, password_hash, full_name, role, active)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (username) DO NOTHING`,
+      [username, passwordHash, 'Fashion Nails Administrator', 'superadmin', true]
+    );
   }
 }
 
@@ -493,20 +412,21 @@ export async function executeQuery(text, params = []) {
  * Gets the connection status and table counts
  */
 export async function getDbStatus() {
-  let counts = { bookings: 0, services: 0, promotions: 0, gallery: 0, schedule_locks: 0, schedule_custom_slots: 0 };
+  let counts = { bookings: 0, services: 0, promotions: 0, gallery: 0, schedule_locks: 0, schedule_custom_slots: 0, categories: 0, admins: 0 };
   let pingMs = dbState.lastPingMs;
 
   if (!dbState.usingFallback && pool) {
     try {
       const start = Date.now();
-      const [b, s, p, g, l, cs, cat] = await Promise.all([
+      const [b, s, p, g, l, cs, cat, a] = await Promise.all([
         pool.query('SELECT COUNT(*) FROM bookings'),
         pool.query('SELECT COUNT(*) FROM services'),
         pool.query('SELECT COUNT(*) FROM promotions'),
         pool.query('SELECT COUNT(*) FROM gallery'),
         pool.query('SELECT COUNT(*) FROM schedule_locks'),
         pool.query('SELECT COUNT(*) FROM schedule_custom_slots'),
-        pool.query('SELECT COUNT(*) FROM categories')
+        pool.query('SELECT COUNT(*) FROM categories'),
+        pool.query('SELECT COUNT(*) FROM admins')
       ]);
       pingMs = Date.now() - start;
       counts = {
@@ -516,7 +436,8 @@ export async function getDbStatus() {
         gallery: parseInt(g.rows[0].count, 10),
         schedule_locks: parseInt(l.rows[0].count, 10),
         schedule_custom_slots: parseInt(cs.rows[0].count, 10),
-        categories: parseInt(cat.rows[0].count, 10)
+        categories: parseInt(cat.rows[0].count, 10),
+        admins: parseInt(a.rows[0].count, 10)
       };
     } catch (err) {
       console.warn('[DB] Failed to get Neon counts, falling back:', err.message);
@@ -530,7 +451,8 @@ export async function getDbStatus() {
       gallery: (store.gallery || defaultGallery).length,
       schedule_locks: (store.schedule_locks || []).length,
       schedule_custom_slots: (store.schedule_custom_slots || []).length,
-      categories: (store.categories || defaultCategories).length
+      categories: (store.categories || defaultCategories).length,
+      admins: (store.admins || defaultAdmins).length
     };
   }
 
@@ -550,6 +472,138 @@ export async function getDbStatus() {
     pingMs,
     initializedAt: dbState.initializedAt
   };
+}
+
+/**
+ * Finds an admin by username (case-insensitive)
+ */
+export async function findAdminByUsername(username) {
+  if (!username) return null;
+  const cleanUsername = String(username).trim().toLowerCase();
+
+  // Try Neon PostgreSQL first if connected
+  if (!dbState.usingFallback && pool) {
+    try {
+      const res = await pool.query(
+        'SELECT * FROM admins WHERE LOWER(username) = $1 AND active = true LIMIT 1',
+        [cleanUsername]
+      );
+      if (res.rows.length > 0) {
+        return res.rows[0];
+      }
+    } catch (err) {
+      console.warn('[DB] Failed to query admin from Neon, checking fallback store:', err.message);
+    }
+  }
+
+  // Fallback store
+  const store = await readFallbackStore();
+  const list = store.admins || [];
+  return list.find(a => (a.username || '').toLowerCase() === cleanUsername && a.active !== false) || null;
+}
+
+/**
+ * Updates an admin's password hash in the database
+ */
+export async function updateAdminPassword(id, passwordHash) {
+  if (!id || !passwordHash) return false;
+
+  if (!dbState.usingFallback && pool) {
+    try {
+      await pool.query(
+        'UPDATE admins SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+        [passwordHash, id]
+      );
+      return true;
+    } catch (err) {
+      console.warn('[DB] Failed to update admin password in Neon, trying fallback:', err.message);
+    }
+  }
+
+  const store = await readFallbackStore();
+  if (!store.admins) store.admins = [];
+  const idx = store.admins.findIndex(a => a.id === id || String(a.id) === String(id));
+  if (idx !== -1) {
+    store.admins[idx].password_hash = passwordHash;
+    store.admins[idx].updated_at = new Date().toISOString();
+    await writeFallbackStore(store);
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Creates a new admin account with hashed password
+ */
+export async function createAdminUser({ username, password, fullName = 'Administrator', role = 'admin' }) {
+  if (!username || !password) throw new Error('Username and password are required');
+  const cleanUser = String(username).trim();
+  const hash = await bcrypt.hash(String(password).trim(), 10);
+
+  if (!dbState.usingFallback && pool) {
+    try {
+      const res = await pool.query(
+        `INSERT INTO admins (username, password_hash, full_name, role, active)
+         VALUES ($1, $2, $3, $4, true)
+         RETURNING id, username, full_name, role, active, created_at`,
+        [cleanUser, hash, fullName, role]
+      );
+      return res.rows[0];
+    } catch (err) {
+      console.warn('[DB] Failed to create admin in Neon, trying fallback:', err.message);
+    }
+  }
+
+  const store = await readFallbackStore();
+  if (!store.admins) store.admins = [];
+  const newAdmin = {
+    id: Date.now(),
+    username: cleanUser,
+    password_hash: hash,
+    full_name: fullName,
+    role,
+    active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+  store.admins.push(newAdmin);
+  await writeFallbackStore(store);
+  return {
+    id: newAdmin.id,
+    username: newAdmin.username,
+    full_name: newAdmin.full_name,
+    role: newAdmin.role,
+    active: newAdmin.active,
+    created_at: newAdmin.created_at
+  };
+}
+
+/**
+ * Returns all admin accounts (passwords excluded)
+ */
+export async function getAdminAccounts() {
+  if (!dbState.usingFallback && pool) {
+    try {
+      const res = await pool.query(
+        'SELECT id, username, full_name, role, active, created_at, updated_at FROM admins ORDER BY id ASC'
+      );
+      return res.rows;
+    } catch (err) {
+      console.warn('[DB] Failed to get admin accounts from Neon, trying fallback:', err.message);
+    }
+  }
+
+  const store = await readFallbackStore();
+  const list = store.admins || [];
+  return list.map(a => ({
+    id: a.id,
+    username: a.username,
+    full_name: a.full_name || a.fullName || 'Administrator',
+    role: a.role || 'admin',
+    active: a.active !== false,
+    created_at: a.created_at,
+    updated_at: a.updated_at
+  }));
 }
 
 export { pool };

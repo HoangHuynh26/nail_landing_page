@@ -219,6 +219,28 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_vouchers_code_upper ON vouchers(UPPER(code
 CREATE INDEX IF NOT EXISTS idx_vouchers_active ON vouchers(is_active);
 CREATE INDEX IF NOT EXISTS idx_vouchers_end_date ON vouchers(end_date);
 
+-- ------------------------------------------------------------------------------
+-- 8. ADMINS TABLE (Administrator accounts & bcrypt authentication)
+-- ------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS admins (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) DEFAULT 'Salon Administrator',
+    role VARCHAR(50) DEFAULT 'admin', -- admin, superadmin, manager
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_admins_username_lower ON admins(LOWER(username));
+
+-- Seed initial admin account (Bcrypt hashed password)
+INSERT INTO admins (username, password_hash, full_name, role, active)
+VALUES
+('admin', '$2b$10$FPVf0W4GJYDLCfPxmM7LieUNPEE0m2NgTUPNKaFVI7QOsbmNzd7nm', 'Fashion Nails Admin', 'superadmin', true)
+ON CONFLICT (username) DO NOTHING;
+
 -- ==============================================================================
 -- SEED INITIAL CATEGORIES DATA
 -- ==============================================================================

@@ -1242,7 +1242,7 @@
 .admin-auth-footer {
   margin-top: 22px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -1258,15 +1258,6 @@
   gap: 6px;
   padding: 6px 0;
   text-decoration: none;
-}
-
-.admin-auth-hint {
-  font-size: 11px;
-  color: #64748b;
-}
-
-.admin-auth-hint strong {
-  color: #d4af37;
 }
 
 .admin-tab-btn-relative {

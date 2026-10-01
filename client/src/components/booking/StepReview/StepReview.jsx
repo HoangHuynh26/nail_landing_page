@@ -4,6 +4,7 @@ import { Calendar, Clock, DollarSign, User, Phone, Users, Mail, AlertCircle, Shi
 import { useLanguage } from '../../../context/LanguageContext';
 import { useBooking } from '../../../context/BookingContext';
 import { Button } from '../../ui/Button/Button';
+import { getFriendlyErrorMessage } from '../../../utils/errorHandler';
 
 export function StepReview() {
   const { language, t } = useLanguage();
@@ -219,7 +220,7 @@ export function StepReview() {
       {error && (
         <div className="booking-error-banner" role="alert">
           <AlertCircle size={18} />
-          <span>{error}</span>
+          <span>{getFriendlyErrorMessage(error, language)}</span>
         </div>
       )}
 

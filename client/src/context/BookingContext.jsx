@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { servicesData } from '../data/services';
 import { useLanguage } from './LanguageContext';
 import { getPerthDateString } from '../utils/perthTime';
+import { getFriendlyErrorMessage, isTechnicalError } from '../utils/errorHandler';
 
 const BookingContext = createContext(null);
 
@@ -57,6 +58,7 @@ export function BookingProvider({ children }) {
   const fetchCategories = async () => {
     try {
       const res = await fetch('/api/categories?active=true');
+      if (!res.ok) return;
       const data = await res.json();
       if (data.success && Array.isArray(data.categories) && data.categories.length > 0) {
         setCategories(data.categories.map(c => ({
@@ -86,6 +88,7 @@ export function BookingProvider({ children }) {
   const fetchLocks = async () => {
     try {
       const res = await fetch('/api/schedule/locks');
+      if (!res.ok) return;
       const data = await res.json();
       if (data.success) {
         setScheduleLocks({
@@ -106,6 +109,7 @@ export function BookingProvider({ children }) {
   const fetchServices = async () => {
     try {
       const res = await fetch('/api/services?active=true');
+      if (!res.ok) return;
       const data = await res.json();
       if (data.success && Array.isArray(data.services) && data.services.length > 0) {
         setServices(data.services);
@@ -248,18 +252,39 @@ export function BookingProvider({ children }) {
     setVoucherError(null);
 
     try {
-      const res = await fetch('/api/vouchers/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          code: clean,
-          servicePrice: totalSubtotal,
-          bookingDate: formData.date
-        })
-      });
+      let res;
+      try {
+        res = await fetch('/api/vouchers/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: clean,
+            servicePrice: totalSubtotal,
+            bookingDate: formData.date
+          })
+        });
+      } catch (netErr) {
+        console.error('Apply voucher network error:', netErr);
+        setVoucherError(getFriendlyErrorMessage(netErr, language));
+        return false;
+      }
 
-      const data = await res.json();
-      if (data.success && data.valid) {
+      if (res.status >= 500) {
+        setVoucherError(getFriendlyErrorMessage('502 Bad Gateway', language));
+        return false;
+      }
+
+      let data = null;
+      try {
+        const text = await res.text();
+        if (text && text.trim()) {
+          data = JSON.parse(text);
+        }
+      } catch {
+        data = null;
+      }
+
+      if (data && data.success && data.valid) {
         setAppliedVoucher(data);
         setFormData(prev => ({
           ...prev,
@@ -270,12 +295,13 @@ export function BookingProvider({ children }) {
         return true;
       } else {
         setAppliedVoucher(null);
-        setVoucherError(data.message || 'Invalid or expired voucher code.');
+        const msg = data?.message || 'Invalid or expired voucher code.';
+        setVoucherError(getFriendlyErrorMessage(msg, language));
         return false;
       }
     } catch (err) {
       console.error('Apply voucher error:', err);
-      setVoucherError('Unable to validate voucher right now. Please try again.');
+      setVoucherError(getFriendlyErrorMessage(err, language));
       return false;
     } finally {
       setIsApplyingVoucher(false);
@@ -355,19 +381,42 @@ export function BookingProvider({ children }) {
         language: 'en'
       };
 
-      const response = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+      let response;
+      try {
+        response = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (networkErr) {
+        console.error('Booking network error:', networkErr);
+        throw new Error(getFriendlyErrorMessage(networkErr, language));
+      }
 
-      const data = await response.json();
+      // Check for server error (500, 502 Bad Gateway, 503, 504 Gateway Timeout)
+      if (response.status >= 500) {
+        console.error(`Booking server error: HTTP ${response.status} ${response.statusText}`);
+        throw new Error(getFriendlyErrorMessage(`HTTP ${response.status}`, language));
+      }
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || t('booking.errors.general'));
+      // Safely parse JSON response
+      let data = null;
+      try {
+        const text = await response.text();
+        if (text && text.trim()) {
+          data = JSON.parse(text);
+        }
+      } catch (parseErr) {
+        console.error('Booking response JSON parse error:', parseErr);
+        throw new Error(getFriendlyErrorMessage(parseErr, language));
+      }
+
+      if (!response.ok || !data || !data.success) {
+        const serverMsg = data?.message;
+        throw new Error(getFriendlyErrorMessage(serverMsg, language));
       }
 
       setBookingResult({
@@ -385,7 +434,7 @@ export function BookingProvider({ children }) {
       setStep(6);
     } catch (err) {
       console.error('Booking submission error:', err);
-      setError(err.message || t('booking.errors.general'));
+      setError(getFriendlyErrorMessage(err, language));
     } finally {
       setIsSubmitting(false);
     }

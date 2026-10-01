@@ -76,18 +76,15 @@ export function AdminSocketProvider({ children }) {
     });
 
     socketInstance.on('connect', () => {
-      console.info('[AdminSocket] Connected to real-time notification socket:', socketInstance.id);
       setIsConnected(true);
     });
 
     socketInstance.on('disconnect', () => {
-      console.info('[AdminSocket] Disconnected from socket');
       setIsConnected(false);
     });
 
     // Listen for incoming new bookings
     socketInstance.on('new_booking', (booking) => {
-      console.info('[AdminSocket] Received new real-time booking:', booking);
 
       const id = booking.bookingId || booking.id;
 

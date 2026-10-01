@@ -1,5 +1,4 @@
 import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.js';
-import { defaultServices } from '../data/defaultServices.js';
 
 const CATEGORY_NAME_MAP = {
   biab: 'Builder Gel - BIAB',
@@ -19,14 +18,14 @@ export function resolveCategoryName(category, serviceName) {
     return category.trim();
   }
   if (serviceName) {
-    const matched = defaultServices.find(s =>
-      s.name_en?.toLowerCase() === serviceName.toLowerCase() ||
-      s.name?.toLowerCase() === serviceName.toLowerCase() ||
-      s.id === serviceName
-    );
-    if (matched && matched.category) {
-      return CATEGORY_NAME_MAP[matched.category.toLowerCase()] || matched.category;
-    }
+    const lower = serviceName.toLowerCase();
+    if (lower.includes('biab')) return 'Builder Gel - BIAB';
+    if (lower.includes('shellac')) return 'Shellac Nails';
+    if (lower.includes('acrylic')) return 'Acrylic Nails';
+    if (lower.includes('gel x') || lower.includes('gelx')) return 'Gel X Extensions';
+    if (lower.includes('sns')) return 'SNS Dipping';
+    if (lower.includes('polish')) return 'Nail Polish';
+    if (lower.includes('extra') || lower.includes('take off') || lower.includes('repair')) return 'Extra Services';
   }
   return '';
 }

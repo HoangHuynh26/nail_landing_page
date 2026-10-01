@@ -1,5 +1,4 @@
 import { pool, dbState, readFallbackStore, writeFallbackStore } from '../db/db.js';
-import { defaultCategories } from '../data/defaultCategories.js';
 
 /**
  * Normalizes PostgreSQL row to match frontend camelCase/object format
@@ -43,7 +42,7 @@ export async function getAllCategories({ activeOnly = false } = {}) {
 
   // Fallback
   const store = await readFallbackStore();
-  let categories = store.categories || defaultCategories;
+  let categories = store.categories || [];
   if (activeOnly) {
     categories = categories.filter(c => c.active !== false);
   }

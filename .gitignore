@@ -11,6 +11,9 @@ build/
 client/dist/
 
 # Local & environment variables
+.env
+.env.*
+!.env.example
 *.local
 .env.local
 .env.*.local

@@ -166,7 +166,7 @@ export async function handler(event, context) {
         headers: CORS_HEADERS,
         body: JSON.stringify({
           success: false,
-          message: 'Server error processing appointment. Please try again or call the atelier.'
+          message: 'System error; please try again.'
         })
       };
     }

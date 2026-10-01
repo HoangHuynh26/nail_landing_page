@@ -11,6 +11,7 @@ import {
   normalizeSlotTime,
   parseSlotToMinutes,
   formatSlotTime,
+  formatMinutesToTime,
   isSlotInPast,
   getPerthFormattedTime,
   getPerthDateString,
@@ -121,6 +122,37 @@ export function StepTime() {
     return (customSlots?.[selectedDate]?.removed || []).map(normalizeSlotTime);
   }, [customSlots, selectedDate]);
 
+  // Set of locked minute numbers for fast and accurate minute-level checks
+  const lockedMinutesSet = useMemo(() => {
+    const set = new Set();
+    for (const slot of (lockedSlots[selectedDate] || [])) {
+      const min = parseSlotToMinutes(slot);
+      if (min >= 0) set.add(min);
+    }
+    return set;
+  }, [lockedSlots, selectedDate]);
+
+  const removedMinutesSet = useMemo(() => {
+    const set = new Set();
+    for (const slot of (customSlots?.[selectedDate]?.removed || [])) {
+      const min = parseSlotToMinutes(slot);
+      if (min >= 0) set.add(min);
+    }
+    return set;
+  }, [customSlots, selectedDate]);
+
+  // Isolated 15-minute slot blocks (:00, :15, :30, :45) that represent a whole 15-min booking interval.
+  // If adjacent minutes (lMin - 1 or lMin + 1) are also locked, it is a range lock and must NOT be extended.
+  const isolatedBlockStarts = useMemo(() => {
+    const blocks = [];
+    for (const lMin of lockedMinutesSet) {
+      if (lMin % 15 === 0 && !lockedMinutesSet.has(lMin - 1) && !lockedMinutesSet.has(lMin + 1)) {
+        blocks.push(lMin);
+      }
+    }
+    return blocks;
+  }, [lockedMinutesSet]);
+
   // Dropdown open states
   const [isHourDropdownOpen, setIsHourDropdownOpen] = useState(false);
   const [isMinuteDropdownOpen, setIsMinuteDropdownOpen] = useState(false);
@@ -207,9 +239,14 @@ export function StepTime() {
     const isPast = isTodayInPerth && isSlotInPast(timeStr, selectedDate, 0);
     const isBeforeOpen = slotMin < openMin;
     const isAfterClose = slotMin > closeMin;
-    const isLockedDirect = lockedSlotsNormalized.includes(norm) || removedSlotsNormalized.includes(norm);
-    const isLockedByBlock = !isLockedDirect && lockedSlotsNormalized.some((lockedSlot) => {
-      const lMin = parseSlotToMinutes(lockedSlot);
+    const isLockedDirect = lockedMinutesSet.has(slotMin) ||
+      removedMinutesSet.has(slotMin) ||
+      lockedSlotsNormalized.includes(norm) ||
+      removedSlotsNormalized.includes(norm);
+    
+    // Check if slot falls into an isolated standard 15-minute grid block (:00, :15, :30, :45).
+    // Note: If adjacent minutes are locked, isolatedBlockStarts will not contain it.
+    const isLockedByBlock = !isLockedDirect && isolatedBlockStarts.some((lMin) => {
       return slotMin >= lMin && slotMin < lMin + 15;
     });
     const isLocked = isLockedDirect || isLockedByBlock;

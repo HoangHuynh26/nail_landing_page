@@ -337,13 +337,8 @@ function buildCustomerEmailHtml(booking) {
             <td align="center">
               <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 12px auto;">
                 <tr>
-                  <td align="center" style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.15) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f6d376" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto;">
-                      <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v1H5z" fill="#d4af37" fill-opacity="0.3"></path>
-                      <circle cx="12" cy="4" r="1.5" fill="#fef08a"></circle>
-                      <circle cx="5" cy="4" r="1.5" fill="#fef08a"></circle>
-                      <circle cx="19" cy="4" r="1.5" fill="#fef08a"></circle>
-                    </svg>
+                  <td align="center" style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.15) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle; font-size: 22px; line-height: 48px;">
+                    👑
                   </td>
                 </tr>
               </table>
@@ -363,11 +358,7 @@ function buildCustomerEmailHtml(booking) {
         <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 14px;">
           <tr>
             <td style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 9999px; padding: 5px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #059669;">
-              <span style="display: inline-block; vertical-align: middle; margin-right: 5px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </span>
+              <span style="display: inline-block; vertical-align: middle; margin-right: 5px; font-size: 13px; font-weight: 900; color: #059669;">✔</span>
               <span style="vertical-align: middle;">Booking Confirmed</span>
             </td>
           </tr>
@@ -383,13 +374,8 @@ function buildCustomerEmailHtml(booking) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 22px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
-              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px; font-size: 12px;">
+                📅
               </div>
             </td>
             <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
@@ -433,11 +419,8 @@ function buildCustomerEmailHtml(booking) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
-              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #ecfdf5; border: 1px solid #a7f3d0; text-align: center; line-height: 24px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                  <line x1="12" y1="1" x2="12" y2="23"></line>
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #ecfdf5; border: 1px solid #a7f3d0; text-align: center; line-height: 24px; font-size: 12px;">
+                💳
               </div>
             </td>
             <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
@@ -477,12 +460,7 @@ function buildCustomerEmailHtml(booking) {
             <table style="width: 100%; border-collapse: collapse;" role="presentation">
               <tr>
                 <td style="font-weight: 700; color: #166534; font-size: 13px; vertical-align: middle;">
-                  <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                    </svg>
-                  </span>
+                  <span style="display: inline-block; vertical-align: middle; margin-right: 6px; font-size: 14px;">🏷️</span>
                   <span style="vertical-align: middle;">Discount / Promo: <strong>${escapeHtml(booking.voucher || '10% Discount')}</strong></span>
                 </td>
                 <td style="text-align: right; font-weight: 800; color: #15803d; font-size: 14px; vertical-align: middle;">
@@ -496,12 +474,7 @@ function buildCustomerEmailHtml(booking) {
             <table style="width: 100%; border-collapse: collapse;" role="presentation">
               <tr>
                 <td style="font-size: 12.5px; color: #64748b; vertical-align: middle;">
-                  <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                    </svg>
-                  </span>
+                  <span style="display: inline-block; vertical-align: middle; margin-right: 6px; font-size: 13px;">🏷️</span>
                   <span style="vertical-align: middle;">Discount / Promo Code: <strong style="color: #475569;">None</strong></span>
                 </td>
                 <td style="text-align: right; font-size: 13px; color: #94a3b8; font-weight: 600; vertical-align: middle;">
@@ -538,11 +511,8 @@ function buildCustomerEmailHtml(booking) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
-              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px; font-size: 12px;">
+                👤
               </div>
             </td>
             <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569;">
@@ -575,13 +545,7 @@ function buildCustomerEmailHtml(booking) {
         <!-- Helpful Reminders -->
         <div class="info-box">
           <div style="font-weight: 700; color: #92400e; margin-bottom: 8px;">
-            <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-              </svg>
-            </span>
+            <span style="display: inline-block; vertical-align: middle; margin-right: 6px; font-size: 14px;">💡</span>
             <span style="vertical-align: middle;">Important Arrival &amp; Payment Guidance:</span>
           </div>
           <div style="line-height: 1.6;">
@@ -594,23 +558,14 @@ function buildCustomerEmailHtml(booking) {
         <!-- Salon Address & Contact -->
         <div class="location-box">
           <div class="location-title">
-            <span style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-            </span>
+            <span style="display: inline-block; vertical-align: middle; margin-right: 6px; font-size: 14px;">📍</span>
             <span style="vertical-align: middle;">Salon Location &amp; Contact</span>
           </div>
           <div><strong>Fashion Nails Morley Galleria</strong></div>
           <div>Shop SP094 (Opposite Kmart), Morley Galleria Shopping Centre</div>
           <div>Cnr Collier Rd &amp; Walter Rd W, Morley WA 6062, Australia</div>
           <div style="margin-top: 8px;">
-            <span style="display: inline-block; vertical-align: middle; margin-right: 5px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-            </span>
+            <span style="display: inline-block; vertical-align: middle; margin-right: 5px; font-size: 13px;">📞</span>
             Phone: <a href="tel:+61893752888" style="color: #0284c7; text-decoration: none; font-weight: 700;">(08) 9375 2888</a>
           </div>
         </div>
@@ -780,13 +735,8 @@ function buildOwnerEmailHtml(booking) {
             <td align="center">
               <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 10px auto;">
                 <tr>
-                  <td align="center" style="width: 46px; height: 46px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.2) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f6d376" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto;">
-                      <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v1H5z" fill="#d4af37" fill-opacity="0.3"></path>
-                      <circle cx="12" cy="4" r="1.5" fill="#fef08a"></circle>
-                      <circle cx="5" cy="4" r="1.5" fill="#fef08a"></circle>
-                      <circle cx="19" cy="4" r="1.5" fill="#fef08a"></circle>
-                    </svg>
+                  <td align="center" style="width: 46px; height: 46px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(180, 83, 9, 0.2) 100%); border: 1.5px solid #d4af37; border-radius: 50%; text-align: center; vertical-align: middle; font-size: 20px; line-height: 46px;">
+                    👑
                   </td>
                 </tr>
               </table>
@@ -796,12 +746,7 @@ function buildOwnerEmailHtml(booking) {
               <div style="display: inline-block; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; box-shadow: 0 2px 6px rgba(180, 83, 9, 0.35);">
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
                   <tr>
-                    <td style="vertical-align: middle; padding-right: 6px;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                      </svg>
-                    </td>
+                    <td style="vertical-align: middle; padding-right: 6px; font-size: 12px;">🔔</td>
                     <td style="vertical-align: middle; color: #ffffff; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                       NEW ONLINE BOOKING RECEIVED
                     </td>
@@ -818,12 +763,8 @@ function buildOwnerEmailHtml(booking) {
         <div class="alert-banner">
           <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
             <tr>
-              <td style="width: 28px; vertical-align: top; padding-top: 2px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="8" x2="12" y2="12"></line>
-                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
+              <td style="width: 28px; vertical-align: top; padding-top: 2px; font-size: 18px; line-height: 1;">
+                📢
               </td>
               <td style="vertical-align: top; font-size: 13.5px; color: #1e40af; line-height: 1.5; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 <strong style="color: #1e3a8a;">A new appointment was just booked online.</strong><br>
@@ -837,11 +778,8 @@ function buildOwnerEmailHtml(booking) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
-              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #eff6ff; border: 1px solid #bfdbfe; text-align: center; line-height: 24px; font-size: 12px;">
+                👤
               </div>
             </td>
             <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -859,11 +797,7 @@ function buildOwnerEmailHtml(booking) {
             <td class="td-k">Phone Number</td>
             <td class="td-v">
               <a href="tel:${escapeHtml(booking.phone)}" style="color: #0284c7; text-decoration: none;">
-                <span style="display: inline-block; vertical-align: middle; margin-right: 4px;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>
-                </span>
+                <span style="display: inline-block; vertical-align: middle; margin-right: 4px; font-size: 13px;">📞</span>
                 <span style="vertical-align: middle;">${escapeHtml(booking.phone)}</span>
               </a>
             </td>
@@ -872,12 +806,7 @@ function buildOwnerEmailHtml(booking) {
             <td class="td-k">Email Address</td>
             <td class="td-v">
               <a href="mailto:${escapeHtml(booking.email)}" style="color: #0284c7; text-decoration: none;">
-                <span style="display: inline-block; vertical-align: middle; margin-right: 4px;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                  </svg>
-                </span>
+                <span style="display: inline-block; vertical-align: middle; margin-right: 4px; font-size: 13px;">✉️</span>
                 <span style="vertical-align: middle;">${escapeHtml(booking.email)}</span>
               </a>
             </td>
@@ -888,13 +817,8 @@ function buildOwnerEmailHtml(booking) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 10px 0; width: 100%;">
           <tr>
             <td style="width: 26px; vertical-align: middle;">
-              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
+              <div style="width: 24px; height: 24px; border-radius: 6px; background-color: #fef3c7; border: 1px solid #fde68a; text-align: center; line-height: 24px; font-size: 12px;">
+                📅
               </div>
             </td>
             <td style="vertical-align: middle; padding-left: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #475569; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -957,36 +881,14 @@ function buildOwnerEmailHtml(booking) {
           <tr>
             <td style="padding: 0 6px;">
               <a href="tel:${escapeHtml(booking.phone)}" style="display: inline-block; background-color: #0284c7; color: #ffffff !important; text-decoration: none; padding: 11px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-align: center; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
-                  <tr>
-                    <td style="vertical-align: middle; padding-right: 6px;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                      </svg>
-                    </td>
-                    <td style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">
-                      Call Client
-                    </td>
-                  </tr>
-                </table>
+                <span style="font-size: 14px; margin-right: 6px; vertical-align: middle;">📞</span>
+                <span style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">Call Client</span>
               </a>
             </td>
             <td style="padding: 0 6px;">
               <a href="http://localhost:3000/admin" style="display: inline-block; background-color: #d97706; color: #ffffff !important; text-decoration: none; padding: 11px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-align: center; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0;">
-                  <tr>
-                    <td style="vertical-align: middle; padding-right: 6px;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="3" y1="9" x2="21" y2="9"></line>
-                        <line x1="9" y1="21" x2="9" y2="9"></line>
-                      </svg>
-                    </td>
-                    <td style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">
-                      Open Admin Dashboard
-                    </td>
-                  </tr>
-                </table>
+                <span style="font-size: 14px; margin-right: 6px; vertical-align: middle;">📊</span>
+                <span style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">Open Admin Dashboard</span>
               </a>
             </td>
           </tr>
