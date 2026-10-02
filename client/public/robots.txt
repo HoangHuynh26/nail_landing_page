@@ -1,0 +1,8 @@
+# Robots.txt for Fashion Nail Morley (Morley Galleria, WA)
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://fashionnailsmorley.com.au/sitemap.xml
