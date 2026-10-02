@@ -15,7 +15,8 @@ import {
   isSlotInPast,
   getPerthFormattedTime,
   getPerthDateString,
-  getPerthNow
+  getPerthNow,
+  getDefaultSlotForDate
 } from '../../../utils/perthTime';
 
 // 60 full minutes for customer selection
@@ -197,36 +198,63 @@ export function StepTime() {
     };
   }, [formData.time]);
 
-  // Determine initial period and hour based on Perth time or existing choice
+  // Compute standard default slot for this date (e.g. 09:00 AM on tomorrow/future dates)
+  const initialDefaultSlot = useMemo(() => {
+    return getDefaultSlotForDate(
+      selectedDate,
+      dateHours,
+      customSlots,
+      lockedDates,
+      lockedSlots
+    );
+  }, [selectedDate, dateHours, customSlots, lockedDates, lockedSlots]);
+
+  // Determine initial period and hour based on existing choice or day's opening slot
   const [selectedPeriod, setSelectedPeriod] = useState(() => {
     if (initialDecomposed) return initialDecomposed.period;
+    if (initialDefaultSlot) return initialDefaultSlot.period;
     if (isTodayInPerth && perthNow.hour >= 12) return 'PM';
     return 'AM';
   });
 
   const [selectedHour, setSelectedHour] = useState(() => {
     if (initialDecomposed) return initialDecomposed.hour;
-    const initPeriod = (isTodayInPerth && perthNow.hour >= 12) ? 'PM' : 'AM';
-    const initHours = getAvailableHoursForPeriod(
-      initPeriod,
-      effectiveHours.openTime,
-      effectiveHours.closeTime,
-      customSlots?.[selectedDate]?.added
-    );
-    if (initHours.length > 0) {
-      if (isTodayInPerth && perthNow.hour >= 12) {
-        const h12 = String(perthNow.hour % 12 || 12).padStart(2, '0');
-        if (initHours.includes(h12)) return h12;
-      }
-      return initHours[0];
-    }
+    if (initialDefaultSlot) return initialDefaultSlot.hour;
     return '09';
   });
 
   const [selectedMinute, setSelectedMinute] = useState(() => {
     if (initialDecomposed) return initialDecomposed.minute;
+    if (initialDefaultSlot) return initialDefaultSlot.minute;
     return '00';
   });
+
+  // Whenever selectedDate changes (e.g. user changes date or clicks Book for Tomorrow),
+  // reset to the earliest opening slot of the new date (e.g. 09:00 AM)
+  const prevDateRef = useRef(selectedDate);
+  useEffect(() => {
+    if (prevDateRef.current !== selectedDate) {
+      prevDateRef.current = selectedDate;
+      const defSlot = getDefaultSlotForDate(
+        selectedDate,
+        dateHours,
+        customSlots,
+        lockedDates,
+        lockedSlots
+      );
+      if (defSlot) {
+        setSelectedPeriod(defSlot.period);
+        setSelectedHour(defSlot.hour);
+        setSelectedMinute(defSlot.minute);
+        updateFormData({ time: defSlot.timeStr });
+      } else {
+        setSelectedPeriod('AM');
+        setSelectedHour('09');
+        setSelectedMinute('00');
+        updateFormData({ time: '' });
+      }
+    }
+  }, [selectedDate, dateHours, customSlots, lockedDates, lockedSlots]);
 
   // Helper to compute slot status
   const getSlotStatus = (hourStr, minuteStr, periodStr) => {
@@ -305,6 +333,8 @@ export function StepTime() {
     if (isDateLocked || hasNoSlots) return;
     if (selectedPeriod === 'AM' && !amAvailable && pmAvailable) {
       setSelectedPeriod('PM');
+    } else if (selectedPeriod === 'PM' && !pmAvailable && amAvailable) {
+      setSelectedPeriod('AM');
     }
   }, [amAvailable, pmAvailable, selectedPeriod, isDateLocked, hasNoSlots]);
 
@@ -452,7 +482,13 @@ export function StepTime() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Clock size={13} style={{ color: '#d97706' }} />
-          <span>Opening Hours Today:</span>
+          <span>
+            {isTodayInPerth
+              ? (language === 'vi' ? 'Giờ mở cửa hôm nay:' : 'Opening Hours Today:')
+              : selectedDate === getPerthDateString(1)
+              ? (language === 'vi' ? 'Giờ mở cửa ngày mai:' : 'Opening Hours Tomorrow:')
+              : (language === 'vi' ? `Giờ mở cửa (${formattedSelectedDate}):` : `Opening Hours (${formattedSelectedDate}):`)}
+          </span>
           <strong style={{ color: '#b45309' }}>
             {effectiveHours.openTime} – {effectiveHours.closeTime}
           </strong>
@@ -475,7 +511,8 @@ export function StepTime() {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  updateFormData({ date: getPerthDateString(1) });
+                  const tomorrowDate = getPerthDateString(1);
+                  updateFormData({ date: tomorrowDate, time: '' });
                   setStep(2);
                 }}
               >
@@ -501,7 +538,7 @@ export function StepTime() {
           <AlertCircle size={26} className="booking-no-slots-box__icon" />
           <div className="booking-no-slots-box__content">
             <h4 className="booking-no-slots-box__title">
-              'No online slots remaining for today'
+              No online slots remaining for today
             </h4>
             <p className="booking-no-slots-box__desc">
               {t('booking.noMoreSlotsToday')}
@@ -511,11 +548,26 @@ export function StepTime() {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  updateFormData({ date: getPerthDateString(1), time: '' });
+                  const tomorrowDate = getPerthDateString(1);
+                  const defSlot = getDefaultSlotForDate(
+                    tomorrowDate,
+                    dateHours,
+                    customSlots,
+                    lockedDates,
+                    lockedSlots
+                  );
+                  if (defSlot) {
+                    setSelectedPeriod(defSlot.period);
+                    setSelectedHour(defSlot.hour);
+                    setSelectedMinute(defSlot.minute);
+                    updateFormData({ date: tomorrowDate, time: defSlot.timeStr });
+                  } else {
+                    updateFormData({ date: tomorrowDate, time: '' });
+                  }
                 }}
               >
                 <Calendar size={14} aria-hidden="true" />
-                <span>Book for Tomorrow</span>
+                <span style={{marginLeft: '5px'}}>Book for Tomorrow</span>
               </Button>
               <a
                 href="tel:0893752888"
@@ -539,7 +591,7 @@ export function StepTime() {
               `No online slots available for ${selectedDate}`
             </h4>
             <p className="booking-no-slots-box__desc">
-              'All appointment slots for this date are fully booked or locked. Please choose another date or call our hotline for assistance!'
+              All appointment slots for this date are fully booked or locked. Please choose another date or call our hotline for assistance!
             </p>
             <div className="booking-no-slots-box__actions">
               <Button
@@ -643,7 +695,7 @@ export function StepTime() {
                         >
                           <div className="booking-hour-list-item__time">
                             <Clock size={14} className="booking-hour-list-item__icon" />
-                            <span>{displayNum}:00 {selectedPeriod}</span>
+                            <span>{displayNum}:00 {selectedPeriod}{displayNum === 12 && selectedPeriod === 'PM' ? ' (Noon)' : ''}</span>
                           </div>
                           {badge}
                         </button>
@@ -832,7 +884,9 @@ export function StepTime() {
                   >
                     <div className="booking-period-item__main">
                       <Sun size={18} style={{ color: selectedPeriod === 'AM' ? '#ffffff' : '#d97706' }} />
-                      <div className="booking-period-item__title">AM</div>
+                      <div>
+                        <div className="booking-period-item__title">AM</div>
+                      </div>
                     </div>
                   </button>
 
@@ -845,7 +899,9 @@ export function StepTime() {
                   >
                     <div className="booking-period-item__main">
                       <Moon size={18} style={{ color: selectedPeriod === 'PM' ? '#ffffff' : '#6366f1' }} />
-                      <div className="booking-period-item__title">PM</div>
+                      <div>
+                        <div className="booking-period-item__title">PM</div>
+                      </div>
                     </div>
                   </button>
                 </div>
@@ -880,7 +936,9 @@ export function StepTime() {
               </div>
               <div style={{ fontSize: '16px', fontWeight: 800, color: currentSlotStatus.isAvailable ? '#0f172a' : '#dc2626' }}>
                 {currentSlotStatus.isAvailable ? (
-                  <span>{currentSlotStatus.timeStr} • {formattedSelectedDate}</span>
+                  <span>
+                    {currentSlotStatus.timeStr}{selectedHour === '12' && selectedPeriod === 'PM' ? ' (Noon)' : ''} • {formattedSelectedDate}
+                  </span>
                 ) : (
                   <span>
                     Please select an available time

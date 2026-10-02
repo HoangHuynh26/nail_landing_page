@@ -293,3 +293,63 @@ export function getCustomizedSlotsForDate(isoDate, customSlotsData = {}, dateHou
   return activeSlots;
 }
 
+/**
+ * Computes the best initial slot for a date:
+ * - If today: earliest slot that is NOT in the past and not locked.
+ * - If future date (tomorrow or later): earliest opening slot (e.g. 09:00 AM) that is not locked.
+ * Returns { hour, minute, period, timeStr } or null if no slot is available.
+ */
+export function getDefaultSlotForDate(isoDate, dateHoursData = {}, customSlotsData = {}, lockedDatesData = [], lockedSlotsData = {}) {
+  if (!isoDate) return null;
+  const effectiveHours = getEffectiveOperatingHours(isoDate, dateHoursData);
+  if (effectiveHours.isClosed || (Array.isArray(lockedDatesData) && lockedDatesData.includes(isoDate))) {
+    return null;
+  }
+
+  const perth = getPerthNow();
+  const isToday = (isoDate === perth.isoDate);
+
+  const lockedSlots = (lockedSlotsData?.[isoDate] || []).map(normalizeSlotTime);
+  const removedSlots = (customSlotsData?.[isoDate]?.removed || []).map(normalizeSlotTime);
+
+  const isSlotValid = (slotStr) => {
+    if (isToday && isSlotInPast(slotStr, isoDate, 0)) return false;
+    const norm = normalizeSlotTime(slotStr);
+    if (lockedSlots.includes(norm)) return false;
+    if (removedSlots.includes(norm)) return false;
+    return true;
+  };
+
+  if (!isToday) {
+    // For future dates: Start at opening time (e.g. "09:00 AM" or "11:00 AM")
+    const openTime = effectiveHours.openTime || '09:00 AM';
+    if (isSlotValid(openTime)) {
+      const parts = openTime.trim().split(/\s+/);
+      const [h, m] = parts[0].split(':');
+      return {
+        hour: String(parseInt(h, 10)).padStart(2, '0'),
+        minute: String(parseInt(m, 10)).padStart(2, '0'),
+        period: (parts[1] || 'AM').toUpperCase(),
+        timeStr: normalizeSlotTime(openTime)
+      };
+    }
+  }
+
+  // Find first available slot from customized slots
+  const allSlots = getCustomizedSlotsForDate(isoDate, customSlotsData, dateHoursData);
+  const firstAvailable = allSlots.find(isSlotValid);
+
+  if (firstAvailable) {
+    const parts = firstAvailable.trim().split(/\s+/);
+    const [h, m] = parts[0].split(':');
+    return {
+      hour: String(parseInt(h, 10)).padStart(2, '0'),
+      minute: String(parseInt(m, 10)).padStart(2, '0'),
+      period: (parts[1] || 'AM').toUpperCase(),
+      timeStr: normalizeSlotTime(firstAvailable)
+    };
+  }
+
+  return null;
+}
+

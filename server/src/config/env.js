@@ -15,5 +15,6 @@ export const config = {
     .replace(/^https?:\/\/.*?\//, '')
     .trim(),
   salonOwnerEmail: process.env.SALON_OWNER_EMAIL || process.env.OWNER_EMAIL || '',
-  emailFrom: process.env.EMAIL_FROM || 'Fashion Nail Morley <onboarding@resend.dev>'
+  emailFrom: process.env.EMAIL_FROM || 'Fashion Nail Morley <onboarding@resend.dev>',
+  adminDashboardUrl: process.env.ADMIN_DASHBOARD_URL || 'https://fashionnailmorley.com.au/admin'
 };

@@ -574,7 +574,7 @@ export function buildCustomerEmailHtml(booking) {
         <div style="margin-top: 8px;">
           Fashion Nail Morley &bull;
           <a href="https://www.instagram.com/fashion_nails_morley/">Instagram</a> &bull;
-          <a href="https://www.facebook.com/FashionNailsMorley/">Facebook</a>
+          <a href="https://www.facebook.com/profile.php?id=61556106694333">Facebook</a>
         </div>
         <div style="margin-top: 8px; font-size: 11px; color: #94a3b8;">
           &copy; ${new Date().getFullYear()} Fashion Nail Morley. All rights reserved.
@@ -879,7 +879,7 @@ export function buildOwnerEmailHtml(booking) {
               </a>
             </td>
             <td style="padding: 0 6px;">
-              <a href="http://localhost:3000/admin" style="display: inline-block; background-color: #d97706; color: #ffffff !important; text-decoration: none; padding: 11px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-align: center; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+              <a href="${config.adminDashboardUrl || 'https://fashionnailmorley.com.au/admin'}" style="display: inline-block; background-color: #d97706; color: #ffffff !important; text-decoration: none; padding: 11px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-align: center; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 <span style="font-size: 14px; margin-right: 6px; vertical-align: middle;">📊</span>
                 <span style="vertical-align: middle; color: #ffffff; font-size: 13.5px; font-weight: 700;">Open Admin Dashboard</span>
               </a>
