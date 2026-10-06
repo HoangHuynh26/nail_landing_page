@@ -3,12 +3,12 @@ import crypto from 'crypto';
 dotenv.config();
 
 export const config = {
-  port: parseInt(process.env.PORT, 10) || 5000,
-  nodeEnv: process.env.NODE_ENV || 'development',
-  databaseUrl: process.env.DATABASE_URL || '',
-  adminPin: process.env.ADMIN_PIN || '8888',
-  adminUsername: process.env.ADMIN_USERNAME || 'admin',
-  adminPassword: process.env.ADMIN_PASSWORD || 'Admin@123',
+  port: parseInt(process.env.PORT, 10),
+  nodeEnv: process.env.NODE_ENV,
+  databaseUrl: process.env.DATABASE_URL,
+  adminPin: process.env.ADMIN_PIN,
+  adminUsername: process.env.ADMIN_USERNAME,
+  adminPassword: process.env.ADMIN_PASSWORD,
   jwtSecret: process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex'),
   rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000,
   rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX, 10) || 60,
