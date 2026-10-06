@@ -389,7 +389,7 @@ export async function validateAndCalculateVoucher(code, servicePrice = 0, bookin
     return {
       valid: false,
       error: 'USAGE_LIMIT_REACHED',
-      message: `Voucher code "${cleanCode}" has reached its maximum usage limit (${voucher.usageLimit} redemptions).`
+      message: `Voucher code "${cleanCode}" has reached its maximum usage limit.`
     };
   }
 
@@ -453,14 +453,20 @@ export async function recordVoucherUsage(code) {
       `UPDATE vouchers 
        SET used_count = used_count + 1, updated_at = CURRENT_TIMESTAMP 
        WHERE UPPER(TRIM(code)) = $1 
+         AND (usage_limit IS NULL OR used_count < usage_limit)
+         AND is_active = true
        RETURNING *`,
       [cleanCode]
     );
-    if (res && res.rows && res.rows[0]) {
+    if (res && res.rows) {
+      if (res.rows.length === 0) {
+        throw new Error('Voucher limit reached or inactive');
+      }
       console.log(`[Voucher] Incremented usage for "${cleanCode}". New count: ${res.rows[0].used_count}`);
       return true;
     }
   } catch (err) {
+    if (err.message === 'Voucher limit reached or inactive') throw err;
     console.warn('[VoucherService] PostgreSQL recordVoucherUsage error, fallback to JSON:', err.message);
   }
 
@@ -468,10 +474,49 @@ export async function recordVoucherUsage(code) {
   const list = store.vouchers || [];
   const found = list.find(v => (v.code || '').trim().toUpperCase() === cleanCode);
   if (found) {
+    if (found.isActive === false || (found.usageLimit != null && found.usedCount >= found.usageLimit)) {
+      throw new Error('Voucher limit reached or inactive');
+    }
     found.usedCount = (found.usedCount || 0) + 1;
     found.updatedAt = new Date().toISOString();
     await writeFallbackStore(store);
     console.log(`[Voucher] Incremented usage for "${cleanCode}". New count: ${found.usedCount}`);
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Revert voucher usage (called when booking fails to save)
+ */
+export async function revertVoucherUsage(code) {
+  if (!code) return false;
+  const cleanCode = code.trim().toUpperCase();
+
+  try {
+    const res = await query(
+      `UPDATE vouchers 
+       SET used_count = GREATEST(0, used_count - 1), updated_at = CURRENT_TIMESTAMP 
+       WHERE UPPER(TRIM(code)) = $1 
+       RETURNING *`,
+      [cleanCode]
+    );
+    if (res && res.rows && res.rows[0]) {
+      console.log(`[Voucher] Reverted usage for "${cleanCode}". New count: ${res.rows[0].used_count}`);
+      return true;
+    }
+  } catch (err) {
+    console.warn('[VoucherService] PostgreSQL revertVoucherUsage error, fallback to JSON:', err.message);
+  }
+
+  const store = await readFallbackStore();
+  const list = store.vouchers || [];
+  const found = list.find(v => (v.code || '').trim().toUpperCase() === cleanCode);
+  if (found) {
+    found.usedCount = Math.max(0, (found.usedCount || 0) - 1);
+    found.updatedAt = new Date().toISOString();
+    await writeFallbackStore(store);
+    console.log(`[Voucher] Reverted usage for "${cleanCode}". New count: ${found.usedCount}`);
     return true;
   }
   return false;

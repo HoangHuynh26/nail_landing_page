@@ -26,9 +26,28 @@ export async function authenticateAdmin(req, res, next) {
       });
     }
 
+    const decodedPayload = jwt.decode(token);
+    if (!decodedPayload || !decodedPayload.username) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid authorization token format.'
+      });
+    }
+
+    // Verify admin still exists and is active in database
+    const admin = await findAdminByUsername(decodedPayload.username);
+    if (!admin || admin.active === false) {
+      return res.status(401).json({
+        success: false,
+        message: 'Admin account not found or has been deactivated.'
+      });
+    }
+
+    const storedHash = admin.password_hash || admin.passwordHash || '';
+    
     let decoded;
     try {
-      decoded = jwt.verify(token, config.jwtSecret);
+      decoded = jwt.verify(token, config.jwtSecret + storedHash);
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
         return res.status(401).json({
@@ -41,15 +60,6 @@ export async function authenticateAdmin(req, res, next) {
         success: false,
         code: 'TOKEN_INVALID',
         message: 'Invalid or forged authentication token.'
-      });
-    }
-
-    // Verify admin still exists and is active in database
-    const admin = await findAdminByUsername(decoded.username);
-    if (!admin || admin.active === false) {
-      return res.status(401).json({
-        success: false,
-        message: 'Admin account not found or has been deactivated.'
       });
     }
 

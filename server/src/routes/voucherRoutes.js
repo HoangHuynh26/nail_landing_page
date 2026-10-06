@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { authenticateAdmin } from '../middleware/authMiddleware.js';
 import {
   listVouchers,
   getVoucher,
@@ -16,12 +17,12 @@ const router = Router();
 router.post('/vouchers/validate', validateVoucherHandler);
 
 // Admin routes: Voucher management
-router.get('/vouchers', listVouchers);
-router.get('/vouchers/:id', getVoucher);
-router.post('/vouchers', createVoucherHandler);
-router.put('/vouchers/:id', updateVoucherHandler);
-router.patch('/vouchers/:id/toggle', toggleVoucherHandler);
-router.delete('/vouchers/:id', deleteVoucherHandler);
-router.post('/vouchers/run-cron', runExpireCronHandler);
+router.get('/vouchers', authenticateAdmin, listVouchers);
+router.get('/vouchers/:id', authenticateAdmin, getVoucher);
+router.post('/vouchers', authenticateAdmin, createVoucherHandler);
+router.put('/vouchers/:id', authenticateAdmin, updateVoucherHandler);
+router.patch('/vouchers/:id/toggle', authenticateAdmin, toggleVoucherHandler);
+router.delete('/vouchers/:id', authenticateAdmin, deleteVoucherHandler);
+router.post('/vouchers/run-cron', authenticateAdmin, runExpireCronHandler);
 
 export default router;

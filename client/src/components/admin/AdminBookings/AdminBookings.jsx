@@ -441,7 +441,8 @@ export function AdminBookings({ targetBookingId, onClearTarget } = {}) {
       })
       .catch(() => {});
 
-    fetch('/api/vouchers')
+    const token = localStorage.getItem('atelier_admin_token');
+    fetch('/api/vouchers', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.vouchers)) {
@@ -499,7 +500,12 @@ export function AdminBookings({ targetBookingId, onClearTarget } = {}) {
       if (selectedMonth !== 'all') params.append('month', selectedMonth);
       if (selectedYear !== 'all') params.append('year', selectedYear);
 
-      const res = await fetch(`/api/bookings?${params.toString()}`);
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch(`/api/bookings?${params.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!res.ok) throw new Error('Failed to fetch bookings');
       const data = await res.json();
       if (data.success) {
@@ -537,9 +543,13 @@ export function AdminBookings({ targetBookingId, onClearTarget } = {}) {
     markAsViewed(bookingId);
     setUpdatingId(bookingId);
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/bookings/${bookingId}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ status: newStatus })
       });
       const data = await res.json();
@@ -550,7 +560,13 @@ export function AdminBookings({ targetBookingId, onClearTarget } = {}) {
         if (selectedBooking && (selectedBooking.bookingId === bookingId || selectedBooking.id === bookingId)) {
           setSelectedBooking((prev) => ({ ...prev, status: newStatus }));
         }
-        showToast(`Status updated: Appointment #${bookingId} is now ${newStatus.toUpperCase()}.`, 'success');
+        const emailNotice = {
+          confirmed: ' • Confirmation email sent to customer',
+          completed: ' • Google Maps review email sent to customer',
+          cancelled: ' • Apology cancellation email sent to customer'
+        }[newStatus.toLowerCase()] || '';
+
+        showToast(`Status updated: Appointment #${bookingId} is now ${newStatus.toUpperCase()}${emailNotice}.`, 'success');
       } else {
         showToast(data.message || 'Failed to update status.', 'error');
       }

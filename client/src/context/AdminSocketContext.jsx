@@ -5,6 +5,8 @@ const AdminSocketContext = createContext(null);
 
 const STORAGE_KEY = 'atelier_unread_booking_ids';
 
+let sharedAudioCtx = null;
+
 /**
  * Plays a gentle luxury 2-tone audio chime (D5 -> A5)
  */
@@ -12,7 +14,16 @@ function playNotificationChime() {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
+    
+    if (!sharedAudioCtx) {
+      sharedAudioCtx = new AudioContextClass();
+    }
+    
+    if (sharedAudioCtx.state === 'suspended') {
+      sharedAudioCtx.resume();
+    }
+    
+    const ctx = sharedAudioCtx;
     const now = ctx.currentTime;
 
     // Tone 1: 587.33 Hz (D5)
@@ -66,49 +77,49 @@ export function AdminSocketProvider({ children }) {
     }
   }, [unreadIds]);
 
-  // Connect socket.io
-  useEffect(() => {
-    // Connect to current origin, Vite proxies /socket.io to backend
+  const socketRef = React.useRef(null);
+  
+  const connectSocket = useCallback(() => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+    const token = localStorage.getItem('atelier_admin_token');
+    if (!token) return;
+
     const socketInstance = io({
+      auth: { token },
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 10,
       reconnectionDelay: 1000
     });
 
-    socketInstance.on('connect', () => {
-      setIsConnected(true);
-    });
+    socketInstance.on('connect', () => setIsConnected(true));
+    socketInstance.on('disconnect', () => setIsConnected(false));
 
-    socketInstance.on('disconnect', () => {
-      setIsConnected(false);
-    });
-
-    // Listen for incoming new bookings
     socketInstance.on('new_booking', (booking) => {
-
       const id = booking.bookingId || booking.id;
-
-      // 1. Play pleasant luxury audio chime
       playNotificationChime();
-
-      // 2. Add to unread IDs list so it glows with distinctive color
       setUnreadIds((prev) => (prev.includes(id) ? prev : [id, ...prev]));
-
-      // 3. Keep in realtime queue
       setRealtimeBookings((prev) => [booking, ...prev]);
-
-      // 4. Trigger luxury toast notification
-      setLiveToast({
-        id,
-        booking,
-        timestamp: Date.now()
-      });
+      setLiveToast({ id, booking, timestamp: Date.now() });
     });
 
     setSocket(socketInstance);
+    socketRef.current = socketInstance;
+  }, []);
 
+  const disconnectSocket = useCallback(() => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current = null;
+      setSocket(null);
+      setIsConnected(false);
+    }
+  }, []);
+
+  useEffect(() => {
     return () => {
-      socketInstance.disconnect();
+      if (socketRef.current) socketRef.current.disconnect();
     };
   }, []);
 
@@ -148,7 +159,9 @@ export function AdminSocketProvider({ children }) {
         markAllAsViewed,
         liveToast,
         dismissToast,
-        realtimeBookings
+        realtimeBookings,
+        connectSocket,
+        disconnectSocket
       }}
     >
       {children}

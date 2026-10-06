@@ -130,8 +130,9 @@ export function AdminOverview({ setActiveTab, onSelectBooking }) {
       if (selectedMonth !== 'all') params.append('month', selectedMonth);
       if (selectedYear !== 'all') params.append('year', selectedYear);
 
+      const token = localStorage.getItem('atelier_admin_token');
       const [bookingsRes, promoRes] = await Promise.all([
-        fetch(`/api/bookings?${params.toString()}`),
+        fetch(`/api/bookings?${params.toString()}`, { headers: { 'Authorization': `Bearer ${token}` } }),
         fetch('/api/promotions/active')
       ]);
 

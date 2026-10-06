@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { authenticateAdmin } from '../middleware/authMiddleware.js';
 import {
   listCategories,
   getCategory,
@@ -16,12 +17,12 @@ router.get('/categories', listCategories);
 router.get('/categories/:id', getCategory);
 
 // POST /api/categories - Create new category
-router.post('/categories', createCategory);
+router.post('/categories', authenticateAdmin, createCategory);
 
 // PUT /api/categories/:id - Update category
-router.put('/categories/:id', updateCategory);
+router.put('/categories/:id', authenticateAdmin, updateCategory);
 
 // DELETE /api/categories/:id - Delete category (cascades to delete all services in that category)
-router.delete('/categories/:id', deleteCategory);
+router.delete('/categories/:id', authenticateAdmin, deleteCategory);
 
 export default router;

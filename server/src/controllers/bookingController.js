@@ -1,14 +1,23 @@
 import {
   saveBooking as persistBooking,
+  saveBookingWithTransaction,
   getBookings,
   updateBookingStatus as modifyBookingStatus,
   deleteBooking as removeBooking,
   getBookingStats
 } from '../services/bookingService.js';
 import { isDateOrSlotLocked } from '../services/scheduleService.js';
-import { recordVoucherUsage } from '../services/voucherService.js';
-import { sendBookingEmails } from '../services/emailService.js';
+import { recordVoucherUsage, validateAndCalculateVoucher, revertVoucherUsage } from '../services/voucherService.js';
+import {
+  sendBookingEmails,
+  sendBookingStatusEmail,
+  buildConfirmedEmailHtml,
+  buildCompletedEmailHtml,
+  buildCancelledEmailHtml
+} from '../services/emailService.js';
 import { broadcastNewBooking, broadcastBookingStatusUpdate } from '../socket.js';
+import { getServiceById } from '../services/serviceService.js';
+import { executeQuery, readFallbackStore } from '../db/db.js';
 
 /**
  * Generates memorable luxury booking code e.g. AURA-8492
@@ -49,8 +58,50 @@ export async function createBooking(req, res, next) {
       source: 'website'
     };
 
-    // 1. Save to Database (Neon PostgreSQL)
-    const saved = await persistBooking(newBooking);
+    let voucherIncremented = false;
+
+    // Calculate real price from database to prevent client tampering
+    try {
+      const service = await getServiceById(rawData.serviceId);
+      if (!service || service.isActive === false || service.is_active === false || service.active === false) {
+        return res.status(400).json({ success: false, message: 'Invalid or inactive service selected.' });
+      }
+      
+      let realOriginalPrice = service.price * (rawData.guests || 1);
+      let realPrice = realOriginalPrice;
+      
+      // Apply voucher logic if exists
+      if (rawData.voucher) {
+         const vResult = await validateAndCalculateVoucher(rawData.voucher, realOriginalPrice, rawData.date);
+         if (vResult.valid) {
+           realPrice = vResult.finalPrice;
+         } else {
+           return res.status(400).json({ success: false, message: vResult.message });
+         }
+      }
+      
+      newBooking.originalPrice = Math.round(realOriginalPrice * 100) / 100;
+      newBooking.price = Math.round(realPrice * 100) / 100;
+      newBooking.unitPrice = service.price; // Prevent client unitPrice tampering
+      
+      // Voucher will be incremented in the transaction with booking save.
+    } catch (priceErr) {
+      console.error('[Booking] Error calculating price or validating voucher:', priceErr);
+      return res.status(500).json({ success: false, message: 'Internal server error during booking validation.' });
+    }
+
+    // 1. Save to Database with Transaction (Neon PostgreSQL)
+    let saved = null;
+    try {
+      saved = await saveBookingWithTransaction(newBooking, rawData.voucher);
+      if (!saved) throw new Error('DB save returned null or false');
+    } catch (saveErr) {
+      console.error('[Booking] Error saving booking to DB:', saveErr.message);
+      if (saveErr.message.includes('Voucher')) {
+         return res.status(400).json({ success: false, message: saveErr.message });
+      }
+      return res.status(500).json({ success: false, message: 'Failed to save booking. Please try again later.' });
+    }
 
     // 2. Dispatch confirmation emails via Resend (Customer thank-you & Owner alert concurrently)
     sendBookingEmails(newBooking)
@@ -61,14 +112,7 @@ export async function createBooking(req, res, next) {
         console.warn(`[Resend Email] Async email error for ${bookingId}:`, err.message);
       });
 
-    // Record voucher usage if a voucher was applied
-    if (newBooking.voucher && !newBooking.voucher.includes('Community Discount') && !newBooking.voucher.includes('10% Discount')) {
-      try {
-        await recordVoucherUsage(newBooking.voucher);
-      } catch (err) {
-        console.warn(`[Booking] Could not increment voucher usage for ${newBooking.voucher}:`, err.message);
-      }
-    }
+    // Email logic remains as-is
 
     console.info(`[Booking] ${bookingId} saved to DB: ${saved ? 'SUCCESS' : 'FAIL'}`);
 
@@ -166,11 +210,72 @@ export async function updateBookingStatus(req, res, next) {
 
     broadcastBookingStatusUpdate(id, status.toLowerCase());
 
+    // Dispatch status change notification email to customer
+    const lowerStatus = status.toLowerCase();
+    let emailDispatched = false;
+    if (['confirmed', 'completed', 'cancelled'].includes(lowerStatus)) {
+      emailDispatched = true;
+      sendBookingStatusEmail(updated, lowerStatus)
+        .then((emailRes) => {
+          console.info(`[Resend Email] Status notification email (${lowerStatus}) dispatched for #${updated.bookingId || id}:`, emailRes);
+        })
+        .catch((err) => {
+          console.warn(`[Resend Email] Failed to send status notification email (${lowerStatus}) for #${updated.bookingId || id}:`, err.message);
+        });
+    }
+
     return res.status(200).json({
       success: true,
       message: `Booking status updated to ${status}`,
-      booking: updated
+      booking: updated,
+      emailDispatched
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Controller to preview HTML email templates for testing/visual inspection
+ */
+export async function previewStatusEmail(req, res, next) {
+  try {
+    const { status } = req.params;
+    const lowerStatus = String(status || '').toLowerCase();
+
+    const sampleBooking = {
+      bookingId: 'AURA-8788',
+      name: 'Monica Pham',
+      phone: '+61 431 881 993',
+      email: 'monicapham1993@gmail.com',
+      service: 'Builder Gel - BIAB (natural nails)',
+      category: 'Builder Gel - BIAB',
+      duration: '50',
+      date: '2026-10-07',
+      time: '11:02 AM',
+      guests: 1,
+      price: 60,
+      originalPrice: 60,
+      voucher: '',
+      message: 'Looking forward to my relaxing appointment!'
+    };
+
+    let html = '';
+    if (lowerStatus === 'confirmed') {
+      html = buildConfirmedEmailHtml(sampleBooking);
+    } else if (lowerStatus === 'completed') {
+      html = buildCompletedEmailHtml(sampleBooking);
+    } else if (lowerStatus === 'cancelled') {
+      html = buildCancelledEmailHtml(sampleBooking);
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid status for preview. Must be confirmed, completed, or cancelled.'
+      });
+    }
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.status(200).send(html);
   } catch (err) {
     next(err);
   }

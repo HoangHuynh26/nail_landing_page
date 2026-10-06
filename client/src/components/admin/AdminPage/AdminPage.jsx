@@ -47,7 +47,9 @@ function AdminDashboardContent({ onBackToWebsite }) {
     unreadCount,
     liveToast,
     dismissToast,
-    markAsViewed
+    markAsViewed,
+    connectSocket,
+    disconnectSocket
   } = useAdminSocket();
 
   // Verify JWT token with backend on mount
@@ -76,6 +78,7 @@ function AdminDashboardContent({ onBackToWebsite }) {
         if (isMounted) {
           if (res.ok && data.success) {
             setIsAuthenticated(true);
+            connectSocket();
             // If already verified and currently at /admin/login, forward to /admin
             if (window.location.pathname === '/admin/login') {
               window.history.replaceState({}, '', '/admin');
@@ -148,6 +151,7 @@ function AdminDashboardContent({ onBackToWebsite }) {
       if (data && data.success) {
         localStorage.setItem('atelier_admin_token', data.token);
         setIsAuthenticated(true);
+        connectSocket();
         // Navigate from /admin/login to /admin
         window.history.pushState({}, '', '/admin');
       } else {
@@ -163,6 +167,7 @@ function AdminDashboardContent({ onBackToWebsite }) {
   const handleLogout = () => {
     localStorage.removeItem('atelier_admin_token');
     setIsAuthenticated(false);
+    disconnectSocket();
     setUsername('');
     setPassword('');
     window.history.pushState({}, '', '/admin/login');

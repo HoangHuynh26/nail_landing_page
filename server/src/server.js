@@ -57,7 +57,7 @@ app.get('/api/health', async (req, res) => {
     status: 'ok',
     service: 'Fashion Nails Morley Galleria API',
     uptime: process.uptime(),
-    database: dbStatus,
+    database: { connected: dbStatus.connected, mode: dbStatus.mode },
     timestamp: new Date().toISOString()
   });
 });

@@ -73,7 +73,9 @@ export default function ScheduleBookedSlots({
       })
       .catch(() => {});
 
-    fetch('/api/vouchers')
+    const token = localStorage.getItem('atelier_admin_token');
+    
+    fetch('/api/vouchers', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(d => {
         if (d.success && Array.isArray(d.vouchers)) {

@@ -116,8 +116,10 @@ export function AdminPromotions() {
         formPayload.append('image', selectedFile);
       }
 
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch('/api/promotions', {
         method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
         body: formPayload
       });
       const data = await res.json();
@@ -152,9 +154,13 @@ export function AdminPromotions() {
 
     setIsSavingEdit(true);
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/promotions/${editingPromo.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           title: editTitle.trim(),
           start_date: editStartDate,
@@ -182,9 +188,13 @@ export function AdminPromotions() {
     const newActive = !promo.active;
     const promoTitle = promo.title || 'Promotional poster';
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/promotions/${promo.id}/toggle`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ active: newActive })
       });
       const data = await res.json();
@@ -209,7 +219,11 @@ export function AdminPromotions() {
   const handleDeletePromotion = async (promo) => {
     if (!window.confirm(`Are you sure you want to delete promotional image "${promo.title}"?`)) return;
     try {
-      const res = await fetch(`/api/promotions/${promo.id}`, { method: 'DELETE' });
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch(`/api/promotions/${promo.id}`, { 
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const data = await res.json();
       if (data.success) {
         setPromotions(prev => prev.filter(p => p.id !== promo.id));

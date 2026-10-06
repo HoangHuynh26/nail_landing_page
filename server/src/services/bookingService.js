@@ -33,6 +33,79 @@ export function resolveCategoryName(category, serviceName) {
 /**
  * Saves a new booking into Neon PostgreSQL or fallback store
  */
+
+export async function saveBookingWithTransaction(booking, voucherCode) {
+  const guests = parseInt(booking.guests, 10) || 1;
+  const price = booking.price != null ? parseFloat(booking.price) : 0;
+  const originalPrice = booking.originalPrice != null ? parseFloat(booking.originalPrice) : price;
+  const category = resolveCategoryName(booking.category, booking.service);
+
+  if (!dbState.usingFallback && pool) {
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      
+      if (voucherCode) {
+        const cleanCode = voucherCode.trim().toUpperCase();
+        const vRes = await client.query(
+          'UPDATE vouchers SET used_count = used_count + 1 WHERE code = $1 AND is_active = true AND (usage_limit IS NULL OR used_count < usage_limit) RETURNING *',
+          [cleanCode]
+        );
+        if (vRes.rowCount === 0) {
+          throw new Error('Voucher limit reached or inactive');
+        }
+      }
+
+      const query = `
+        INSERT INTO bookings (
+          booking_id, name, phone, email, service, category, date, time, message, voucher, status, guests, price, original_price, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+        RETURNING *;
+      `;
+      const values = [
+        booking.bookingId, booking.name, booking.phone, booking.email, booking.service, category,
+        booking.date, booking.time, booking.message || '', booking.voucher || '', booking.status || 'pending',
+        guests, price, originalPrice, booking.createdAt || new Date().toISOString()
+      ];
+      const res = await client.query(query, values);
+      
+      await client.query('COMMIT');
+      return mapPostgresBooking(res.rows[0]);
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
+  }
+
+  // Fallback
+  const store = await readFallbackStore();
+  
+  if (voucherCode) {
+    const cleanCode = voucherCode.trim().toUpperCase();
+    const list = store.vouchers || [];
+    const idx = list.findIndex(v => v.code === cleanCode);
+    if (idx !== -1 && list[idx].isActive !== false && (list[idx].usageLimit == null || (list[idx].usedCount || 0) < list[idx].usageLimit)) {
+      list[idx].usedCount = (list[idx].usedCount || 0) + 1;
+    } else {
+      throw new Error('Voucher limit reached or inactive');
+    }
+  }
+
+  const fallbackBooking = {
+    ...booking,
+    category,
+    guests,
+    price,
+    originalPrice
+  };
+  store.bookings.unshift(fallbackBooking);
+  await writeFallbackStore(store);
+  return fallbackBooking;
+}
+
+
 export async function saveBooking(booking) {
   const guests = parseInt(booking.guests, 10) || 1;
   const price = booking.price != null ? parseFloat(booking.price) : 0;

@@ -111,9 +111,10 @@ export function AdminServices() {
     }
 
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch('/api/categories', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ id: slug, name_en: trimmed, name_vi: trimmed })
       });
       const data = await res.json();
@@ -158,9 +159,10 @@ export function AdminServices() {
     }
 
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/categories/${editingCatId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ name_en: trimmed, name_vi: trimmed })
       });
       const data = await res.json();
@@ -192,8 +194,10 @@ export function AdminServices() {
     if (!window.confirm(message)) return;
 
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/categories/${catId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
@@ -346,9 +350,10 @@ export function AdminServices() {
 
     try {
       if (editingService) {
+        const token = localStorage.getItem('atelier_admin_token');
         const res = await fetch(`/api/services/${editingService.id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
@@ -362,9 +367,10 @@ export function AdminServices() {
           showToast('Update error: ' + data.message, 'error');
         }
       } else {
+        const token = localStorage.getItem('atelier_admin_token');
         const res = await fetch('/api/services', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
@@ -391,9 +397,10 @@ export function AdminServices() {
     const targetService = services.find((s) => s.id === id);
     const sName = targetService?.name_en || targetService?.name_vi || 'Service';
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/services/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ price: parseFloat(newPrice) })
       });
       const data = await res.json();
@@ -419,9 +426,10 @@ export function AdminServices() {
     const newActive = !service.active;
     const serviceName = service.name_en || service.name_vi || 'Service';
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/services/${service.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ active: newActive })
       });
       const data = await res.json();
@@ -446,7 +454,8 @@ export function AdminServices() {
   const handleDeleteService = async (service) => {
     if (!window.confirm(`Permanently remove service "${service.name_en}"?`)) return;
     try {
-      const res = await fetch(`/api/services/${service.id}`, { method: 'DELETE' });
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch(`/api/services/${service.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (data.success) {
         setServices((prev) => prev.filter((s) => s.id !== service.id));
@@ -462,7 +471,8 @@ export function AdminServices() {
   const handleResetDefaults = async () => {
     if (!window.confirm('Reset all service catalog prices, entries & categories to official salon defaults?')) return;
     try {
-      const res = await fetch('/api/services/reset', { method: 'POST' });
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch('/api/services/reset', { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (data.success) {
         setServices(data.services || []);

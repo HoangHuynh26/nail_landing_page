@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 dotenv.config();
 
 export const config = {
@@ -8,7 +9,7 @@ export const config = {
   adminPin: process.env.ADMIN_PIN || '8888',
   adminUsername: process.env.ADMIN_USERNAME || 'admin',
   adminPassword: process.env.ADMIN_PASSWORD || 'Admin@123',
-  jwtSecret: process.env.JWT_SECRET || 'nailsalonMorleyGalleria_0893752888',
+  jwtSecret: process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex'),
   rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000,
   rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX, 10) || 60,
   resendApiKey: (process.env.RESEND_API_KEY || process.env.RESEND || '')

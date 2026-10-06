@@ -195,7 +195,10 @@ export function AdminGallery() {
   const fetchGallery = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/gallery');
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch('/api/gallery', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (!res.ok) throw new Error('Failed to fetch gallery items');
       const data = await res.json();
       if (data.success) {
@@ -341,8 +344,10 @@ export function AdminGallery() {
   const handleToggleActive = async (item, e) => {
     e.stopPropagation();
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/gallery/${item.id}/toggle`, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (data.success) {
@@ -410,8 +415,10 @@ export function AdminGallery() {
       const url = isEditing ? `/api/gallery/${editingItem.id}` : '/api/gallery';
       const method = isEditing ? 'PUT' : 'POST';
 
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(url, {
         method,
+        headers: { Authorization: `Bearer ${token}` },
         body: formPayload
       });
 
@@ -438,8 +445,10 @@ export function AdminGallery() {
     if (!deletingItem) return;
     setIsDeleting(true);
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/gallery/${deletingItem.id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (data.success) {
@@ -465,7 +474,11 @@ export function AdminGallery() {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/gallery/reset', { method: 'POST' });
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch('/api/gallery/reset', { 
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const data = await res.json();
       if (data.success) {
         setItems(data.items || []);

@@ -51,7 +51,10 @@ export default function AdminVouchers() {
   const fetchVouchers = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/vouchers');
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch('/api/vouchers', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const data = await res.json();
       if (data.success) {
         setVouchers(data.vouchers || []);
@@ -217,9 +220,13 @@ export default function AdminVouchers() {
       const url = editingVoucher ? `/api/vouchers/${editingVoucher.id}` : '/api/vouchers';
       const method = editingVoucher ? 'PUT' : 'POST';
 
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(payload)
       });
       const data = await res.json();
@@ -247,8 +254,10 @@ export default function AdminVouchers() {
   // Toggle Active State
   const handleToggle = async (voucher) => {
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/vouchers/${voucher.id}/toggle`, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (data.success) {
@@ -274,8 +283,10 @@ export default function AdminVouchers() {
     }
 
     try {
+      const token = localStorage.getItem('atelier_admin_token');
       const res = await fetch(`/api/vouchers/${voucher.id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (data.success) {
@@ -293,7 +304,11 @@ export default function AdminVouchers() {
   // Manual Trigger Cron Expire Check
   const handleRunCron = async () => {
     try {
-      const res = await fetch('/api/vouchers/run-cron', { method: 'POST' });
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch('/api/vouchers/run-cron', { 
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const data = await res.json();
       if (data.success) {
         showToast(data.message, 'success');

@@ -3,6 +3,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import { config } from '../config/env.js';
 
 const { Pool } = pg;
 const __filename = fileURLToPath(import.meta.url);
@@ -97,6 +99,7 @@ export async function writeFallbackStore(data) {
     await fs.writeFile(FALLBACK_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (err) {
     console.error('[DB] Error writing fallback store:', err.message);
+    throw err;
   }
 }
 
@@ -318,9 +321,16 @@ async function seedPostgresIfEmpty(client) {
   const adminRes = await client.query('SELECT COUNT(*) FROM admins');
   if (parseInt(adminRes.rows[0].count, 10) === 0) {
     console.log('[DB] Initializing default admin user in Neon PostgreSQL...');
-    const defaultPassword = process.env.ADMIN_PASSWORD || 'Admin@123';
+    const isDefaultProvided = !!process.env.ADMIN_PASSWORD;
+    const defaultPassword = process.env.ADMIN_PASSWORD || crypto.randomBytes(8).toString('hex');
     const passwordHash = await bcrypt.hash(defaultPassword, 10);
     const username = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
+    
+    if (!isDefaultProvided) {
+      console.warn(`[DB] WARNING: Created default admin account: ${username} / ${defaultPassword}`);
+      console.warn('[DB] Please log in and change this password immediately.');
+    }
+    
     await client.query(
       `INSERT INTO admins (username, password_hash, full_name, role, active)
        VALUES ($1, $2, $3, $4, $5)
@@ -361,9 +371,7 @@ export async function initDatabase(customUrl = null) {
 
     pool = new Pool({
       connectionString: connUrl,
-      ssl: {
-        rejectUnauthorized: false
-      },
+      ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: true } : { rejectUnauthorized: false },
       connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 30000
     });
@@ -490,9 +498,12 @@ export async function findAdminByUsername(username) {
       );
       if (res.rows.length > 0) {
         return res.rows[0];
+      } else {
+        return null;
       }
     } catch (err) {
-      console.warn('[DB] Failed to query admin from Neon, checking fallback store:', err.message);
+      console.error('[DB] Failed to query admin from Neon:', err.message);
+      throw new Error('Database connection failed during authentication');
     }
   }
 

@@ -567,27 +567,23 @@
 
 /* Status Button variations inside segmented control */
 .admin-segmented-btn--live.is-active {
-  background: #059669;
-  border-color: #059669;
-  color: #ffffff;
+  background: #059669 !important;
+  color: #ffffff !important;
 }
 
 .admin-segmented-btn--scheduled.is-active {
-  background: #d97706;
-  border-color: #d97706;
-  color: #ffffff;
+  background: #d97706 !important;
+  color: #ffffff !important;
 }
 
 .admin-segmented-btn--inactive.is-active {
-  background: #475569;
-  border-color: #475569;
-  color: #ffffff;
+  background: #475569 !important;
+  color: #ffffff !important;
 }
 
 .admin-segmented-btn--expired.is-active {
-  background: #dc2626;
-  border-color: #dc2626;
-  color: #ffffff;
+  background: #dc2626 !important;
+  color: #ffffff !important;
 }
 
 /* Custom Select Component for Admin Promotions */

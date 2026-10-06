@@ -81,7 +81,7 @@ export async function verifyAdminPin(req, res, next) {
         role: admin.role || 'admin',
         fullName: admin.full_name || admin.fullName || 'Administrator'
       },
-      config.jwtSecret,
+      config.jwtSecret + storedHash,
       { expiresIn: '24h' }
     );
 

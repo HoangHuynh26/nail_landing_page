@@ -79,9 +79,6 @@ export function BookingDetailModal({
                   <Mail size={13} /> {selectedBooking.email}
                 </a>
               )}
-              <span className="admin-booking-modal-party-badge">
-                <Users size={13} /> Party Size: <strong>{guests > 1 ? `${guests} People` : '1 Person'}</strong>
-              </span>
             </div>
           </div>
 
@@ -105,9 +102,6 @@ export function BookingDetailModal({
                   <span className="admin-booking-service-duration">
                     <Clock size={12} /> Duration: ~{duration} mins
                   </span>
-                  <span className="admin-booking-service-party">
-                    <Users size={12} /> Party Size: <strong>{guests} {guests > 1 ? 'Guests' : 'Guest'}</strong>
-                  </span>
                 </div>
               </div>
             </div>
@@ -126,7 +120,7 @@ export function BookingDetailModal({
                   <span className="admin-booking-calc-label">UNIT PRICE</span>
                   <div className="admin-booking-calc-value">
                     {unitPrice > 0 ? `$${formatPrice(unitPrice)}` : 'Custom'}
-                    <span className="admin-booking-calc-sub">/ person</span>
+                    <span className="admin-booking-calc-sub"></span>
                   </div>
                 </div>
 
@@ -134,7 +128,7 @@ export function BookingDetailModal({
                 <div className="admin-booking-calc-item">
                   <span className="admin-booking-calc-label">PARTY SIZE</span>
                   <div className="admin-booking-calc-value">
-                    × {guests} {guests > 1 ? 'people' : 'person'}
+                    {guests} {guests > 1 ? 'people' : 'person'}
                   </div>
                 </div>
 
@@ -224,15 +218,6 @@ export function BookingDetailModal({
                       : voucherInfo.discountType === 'fixed'
                       ? `Fixed Amount: -$${voucherInfo.discountValue}`
                       : voucherInfo.typeLabel}
-                  </span>
-                </div>
-
-                <div className="admin-booking-col-span-2">
-                  <span className="admin-booking-field-label-sm">
-                    Promotion Name
-                  </span>
-                  <span className="admin-booking-voucher-promo-name">
-                    {voucherInfo.name}
                   </span>
                 </div>
 

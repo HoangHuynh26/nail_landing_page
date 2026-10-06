@@ -21,16 +21,6 @@ export function VoucherHeader({ onRunCron, onRefresh, onOpenCreate, loading }) {
       <div className="admin-vouchers-header-actions">
         <button
           type="button"
-          onClick={onRunCron}
-          title="Scan and expire overdue vouchers immediately"
-          className="admin-vouchers-btn-cron"
-        >
-          <Clock size={15} />
-          <span>Run Expiry Check</span>
-        </button>
-
-        <button
-          type="button"
           onClick={onRefresh}
           title="Reload voucher list"
           className="admin-vouchers-btn-refresh"
@@ -45,7 +35,7 @@ export function VoucherHeader({ onRunCron, onRefresh, onOpenCreate, loading }) {
           className="admin-vouchers-btn-create"
         >
           <Plus size={16} />
-          <span>+ Create New Voucher</span>
+          <span>Create New Voucher</span>
         </button>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { authenticateAdmin } from '../middleware/authMiddleware.js';
 import {
   listGallery,
   getGalleryItem,
@@ -8,7 +9,7 @@ import {
   deleteGallery,
   resetGallery
 } from '../controllers/galleryController.js';
-import { uploadGalleryImage } from '../middleware/uploadMiddleware.js';
+import { uploadGalleryImage, verifyImageSignature } from '../middleware/uploadMiddleware.js';
 
 const router = Router();
 
@@ -19,18 +20,18 @@ router.get('/gallery', listGallery);
 router.get('/gallery/:id', getGalleryItem);
 
 // POST /api/gallery - Create new gallery item with optional image file upload
-router.post('/gallery', uploadGalleryImage.single('image'), createGallery);
+router.post('/gallery', authenticateAdmin, uploadGalleryImage.single('image'), verifyImageSignature, createGallery);
 
 // PUT /api/gallery/:id - Update gallery item with optional new image file
-router.put('/gallery/:id', uploadGalleryImage.single('image'), updateGallery);
+router.put('/gallery/:id', authenticateAdmin, uploadGalleryImage.single('image'), verifyImageSignature, updateGallery);
 
 // PATCH /api/gallery/:id/toggle - Toggle active status (publish/hide)
-router.patch('/gallery/:id/toggle', toggleGallery);
+router.patch('/gallery/:id/toggle', authenticateAdmin, toggleGallery);
 
 // DELETE /api/gallery/:id - Delete gallery item
-router.delete('/gallery/:id', deleteGallery);
+router.delete('/gallery/:id', authenticateAdmin, deleteGallery);
 
 // POST /api/gallery/reset - Reset to default catalog
-router.post('/gallery/reset', resetGallery);
+router.post('/gallery/reset', authenticateAdmin, resetGallery);
 
 export default router;

@@ -194,6 +194,19 @@ export async function updateVoucherHandler(req, res, next) {
     const { id } = req.params;
     const updated = await updateVoucher(id, req.body);
 
+      const perthToday = getPerthTodayStr();
+      const expired = isVoucherExpired(updated.endDate, perthToday);
+      let computedStatus = 'active';
+      if (!updated.isActive) {
+        computedStatus = 'inactive';
+      } else if (expired) {
+        computedStatus = 'expired';
+      } else if (updated.startDate && perthToday < updated.startDate) {
+        computedStatus = 'upcoming';
+      }
+      updated.computedStatus = computedStatus;
+
+
     return res.status(200).json({
       success: true,
       message: `Voucher "${updated.code}" updated successfully!`,
@@ -217,6 +230,18 @@ export async function toggleVoucherHandler(req, res, next) {
   try {
     const { id } = req.params;
     const updated = await toggleVoucherStatus(id);
+
+    const perthToday = getPerthTodayStr();
+    const expired = isVoucherExpired(updated.endDate, perthToday);
+    let computedStatus = 'active';
+    if (!updated.isActive) {
+      computedStatus = 'inactive';
+    } else if (expired) {
+      computedStatus = 'expired';
+    } else if (updated.startDate && perthToday < updated.startDate) {
+      computedStatus = 'upcoming';
+    }
+    updated.computedStatus = computedStatus;
 
     return res.status(200).json({
       success: true,

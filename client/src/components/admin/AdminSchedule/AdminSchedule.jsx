@@ -145,7 +145,10 @@ export default function AdminSchedule() {
   // Fetch all bookings for date strip badges
   const fetchAllBookings = async () => {
     try {
-      const res = await fetch('/api/bookings?limit=200');
+      const token = localStorage.getItem('atelier_admin_token');
+      const res = await fetch('/api/bookings?limit=200', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
       const data = await res.json();
       if (data.success) {
         setAllUpcomingBookings(data.bookings || []);

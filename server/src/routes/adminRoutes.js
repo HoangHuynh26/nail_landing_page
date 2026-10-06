@@ -13,7 +13,7 @@ import { authenticateAdmin } from '../middleware/authMiddleware.js';
 const router = Router();
 
 // GET /api/admin/status - DB & System Status
-router.get('/admin/status', getSystemStatus);
+router.get('/admin/status', authenticateAdmin, getSystemStatus);
 
 // POST /api/admin/login - Verify credentials with DB & bcrypt (rate limited)
 router.post('/admin/login', adminLoginLimiter, verifyAdminPin);
